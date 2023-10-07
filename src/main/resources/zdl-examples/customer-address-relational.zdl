@@ -1,0 +1,119 @@
+/**
+ * Simple Event-Driven CRUD for Customer/Addresses.
+ */
+config {
+    title "ZenWave Playground Customer-Address MariaDB"
+    basePackage "io.zenwave360.example"
+    persistence jpa
+    databaseType mariadb
+//    haltOnFailFormatting false
+
+    plugins {
+
+        ZDLToOpenAPIPlugin {
+            idType integer
+            idTypeFormat int64
+            targetFile "src/main/resources/model/openapi.yml"
+        }
+
+        ZDLToAsyncAPIPlugin {
+            asyncapiVersion v3
+            idType integer
+            idTypeFormat int64
+            targetFile "src/main/resources/model/asyncapi.yml"
+        }
+
+        BackendApplicationDefaultPlugin {
+            --force // overwite all files
+        }
+
+        OpenAPIControllersPlugin {
+            specFile "src/main/resources/model/openapi.yml"
+            zdlFile "src/main/resources/zdl-examples/customer-address-relational.zdl"
+
+            // thse should match the values of openapi-generator-maven-plugin
+            openApiApiPackage "{{basePackage}}.adapters.web"
+            openApiModelPackage "{{basePackage}}.adapters.web.model"
+            openApiModelNameSuffix DTO
+        }
+    }
+}
+
+
+// == Entities =============================
+/**
+* Customer javadoc comment
+*/
+@aggregate
+entity Customer {
+  username String required unique /** username javadoc comment */
+  email String required unique /** email javadoc comment */
+}
+
+entity Address {
+    street String required /** street javadoc comment */
+    city String /** city javadoc comment */
+    state String /** state javadoc comment */
+    zip String /** zip javadoc comment */
+    type AddressType required /** address type is an enum */
+}
+
+enum AddressType {  HOME(1) /** home description */,  WORK(1) /** work description */ }
+
+relationship OneToMany {
+ Customer{addresses} to Address{customer}
+}
+
+/**
+ Service javadoc comment
+ */
+@rest("/customers")
+service CustomerService for (Customer) {
+  /**
+   * Create customer javadoc comment
+   */
+  @post
+  createCustomer(Customer) Customer withEvents CustomerEvent [CustomerCreated|CustomerCreatedFailed]
+
+  @put("/{customerId}")
+  updateCustomer(id, Customer) Customer? withEvents CustomerEvent CustomerUpdated /** update customer javadoc comment */
+
+  @delete("/{customerId}")
+  deleteCustomer(id) withEvents CustomerDeleted
+
+  @get("/{customerId}")
+  getCustomer(id) Customer?
+
+  @get({params: {search: "string"}})
+  @paginated
+  listCustomers() Customer[]
+}
+
+@copy(Customer)
+@asyncapi({channel: "customerEventsChannel", topic: "customer-events-topic"})
+event CustomerEvent {
+
+}
+
+@asyncapi({channel: "customerEventsChannel", topic: "customer-events-topic"})
+event CustomerCreated {
+  customerId String
+  customer Customer
+}
+
+@asyncapi({channel: "customerEventsChannel", topic: "customer-events-topic"})
+event CustomerCreatedFailed {
+  customerInput CustomerInput
+  error String
+}
+
+@asyncapi({channel: "customerEventsChannel", topic: "customer-events-topic"})
+event CustomerUpdated {
+  customerId String
+  customer Customer
+}
+
+@asyncapi({channel: "customerEventsChannel", topic: "customer-events-topic"})
+event CustomerDeleted {
+  customerId String
+}
