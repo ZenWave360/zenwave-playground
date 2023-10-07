@@ -1,22 +1,25 @@
-
 /**
  * Simple Event-Driven CRUD for Customer/Addresses.
  */
 config {
-    title "ZenWave Playground Customer-Address Mongodb"
+    title "ZenWave Playground Customer-Address MariaDB"
     basePackage "io.zenwave360.example"
-    persistence mongodb
+    persistence jpa
+    databaseType mariadb
+//    haltOnFailFormatting false
 
     plugins {
 
         ZDLToOpenAPIPlugin {
-            idType string
+            idType integer
+            idTypeFormat int64
             targetFile "src/main/resources/model/openapi.yml"
         }
 
         ZDLToAsyncAPIPlugin {
             asyncapiVersion v3
-            idType string
+            idType integer
+            idTypeFormat int64
             targetFile "src/main/resources/model/asyncapi.yml"
         }
 
@@ -26,7 +29,7 @@ config {
 
         OpenAPIControllersPlugin {
             specFile "src/main/resources/model/openapi.yml"
-            zdlFile "src/main/resources/zdl-examples/customer-address-mongodb.zdl"
+            zdlFile "src/main/resources/zdl-examples/customer-address-relational.zdl"
 
             // thse should match the values of openapi-generator-maven-plugin
             openApiApiPackage "{{basePackage}}.adapters.web"
@@ -45,20 +48,21 @@ config {
 entity Customer {
   username String required unique /** username javadoc comment */
   email String required unique /** email javadoc comment */
-  tags String[] /** tags javadoc comment */
-  /**
-   * address is a nested entity
-   */
-  addresses Address[] {
+}
+
+entity Address {
     street String required /** street javadoc comment */
     city String /** city javadoc comment */
     state String /** state javadoc comment */
     zip String /** zip javadoc comment */
     type AddressType required /** address type is an enum */
-  }
 }
 
 enum AddressType {  HOME(1) /** home description */,  WORK(1) /** work description */ }
+
+relationship OneToMany {
+ Customer{addresses} to Address{customer}
+}
 
 /**
  Service javadoc comment
@@ -88,6 +92,7 @@ service CustomerService for (Customer) {
 @copy(Customer)
 @asyncapi({channel: "customerEventsChannel", topic: "customer-events-topic"})
 event CustomerEvent {
+
 }
 
 @asyncapi({channel: "customerEventsChannel", topic: "customer-events-topic"})
@@ -97,11 +102,9 @@ event CustomerCreated {
 }
 
 @asyncapi({channel: "customerEventsChannel", topic: "customer-events-topic"})
-event CustomerCreatedNested {
-  customerId String
-  customer CustomerNested {
-    customerName String
-  }
+event CustomerCreatedFailed {
+  customerInput CustomerInput
+  error String
 }
 
 @asyncapi({channel: "customerEventsChannel", topic: "customer-events-topic"})

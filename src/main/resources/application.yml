@@ -9,9 +9,20 @@ spring:
       name: user
       password: password
       roles: USER
-  data:
-    mongodb:
-      uri: ${MONGODB_URI}
+  jpa.hibernate.ddl-auto: update
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mariadb://localhost:3306/zenwave-playground?useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password:
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
   kafka:
     bootstrap-servers: localhost:9092
     producer:
