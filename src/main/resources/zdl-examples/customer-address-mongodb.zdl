@@ -43,7 +43,7 @@ config {
 */
 @aggregate
 entity Customer {
-  username String required unique /** username javadoc comment */
+  username String required unique minlength(2) maxlength(250) /** username javadoc comment */
   email String required unique /** email javadoc comment */
   tags String[] /** tags javadoc comment */
   /**
@@ -94,6 +94,13 @@ event CustomerEvent {
 event CustomerCreated {
   customerId String
   customer Customer
+}
+
+@asyncapi({channel: "customerEventsChannel", topic: "customer-events-topic"})
+event CustomerCreatedFailed {
+  customerId String
+  customer Customer
+  error String
 }
 
 @asyncapi({channel: "customerEventsChannel", topic: "customer-events-topic"})
