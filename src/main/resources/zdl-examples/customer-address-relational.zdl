@@ -46,8 +46,8 @@ config {
 */
 @aggregate
 entity Customer {
-  username String required unique /** username javadoc comment */
-  email String required unique /** email javadoc comment */
+    username String required unique /** username javadoc comment */
+    email String required unique /** email javadoc comment */
 }
 
 entity Address {
@@ -61,7 +61,7 @@ entity Address {
 enum AddressType {  HOME(1) /** home description */,  WORK(1) /** work description */ }
 
 relationship OneToMany {
- Customer{addresses} to Address{customer}
+    Customer{addresses} to Address{customer}
 }
 
 /**
@@ -103,7 +103,8 @@ event CustomerCreated {
 
 @asyncapi({channel: "customerEventsChannel", topic: "customer-events-topic"})
 event CustomerCreatedFailed {
-  customerInput CustomerInput
+  customerId String
+  customer Customer
   error String
 }
 
