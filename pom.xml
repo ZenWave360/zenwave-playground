@@ -8,6 +8,7 @@
 		<version>3.1.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+	<packaging>pom</packaging>
 	<groupId>io.zenwave360.example</groupId>
 	<artifactId>zenwave-playground</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -18,7 +19,7 @@
 		<spring-boot.version>${project.parent.version}</spring-boot.version>
 		<spring-cloud.version>2022.0.4</spring-cloud.version>
 
-		<zenwave.version>2.0.0-SNAPSHOT</zenwave.version>
+		<zenwave.version>1.4.0-SNAPSHOT</zenwave.version>
 
 		<jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
 		<mapstruct.version>1.5.3.Final</mapstruct.version>
@@ -37,6 +38,14 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
+	<modules>
+		<module>customer-address-domain</module>
+		<module>customer-address-impl</module>
+		<module>customer-address-infra</module>
+		<module>customer-address-adapters</module>
+		<module>customer-address-boot</module>
+	</modules>
 
 	<dependencies>
 		<dependency>
@@ -111,119 +120,5 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.openapitools</groupId>
-				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>6.6.0</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<phase>generate-sources</phase>
-						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/model/openapi.yml</inputSpec>
-							<generatorName>spring</generatorName>
-							<apiPackage>io.zenwave360.example.adapters.web</apiPackage>
-							<modelPackage>io.zenwave360.example.adapters.web.model</modelPackage>
-							<modelNameSuffix>DTO</modelNameSuffix>
-							<addCompileSourceRoot>true</addCompileSourceRoot>
-							<supportingFilesToGenerate>
-								ApiUtil.java
-							</supportingFilesToGenerate>
-							<typeMappings>
-								<typeMapping>Double=java.math.BigDecimal</typeMapping>
-							</typeMappings>
-							<configOptions>
-								<useSpringBoot3>true</useSpringBoot3>
-								<documentationProvider>none</documentationProvider>
-								<openApiNullable>false</openApiNullable>
-								<useOptional>true</useOptional>
-								<useTags>true</useTags>
-								<interfaceOnly>true</interfaceOnly>
-								<delegatePattern>false</delegatePattern>
-							</configOptions>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>io.github.zenwave360.zenwave-sdk</groupId>
-				<artifactId>zenwave-sdk-maven-plugin</artifactId>
-				<version>${zenwave.version}</version>
-				<configuration>
-					<inputSpec>${pom.basedir}/src/main/resources/model/asyncapi.yml</inputSpec>
-					<skip>false</skip>
-					<addCompileSourceRoot>true</addCompileSourceRoot>
-					<addTestCompileSourceRoot>true</addTestCompileSourceRoot>
-				</configuration>
-				<executions>
-					<!-- DTOs -->
-					<execution>
-						<id>generate-asyncapi-dtos</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<generatorName>jsonschema2pojo</generatorName>
-							<configOptions>
-								<modelPackage>io.zenwave360.example.core.domain.events</modelPackage>
-<!--								<jsonschema2pojo.includeTypeInfo>true</jsonschema2pojo.includeTypeInfo>-->
-								<jsonschema2pojo.isUseJakartaValidation>true</jsonschema2pojo.isUseJakartaValidation>
-								<jsonschema2pojo.useLongIntegers>true</jsonschema2pojo.useLongIntegers>
-							</configOptions>
-						</configuration>
-					</execution>
-					<!-- Generate PROVIDER -->
-					<execution>
-						<id>generate-asyncapi</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<generatorName>spring-cloud-streams3</generatorName>
-							<configOptions>
-								<role>provider</role>
-								<style>imperative</style>
-<!--								<transactionalOutbox>mongodb</transactionalOutbox>-->
-								<modelPackage>io.zenwave360.example.core.domain.events</modelPackage>
-								<producerApiPackage>io.zenwave360.example.core.outbound.events</producerApiPackage>
-								<consumerApiPackage>io.zenwave360.example.adapters.commands</consumerApiPackage>
-							</configOptions>
-						</configuration>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>io.github.zenwave360.zenwave-sdk.plugins</groupId>
-						<artifactId>asyncapi-spring-cloud-streams3</artifactId>
-						<version>${zenwave.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>io.github.zenwave360.zenwave-sdk.plugins</groupId>
-						<artifactId>asyncapi-jsonschema2pojo</artifactId>
-						<version>${zenwave.version}</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-		</plugins>
-	</build>
 
 </project>

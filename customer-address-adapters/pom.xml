@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.zenwave360.example</groupId>
+        <artifactId>zenwave-playground</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>..</relativePath>
+    </parent>
+    <artifactId>zenwave-playground-adapters</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.zenwave360.example</groupId>
+            <artifactId>zenwave-playground-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>6.6.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/model/openapi.yml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <apiPackage>io.zenwave360.example.adapters.web</apiPackage>
+                            <modelPackage>io.zenwave360.example.adapters.web.model</modelPackage>
+                            <modelNameSuffix>DTO</modelNameSuffix>
+                            <addCompileSourceRoot>true</addCompileSourceRoot>
+                            <supportingFilesToGenerate>
+                                ApiUtil.java
+                            </supportingFilesToGenerate>
+                            <typeMappings>
+                                <typeMapping>Double=java.math.BigDecimal</typeMapping>
+                            </typeMappings>
+                            <configOptions>
+                                <useSpringBoot3>true</useSpringBoot3>
+                                <documentationProvider>none</documentationProvider>
+                                <openApiNullable>false</openApiNullable>
+                                <useOptional>true</useOptional>
+                                <useTags>true</useTags>
+                                <interfaceOnly>true</interfaceOnly>
+                                <delegatePattern>false</delegatePattern>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.github.zenwave360.zenwave-sdk</groupId>
+                <artifactId>zenwave-sdk-maven-plugin</artifactId>
+                <version>${zenwave.version}</version>
+                <configuration>
+                    <inputSpec>${pom.basedir}/src/main/resources/model/asyncapi.yml</inputSpec>
+                    <skip>false</skip>
+                    <addCompileSourceRoot>true</addCompileSourceRoot>
+                    <addTestCompileSourceRoot>true</addTestCompileSourceRoot>
+                </configuration>
+                <executions>
+                    <!-- DTOs -->
+                    <execution>
+                        <id>generate-asyncapi-dtos</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <generatorName>jsonschema2pojo</generatorName>
+                            <configOptions>
+                                <modelPackage>io.zenwave360.example.core.domain.events</modelPackage>
+                                <!--								<jsonschema2pojo.includeTypeInfo>true</jsonschema2pojo.includeTypeInfo>-->
+                                <jsonschema2pojo.isUseJakartaValidation>true</jsonschema2pojo.isUseJakartaValidation>
+                                <jsonschema2pojo.useLongIntegers>true</jsonschema2pojo.useLongIntegers>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                    <!-- Generate PROVIDER -->
+                    <execution>
+                        <id>generate-asyncapi</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <generatorName>spring-cloud-streams3</generatorName>
+                            <configOptions>
+                                <role>provider</role>
+                                <style>imperative</style>
+                                <!--								<transactionalOutbox>mongodb</transactionalOutbox>-->
+                                <modelPackage>io.zenwave360.example.core.domain.events</modelPackage>
+                                <producerApiPackage>io.zenwave360.example.core.outbound.events</producerApiPackage>
+                                <consumerApiPackage>io.zenwave360.example.adapters.commands</consumerApiPackage>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.github.zenwave360.zenwave-sdk.plugins</groupId>
+                        <artifactId>asyncapi-spring-cloud-streams3</artifactId>
+                        <version>${zenwave.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>io.github.zenwave360.zenwave-sdk.plugins</groupId>
+                        <artifactId>asyncapi-jsonschema2pojo</artifactId>
+                        <version>${zenwave.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

@@ -11,27 +11,32 @@ config {
 
         ZDLToOpenAPIPlugin {
             idType string
-            targetFile "src/main/resources/model/openapi.yml"
+            targetFile "customer-address-adapters/src/main/resources/model/openapi.yml"
         }
 
         ZDLToAsyncAPIPlugin {
             asyncapiVersion v3
             idType string
-            targetFile "src/main/resources/model/asyncapi.yml"
+            targetFile "customer-address-adapters/src/main/resources/model/asyncapi.yml"
         }
 
         BackendApplicationDefaultPlugin {
+            useLombok true
+            multiModule true
+            mavenModulesPrefix "customer-address"
             --force // overwite all files
         }
 
         OpenAPIControllersPlugin {
-            specFile "src/main/resources/model/openapi.yml"
+            specFile "customer-address-adapters/src/main/resources/model/openapi.yml"
             zdlFile "src/main/resources/zdl-examples/customer-address-mongodb.zdl"
 
             // thse should match the values of openapi-generator-maven-plugin
             openApiApiPackage "{{basePackage}}.adapters.web"
             openApiModelPackage "{{basePackage}}.adapters.web.model"
             openApiModelNameSuffix DTO
+
+            targetFolder "customer-address-adapters"
         }
     }
 }
