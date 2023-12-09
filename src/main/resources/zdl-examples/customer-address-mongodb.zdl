@@ -21,10 +21,12 @@ config {
         }
 
         BackendApplicationDefaultPlugin {
+            useLombok true
             --force // overwite all files
         }
 
         OpenAPIControllersPlugin {
+            formatter google // comments in one line are better for demos
             specFile "src/main/resources/model/openapi.yml"
             zdlFile "src/main/resources/zdl-examples/customer-address-mongodb.zdl"
 
