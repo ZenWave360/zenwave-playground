@@ -28,6 +28,7 @@ config {
         }
 
         OpenAPIControllersPlugin {
+            formatter google // comments in one line are better for demos
             specFile "customer-address-adapters/src/main/resources/model/openapi.yml"
             zdlFile "src/main/resources/zdl-examples/customer-address-mongodb.zdl"
 
