@@ -1,14 +1,12 @@
 # ZenWave SDK Playground
 
-Follow instructions at: [ZenWave SDK Getting Started](https://zenwave360.github.io/docs/getting-started/)
+Follow instructions at: [ZenWave SDK Getting Started](https://www.zenwave360.io/docs/getting-started/)
 
-Available Base Line branches:
+Base Line Projects:
 
-* [baseline/jpa](https://github.com/ZenWave360/zenwave-playground/tree/baseline/jpa)
-* [baseline/jpa](https://github.com/ZenWave360/zenwave-playground/tree/baseline/jpa)
-* [baseline/mongodb](https://github.com/ZenWave360/zenwave-playground/tree/baseline/mongodb)
-* [baseline/mongodb-multi-maven](https://github.com/ZenWave360/zenwave-playground/tree/baseline/mongodb-multi-maven)
+* [zenwave-jpa-baseline](zenwave-jpa-baseline)
+* [zenwave-mongodb-baseline](zenwave-mongodb-baseline)
 
-Available branches from demos:
+Example Projects:
 
-* [feature/maven-asyncapi-demo](https://github.com/ZenWave360/zenwave-playground/tree/feature/maven-asyncapi-demo)
+* [zenwave-mongodb-baseline](zenwave-mongodb-baseline)

@@ -1,0 +1,57 @@
+/**
+ * Sample ZenWave Model Definition.
+ * Use zenwave-scripts.zdl to generate your code from this model definition.
+ */
+
+/**
+* Customer entity
+*/
+@aggregate
+@auditing
+entity Customer {
+    name String required minlength(3) maxlength(254)
+    email String required minlength(3) maxlength(254) pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)
+    addresses Address[] minlength(1) maxlength(5) {
+        street String required maxlength(254)
+        city String required maxlength(254)
+    }
+    paymentMethods PaymentMethod[] {
+        type PaymentMethodType required
+        cardNumber String required
+    }
+}
+
+enum PaymentMethodType { VISA(1), MASTERCARD(2) }
+
+
+// you can create 'inputs' as dtos for your service methods, or use entities directly
+input CustomerSearchCriteria {
+    name String
+    email String
+    city String
+    state String
+}
+
+@rest("/customers")
+service CustomerService for (Customer) {
+    @post
+    createCustomer(Customer) Customer withEvents CustomerEvent
+    @get("/{id}")
+    getCustomer(id) Customer?
+    @put("/{id}")
+    updateCustomer(id, Customer) Customer? withEvents CustomerEvent
+    @delete("/{id}")
+    deleteCustomer(id) withEvents CustomerEvent
+    @post("/search")
+    @paginated
+    searchCustomers(CustomerSearchCriteria) Customer[]
+}
+
+@copy(Customer)
+@asyncapi({ channel: "CustomersChannel", topic: "customers" })
+event CustomerEvent {
+    id String
+    version Integer
+    // all fields from Customer are copied here, but not relationships
+    paymentMethods PaymentMethod[]
+}
