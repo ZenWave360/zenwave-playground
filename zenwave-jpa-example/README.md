@@ -44,6 +44,3 @@ mvn clean verify
 docker-compose down
 ```
 
-## License
-
-&copy; 2024 ZenWave. All rights reserved.
