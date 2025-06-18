@@ -23,19 +23,9 @@ config {
 
         ZDLToAsyncAPIPlugin {
             asyncapiVersion v3
-            idType integer
-            idTypeFormat int64
-            targetFile "src/main/resources/public/apis/asyncapi.yml"
-            includeKafkaCommonHeaders true
-        }
-
-        ZDLToAsyncAPIPlugin {
-            asyncapiVersion v3
             schemaFormat avro
             avroPackage "io.zenwave360.example.core.outbound.events.dtos"
             idType long
-//            idType integer
-//            idTypeFormat int64
             targetFile "src/main/resources/public/apis/asyncapi.yml"
             includeKafkaCommonHeaders true
         }

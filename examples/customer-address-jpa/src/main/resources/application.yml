@@ -15,6 +15,7 @@ spring:
   modulith.events.externalization.enabled: true
   modulith.events.jdbc.schema-initialization.enabled: true
   modulith.events.republish-outstanding-events-on-restart: true
+
   security:
     user:
       name: user

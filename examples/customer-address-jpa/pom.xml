@@ -42,7 +42,7 @@
 		<spring-cloud-stream-schema.version>2.2.1.RELEASE</spring-cloud-stream-schema.version>
 		<spring-modulith.version>1.3.0</spring-modulith.version>
 
-		<zenwave.version>1.7.0</zenwave.version>
+		<zenwave.version>2.0.2</zenwave.version>
 
 		<jakarta.validation-api.version>3.1.0</jakarta.validation-api.version>
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
@@ -364,32 +364,6 @@
 							</configOptions>
 						</configuration>
 					</execution>
-					<!-- Ejemplo de como generar un cliente OpenAPI usando spring-http-interface
-						 ver tambien: HttpInterfacesWebClientConfig.java
-					<execution>
-						<id>openapi-generator-client-customers</id>
-						<goals><goal>generate</goal></goals>
-						<phase>generate-sources</phase>
-						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/public/apis/clients/customer-openapi.yml</inputSpec>
-							<generatorName>spring</generatorName>
-							<library>spring-http-interface</library>
-							<apiPackage>${basePackage}.customers.client</apiPackage>
-							<modelPackage>${basePackage}.customers.client.model</modelPackage>
-							<modelNameSuffix>DTO</modelNameSuffix>
-							<addCompileSourceRoot>true</addCompileSourceRoot>
-							<typeMappings>
-								<typeMapping>Double=java.math.BigDecimal</typeMapping>
-							</typeMappings>
-							<configOptions>
-								<useJakartaEe>true</useJakartaEe>
-								<documentationProvider>none</documentationProvider>
-								<openApiNullable>false</openApiNullable>
-								<useOptional>true</useOptional>
-								<useTags>true</useTags>
-							</configOptions>
-						</configuration>
-					</execution> -->
 				</executions>
 			</plugin>
 		</plugins>
@@ -406,7 +380,7 @@
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>io.github.zenwave360.zenwave-sdk</groupId>
+						<groupId>io.zenwave360.sdk</groupId>
 						<artifactId>zenwave-sdk-maven-plugin</artifactId>
 						<version>${zenwave.version}</version>
 						<configuration>
@@ -456,12 +430,12 @@
 						</executions>
 						<dependencies>
 							<dependency>
-								<groupId>io.github.zenwave360.zenwave-sdk.plugins</groupId>
+								<groupId>io.zenwave360.sdk.plugins</groupId>
 								<artifactId>asyncapi-spring-cloud-streams3</artifactId>
 								<version>${zenwave.version}</version>
 							</dependency>
 							<dependency>
-								<groupId>io.github.zenwave360.zenwave-sdk.plugins</groupId>
+								<groupId>io.zenwave360.sdk.plugins</groupId>
 								<artifactId>asyncapi-jsonschema2pojo</artifactId>
 								<version>${zenwave.version}</version>
 							</dependency>
