@@ -1,4 +1,7 @@
+@import("io.zenwave360.sdk.plugins.customizations:kotlin-backend-application:2.1.0-SNAPSHOT")
+
 config {
+
     zdlFile "zenwave-model.zdl"
 
     plugins {
@@ -11,29 +14,32 @@ config {
 
         ZDLToAsyncAPIPlugin {
             asyncapiVersion v3
-            schemaFormat avro
-            avroPackage "io.zenwave360.example.core.outbound.events.dtos"
-            idType long
+            idType integer
+            idTypeFormat int64
             targetFile "src/main/resources/public/apis/asyncapi.yml"
-            includeKafkaCommonHeaders true
+            // includeKafkaCommonHeaders true
         }
 
         BackendApplicationDefaultPlugin {
-            useLombok true
+            templates "new io.zenwave360.sdk.plugins.kotlin.BackendApplicationKotlinTemplates()"
             includeEmitEventsImplementation true
-            // --force // overwite all files
+            haltOnFailFormatting false
+            --force // overwite all files
         }
 
         OpenAPIControllersPlugin {
             openapiFile "src/main/resources/public/apis/openapi.yml"
+            templates "new io.zenwave360.sdk.plugins.kotlin.OpenAPIControllersKotlinTemplates()"
         }
 
         SpringWebTestClientPlugin {
             openapiFile "src/main/resources/public/apis/openapi.yml"
+            templates "new io.zenwave360.sdk.plugins.kotlin.SpringWebTestClientKotlinTemplates()"
         }
 
         SpringWebTestClientPlugin {
             openapiFile "src/main/resources/public/apis/openapi.yml"
+            templates "new io.zenwave360.sdk.plugins.kotlin.SpringWebTestClientKotlinTemplates()"
             groupBy businessFlow
             businessFlowTestName CreateUpdateDeleteCustomerIntegrationTest
             operationIds createCustomer,updateCustomer,deleteCustomer,getCustomer

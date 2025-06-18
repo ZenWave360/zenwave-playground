@@ -3,15 +3,18 @@
  * Use zenwave-scripts.zdl to generate your code from this model definition.
  */
 config {
-    title "ZenWave Customer JPA Example"
-    basePackage "io.zenwave360.example"
+    title "Project Name"
+    basePackage "io.zenwave360.examples.kotlin"
     persistence jpa
     databaseType postgresql
 
+    // you can choose: DefaultProjectLayout, CleanHexagonalProjectLayout, LayeredProjectLayout, SimpleDomainProjectLayout, HexagonalProjectLayout, CleanArchitectureProjectLayout
+    layout LayeredProjectLayout
+
     // these should match the values of openapi-generator-maven-plugin
     // used by the OpenAPIControllersPlugin and SpringWebTestClientPlugin
-    openApiApiPackage "{{basePackage}}.adapters.web"
-    openApiModelPackage "{{basePackage}}.adapters.web.model"
+    layout.openApiApiPackage "{{basePackage}}.web"
+    layout.openApiModelPackage "{{basePackage}}.web.dtos"
     openApiModelNameSuffix DTO
 }
 
@@ -22,7 +25,7 @@ config {
 @auditing // adds auditing fields to the entity
 entity Customer {
     name String required maxlength(254) /** Customer name */
-    email String required maxlength(254)
+    email String required maxlength(254) pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)
     /** Customer Addresses can be stored in a JSON column in the database. */
     @json addresses Address[] minlength(1) maxlength(5) {
         street String required maxlength(254)
@@ -55,27 +58,21 @@ input CustomerSearchCriteria {
 service CustomerService for (Customer) {
     @post
     createCustomer(Customer) Customer withEvents CustomerEvent
-    @get("/{id}")
+    @get("/{customerId}")
     getCustomer(id) Customer?
-    @put("/{id}")
+    @put("/{customerId}")
     updateCustomer(id, Customer) Customer? withEvents CustomerEvent
-    @delete("/{id}")
-    deleteCustomer(id) withEvents CustomerDeletedEvent
-    @post("/search")
-    @paginated
+    @delete("/{customerId}")
+    deleteCustomer(id) withEvents CustomerEvent
+    @post({path: "/search", status: 200}) @paginated
     searchCustomers(CustomerSearchCriteria) Customer[]
 }
 
 @copy(Customer)
 @asyncapi({ channel: "CustomersChannel", topic: "customers" })
 event CustomerEvent {
-    id Long required
+    id Long
     version Integer
     // all fields from Customer are copied here, but not relationships
     paymentMethods PaymentMethod[]
-}
-
-@asyncapi({ channel: "CustomersChannel", topic: "customers" })
-event CustomerDeletedEvent {
-    id Long required
 }
