@@ -35,7 +35,7 @@ mvn spring-boot:run -Dspring-boot.run.profiles=local
 
 ### Prerequisites
 
-* Java 17+
+* Java 21+
 * Maven 3.6+
 * Docker/Docker Compose
 * Git and Git-Bash
@@ -44,7 +44,7 @@ mvn spring-boot:run -Dspring-boot.run.profiles=local
 
 ## Technologies
 
-* Spring Boot 3.3.x
+* Spring Boot 3.5.x
 * Spring Data JPA or MongoDB
 * Spring Data Elasticsearch
 * Spring Cloud Streams for Kafka, RabbitMQ, or other Message Brokers
@@ -219,20 +219,29 @@ The base project comes with to files:
   - Use InMemory dependencies for all use cases.
 - Interfaces that connect to external resources **MUST** be tested using DockerComposeContainer, even if this does not contribute to code coverage metrics.
 
+
 ## Code Formating
 
-This project is configured to use Spring Java Format as code formatter. You can apply code formatting from the command line with the following command:
+This project is configured to use [Spotless](https://github.com/diffplug/spotless) with Palantir Java Format as code formatter. You can apply code formatting from the command line with the following command:
 
 ```bash
-mvn spring-javaformat:apply
+mvn spotless:apply
 ```
 
 You can also configure your IDE for code automatic code formating with the following plugins:
 
-- https://github.com/spring-io/spring-javaformat?tab=readme-ov-file#eclipse
-- https://github.com/spring-io/spring-javaformat?tab=readme-ov-file#intellij-idea
+- https://plugins.jetbrains.com/plugin/13180-palantir-java-format
+- https://github.com/palantir/palantir-java-format/tree/develop/eclipse_plugin
 
 Keep a consistent code style from the beginning of the project.
+
+### Palantir IntelliJ plugin
+
+The plugin will be disabled by default on new projects. To manually enable it in the current project, go to `File→Settings...→palantir-java-format Settings` (or `IntelliJ IDEA→Preferences...→Other Settings→palantir-java-format Settings` on macOS) and check the Enable palantir-java-format checkbox.
+
+To enable it by default in new projects, use `File→Other Settings→Default Settings...`.
+
+When enabled, it will replace the normal Reformat Code action, which can be triggered from the Code menu or with the Ctrl-Alt-L (by default) keyboard shortcut.
 
 
 Happy Coding!! 🚀🚀🚀
