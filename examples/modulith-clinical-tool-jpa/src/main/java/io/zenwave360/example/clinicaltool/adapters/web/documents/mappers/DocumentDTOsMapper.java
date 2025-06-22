@@ -1,0 +1,31 @@
+package io.zenwave360.example.clinicaltool.adapters.web.documents.mappers;
+
+import io.zenwave360.example.clinicaltool.common.mappers.*;
+import io.zenwave360.example.clinicaltool.modules.documents.core.domain.*;
+import io.zenwave360.example.clinicaltool.modules.documents.core.inbound.dtos.*;
+import io.zenwave360.example.clinicaltool.adapters.web.documents.dtos.*;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
+import java.math.*;
+import java.time.*;
+import java.util.*;
+import org.springframework.data.domain.Page;
+
+@Mapper(uses = BaseMapper.class)
+public interface DocumentDTOsMapper {
+
+    DocumentDTOsMapper INSTANCE = Mappers.getMapper(DocumentDTOsMapper.class);
+
+    // request mappings
+        DocumentInfo asDocumentInfo(org.springframework.web.multipart.MultipartFile file, Long id, Integer version, String uuid, String fileName, String documentType, String contentType, List<String> tags, DocumentDataDTO documentData);
+
+    // response mappings
+    
+    List<DocumentInfoDTO> asDocumentInfoDTOList(List<DocumentInfo> entityList);
+    
+    DocumentInfoDTO asDocumentInfoDTO(DocumentInfo entity);
+    
+
+
+}

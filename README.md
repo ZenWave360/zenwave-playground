@@ -9,4 +9,6 @@ Base Line Projects:
 
 Example Projects:
 
-* [zenwave-mongodb-baseline](zenwave-mongodb-baseline)
+* [examples/customer-address-jpa](examples/customer-address-jpa) Spring Boot + JPA + Kafka
+* [examples/kustomer-address-jpa](examples/kustomer-address-jpa) Spring Boot + JPA + Kafka + Kotlin
+* [examples/modulith-clinical-tool-jpa](examples/modulith-clinical-tool-jpa) Modular Monolith

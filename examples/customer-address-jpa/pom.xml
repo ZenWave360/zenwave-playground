@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.0</version> <!-- lookup parent from repository -->
+		<version>3.5.0</version> <!-- lookup parent from repository -->
 	</parent>
 
 	<groupId>io.zenwave360.example</groupId>
@@ -38,7 +38,7 @@
 		<asyncApiConsumerApiPackage>${basePackage}.adapters.commands</asyncApiConsumerApiPackage>
 
 		<spring-boot.version>${project.parent.version}</spring-boot.version>
-		<spring-cloud.version>2024.0.0</spring-cloud.version>
+		<spring-cloud.version>2025.0.0</spring-cloud.version>
 		<spring-cloud-stream-schema.version>2.2.1.RELEASE</spring-cloud-stream-schema.version>
 		<spring-modulith.version>1.3.0</spring-modulith.version>
 
