@@ -6,13 +6,26 @@ logging:
 springdoc.swagger-ui.urls:
   - name: Login Form
     url: /apis/login-openapi.yml
-  - name: Project Name
-    url: /apis/openapi.yml
+  - name: Clinical Tool - WebApp API
+    url: /apis/webapp-openapi.yml
+  - name: Clinical Tool - Mobile API
+    url: /apis/mobile-openapi.yml
+  - name: Documents API
+    url: /apis/documents-openapi.yml
+  - name: Master Data API
+    url: /apis/masterdata-openapi.yml
+  - name: Surveys - Backoffice API
+    url: /apis/surveys-backoffice-openapi.yml
+  - name: Surveys - Public API
+    url: /apis/surveys-public-openapi.yml
+  - name: User Management API
+    url: /apis/users-openapi.yml
+  - name: Terms And Conditions API
+    url: /apis/terms-and-conditions-openapi.yml
 
 management:
   endpoints.web.exposure.include: "*"
 
-app:
 spring:
   security:
     user:
@@ -35,5 +48,3 @@ spring:
         prepStmtCacheSize: 250
         prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: true
-  data:
-  cloud:

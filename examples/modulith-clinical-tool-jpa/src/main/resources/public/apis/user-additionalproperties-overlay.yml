@@ -1,0 +1,12 @@
+overlay: 1.0.0
+info:
+  title: "User AdditionalProperties Overlay"
+  version: 0.0.1
+  description: "Overlay for User additionalProperties"
+
+actions:
+  - target: $.components.schemas.User.properties.additionalProperties
+    update:
+      type: "object"
+      additionalProperties:
+        type: "object"

@@ -22,6 +22,7 @@ config {
 
     // BackendApplicationDefaultPlugin
     useLombok true
+    useSpringModulith true
 
     haltOnFailFormatting false
 
@@ -74,6 +75,13 @@ config {
             targetFile "src/main/resources/public/apis/terms-and-conditions-openapi.yml"
         }
 
+        ZDLToOpenAPIPlugin {
+            title "User Managament API"
+            zdlFiles "models/users.zdl"
+            overlayFiles "src/main/resources/public/apis/user-additionalproperties-overlay.yml"
+            targetFile "src/main/resources/public/apis/users-openapi.yml"
+        }
+
 
         //-----------------------------
 
@@ -100,6 +108,11 @@ config {
         BackendApplicationDefaultPlugin {
             zdlFile "models/terms-and-conditions.zdl"
             // --force // overwite all files
+        }
+
+        BackendApplicationDefaultPlugin {
+            zdlFile "models/users.zdl"
+             --force // overwite all files
         }
 
 
@@ -145,6 +158,12 @@ config {
             zdlFiles "models/terms-and-conditions.zdl"
             openapiFile "src/main/resources/public/apis/terms-and-conditions-openapi.yml"
             customWebModule "{{basePackage}}.adapters.web.termsandconditions"
+        }
+
+        OpenAPIControllersPlugin {
+            zdlFiles "models/users.zdl"
+            openapiFile "src/main/resources/public/apis/users-openapi.yml"
+            customWebModule "{{basePackage}}.adapters.web.users"
         }
 
         //-----------------------------

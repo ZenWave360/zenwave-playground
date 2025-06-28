@@ -1,0 +1,58 @@
+config {
+    title "User Management"
+    moduleBasePackage "io.zenwave360.example.clinicaltool.modules.users"
+    // you can choose: DefaultProjectLayout, CleanHexagonalProjectLayout, LayeredProjectLayout, SimpleDomainProjectLayout, HexagonalProjectLayout, CleanArchitectureProjectLayout
+    layout SimpleDomainProjectLayout
+}
+
+@aggregate
+@auditing
+entity User (application_user) {
+    name String
+    @naturalId
+    username String required unique
+    email String required unique
+    password String
+
+    @set
+    roles String[] required
+
+    enabled Boolean
+    credentialsNonExpired Boolean
+    accountNonExpired Boolean
+    accountNonLocked Boolean
+
+    @jsonb additionalProperties Map
+}
+
+input SearchCriteria {
+    username String
+    email String
+    role String
+    enabled Boolean
+    searchTerms Map
+}
+
+@rest("/users")
+service UserService for (User) {
+
+    @get("/{username}")
+    findByUsername(@natural id) User?
+
+    @post
+    createUser(User) User
+    @put("/{username}")
+    updateUser(@natural id, User) User?
+
+    @put(path: "/{username}/lock", status: 200)
+    lockAccount(@natural id) User?
+    @put(path: "/{username}/unlock", status: 200)
+    unLockAccount(@natural id) User?
+    @delete("/{username}")
+    deleteUser(@natural id)
+
+    @post(path: "/search", status: 200) @paginated
+    searchUsers(SearchCriteria) User[]
+    @get("/list") @paginated
+    listUsers() User[]
+}

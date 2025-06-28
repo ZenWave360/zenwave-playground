@@ -27,6 +27,7 @@
 		<spring-boot.version>${project.parent.version}</spring-boot.version>
 		<spring-cloud.version>2025.0.0</spring-cloud.version>
 		<spring-cloud-stream-schema.version>2.2.1.RELEASE</spring-cloud-stream-schema.version>
+		<spring-modulith.version>1.4.1</spring-modulith.version>
 
 		<zenwave.version>2.0.2</zenwave.version>
 
@@ -53,6 +54,13 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+            <dependency>
+                <groupId>org.springframework.modulith</groupId>
+                <artifactId>spring-modulith-bom</artifactId>
+                <version>${spring-modulith.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -131,16 +139,20 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
-		<!-- infinispan -->
-		<dependency>
-			<groupId>org.infinispan</groupId>
-			<artifactId>infinispan-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.infinispan</groupId>
-			<artifactId>infinispan-spring-boot-starter-embedded</artifactId>
-			<version>${infinispan-spring-boot-starter-embedded.version}</version>
-		</dependency>
+        <!-- spring modulith -->
+        <dependency>
+            <groupId>org.springframework.modulith</groupId>
+            <artifactId>spring-modulith-starter-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.modulith</groupId>
+            <artifactId>spring-modulith-starter-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.modulith</groupId>
+            <artifactId>spring-modulith-runtime</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 		<!-- swagger -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
@@ -154,6 +166,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+        <!-- Spring Modulith Test -->
+        <dependency>
+            <groupId>org.springframework.modulith</groupId>
+            <artifactId>spring-modulith-test</artifactId>
+            <scope>test</scope>
+        </dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webflux</artifactId>
@@ -295,7 +313,7 @@
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>7.12.0</version>
+                <version>7.10.0</version>
                 <configuration>
                     <skipIfSpecIsUnchanged>true</skipIfSpecIsUnchanged>
                     <generatorName>spring</generatorName>
@@ -407,6 +425,18 @@
                             <inputSpec>${project.basedir}/src/main/resources/public/apis/terms-and-conditions-openapi.yml</inputSpec>
                             <apiPackage>${basePackage}.adapters.web.termsandconditions</apiPackage>
                             <modelPackage>${basePackage}.adapters.web.termsandconditions.dtos</modelPackage>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>openapi-generator-users</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/public/apis/users-openapi.yml</inputSpec>
+                            <apiPackage>${basePackage}.adapters.web.users</apiPackage>
+                            <modelPackage>${basePackage}.adapters.web.users.dtos</modelPackage>
                         </configuration>
                     </execution>
                 </executions>

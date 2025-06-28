@@ -1,10 +1,6 @@
 /** Inbound DTOs. */
 @keep
-@NamedInterface
-package io.zenwave360.example.clinicaltool.modules.clinical.core.inbound.dtos;
-
-import org.springframework.modulith.NamedInterface;
-
+package io.zenwave360.example.clinicaltool.modules.users.core.inbound.dtos;
 @interface keep {
     // keeps this package even when it's empty,
     // allowing wildcard import "io.zenwave360.example.clinicaltool.core.inbound.dtos.*;"
