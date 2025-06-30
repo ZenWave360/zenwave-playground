@@ -1,11 +1,11 @@
 package io.zenwave360.example.clinicaltool.modules.termsandconditions.config;
 
 
-import io.zenwave360.example.clinicaltool.modules.termsandconditions.core.domain.*;
+import io.zenwave360.example.clinicaltool.modules.termsandconditions.domain.*;
 
 
-import io.zenwave360.example.clinicaltool.modules.termsandconditions.core.inbound.*;
-import io.zenwave360.example.clinicaltool.modules.termsandconditions.core.implementation.*;
+import io.zenwave360.example.clinicaltool.modules.termsandconditions.*;
+import io.zenwave360.example.clinicaltool.modules.termsandconditions.*;
 
 
     

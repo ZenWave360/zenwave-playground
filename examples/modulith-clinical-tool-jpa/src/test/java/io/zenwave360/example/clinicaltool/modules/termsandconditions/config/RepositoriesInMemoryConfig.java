@@ -3,8 +3,8 @@ package io.zenwave360.example.clinicaltool.modules.termsandconditions.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 
-import io.zenwave360.example.clinicaltool.modules.termsandconditions.core.outbound.jpa.*;
-import io.zenwave360.example.clinicaltool.modules.termsandconditions.infrastructure.jpa.inmemory.*;
+import io.zenwave360.example.clinicaltool.modules.termsandconditions.*;
+import io.zenwave360.example.clinicaltool.modules.termsandconditions.inmemory.*;
 
 
 //@Configuration

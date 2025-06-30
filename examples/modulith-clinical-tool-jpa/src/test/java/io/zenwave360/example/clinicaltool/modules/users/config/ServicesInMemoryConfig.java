@@ -1,11 +1,11 @@
 package io.zenwave360.example.clinicaltool.modules.users.config;
 
 
-import io.zenwave360.example.clinicaltool.modules.users.core.domain.*;
+import io.zenwave360.example.clinicaltool.modules.users.domain.*;
 
 
-import io.zenwave360.example.clinicaltool.modules.users.core.inbound.*;
-import io.zenwave360.example.clinicaltool.modules.users.core.implementation.*;
+import io.zenwave360.example.clinicaltool.modules.users.*;
+import io.zenwave360.example.clinicaltool.modules.users.*;
 
 
     

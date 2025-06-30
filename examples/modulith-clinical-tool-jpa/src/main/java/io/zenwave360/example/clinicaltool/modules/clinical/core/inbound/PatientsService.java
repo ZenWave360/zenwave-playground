@@ -2,15 +2,13 @@ package io.zenwave360.example.clinicaltool.modules.clinical.core.inbound;
 
 import io.zenwave360.example.clinicaltool.modules.clinical.core.domain.*;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.inbound.dtos.*;
-import java.math.*;
-import java.time.*;
+
 import java.util.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 /**
  * Inbound Service Port for managing [Patient, ProvisionalPatient].
  */
+@org.springframework.modulith.NamedInterface("PatientsService")
 public interface PatientsService {
 
      /**
@@ -58,14 +56,14 @@ public interface PatientsService {
     public PatientProfile getPatientProfileById(Long id)
 ;
      /**
-      * 
+      *
       *
       */
 
     public void requestOptOut(Long id)
 ;
      /**
-      * 
+      *
       *
       */
 

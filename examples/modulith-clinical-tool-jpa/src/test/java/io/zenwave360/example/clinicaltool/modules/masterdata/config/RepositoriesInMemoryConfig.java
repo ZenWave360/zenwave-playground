@@ -3,8 +3,8 @@ package io.zenwave360.example.clinicaltool.modules.masterdata.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 
-import io.zenwave360.example.clinicaltool.modules.masterdata.core.outbound.jpa.*;
-import io.zenwave360.example.clinicaltool.modules.masterdata.infrastructure.jpa.inmemory.*;
+import io.zenwave360.example.clinicaltool.modules.masterdata.*;
+import io.zenwave360.example.clinicaltool.modules.masterdata.inmemory.*;
 
 
 //@Configuration

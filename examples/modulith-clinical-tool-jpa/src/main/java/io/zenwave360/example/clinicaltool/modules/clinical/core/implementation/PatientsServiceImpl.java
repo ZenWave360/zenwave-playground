@@ -1,21 +1,16 @@
 package io.zenwave360.example.clinicaltool.modules.clinical.core.implementation;
 
+import io.zenwave360.example.clinicaltool.modules.clinical.core.inbound.PatientsService;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.domain.*;
-import io.zenwave360.example.clinicaltool.modules.clinical.core.inbound.*;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.inbound.dtos.*;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.implementation.mappers.*;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.outbound.jpa.*;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.outbound.events.*;
-import io.zenwave360.example.clinicaltool.modules.clinical.core.domain.events.*;
 
-import java.math.*;
-import java.time.*;
 import java.util.*;
-import org.mapstruct.factory.Mappers;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

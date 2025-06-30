@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 /**
  * Inbound Service Port for managing [Hospital, Doctor].
  */
+@org.springframework.modulith.NamedInterface("HospitalService")
 public interface HospitalService {
 
      /**

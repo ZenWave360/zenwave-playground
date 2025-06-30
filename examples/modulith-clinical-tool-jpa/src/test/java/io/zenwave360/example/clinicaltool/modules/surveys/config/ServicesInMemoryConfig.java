@@ -1,11 +1,11 @@
 package io.zenwave360.example.clinicaltool.modules.surveys.config;
 
 
-import io.zenwave360.example.clinicaltool.modules.surveys.core.domain.*;
+import io.zenwave360.example.clinicaltool.modules.surveys.domain.*;
 
 
-import io.zenwave360.example.clinicaltool.modules.surveys.core.inbound.*;
-import io.zenwave360.example.clinicaltool.modules.surveys.core.implementation.*;
+import io.zenwave360.example.clinicaltool.modules.surveys.service.*;
+import io.zenwave360.example.clinicaltool.modules.surveys.service.impl.*;
 
 
     

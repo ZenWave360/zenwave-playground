@@ -1,16 +1,12 @@
 package io.zenwave360.example.clinicaltool.modules.clinical.config;
 
 
+import io.zenwave360.example.clinicaltool.modules.clinical.core.inbound.PatientsService;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.domain.*;
 
 
 import io.zenwave360.example.clinicaltool.modules.clinical.core.inbound.*;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.implementation.*;
-
-
-    
-import io.zenwave360.example.clinicaltool.modules.clinical.core.domain.events.*;
-    
 
 import io.zenwave360.example.clinicaltool.modules.clinical.infrastructure.events.*;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import java.util.List;
-import java.util.ArrayList;
 
 /**
  * Services InMemory Config. It can be used standalone or with @SpringBootTest.
@@ -49,7 +44,7 @@ public class ServicesInMemoryConfig extends RepositoriesInMemoryConfig {
 	static List<Patient> _patients;
 	static List<ProvisionalPatient> _provisionalPatients;
 	public void reloadTestData() {
-        
+
 		var testDataLoader = new TestDataLoader(List.of(Hospital.class, Doctor.class, Patient.class, GeneralInfo.class, HealthInsuranceInfo.class, ProvisionalPatient.class, PatientAddress.class, HospitalAddress.class, PatientWearable.class, MedicalContact.class, PersonalContact.class));
 		var hospitals = _hospitals != null? _hospitals : testDataLoader.loadCollectionTestDataAsObjects(Hospital.class);
 		hospitalRepository().deleteAll();

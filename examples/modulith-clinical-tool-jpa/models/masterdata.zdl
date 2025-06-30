@@ -1,6 +1,6 @@
 config {
     title "Master Data"
-    moduleBasePackage "io.zenwave360.example.clinicaltool.modules.masterdata"
+    layout.moduleBasePackage "io.zenwave360.example.clinicaltool.modules.masterdata"
     // you can choose: DefaultProjectLayout, CleanHexagonalProjectLayout, LayeredProjectLayout, SimpleDomainProjectLayout, HexagonalProjectLayout, CleanArchitectureProjectLayout
     layout SimpleDomainProjectLayout
 }

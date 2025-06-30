@@ -12,6 +12,7 @@ import io.zenwave360.example.clinicaltool.modules.clinical.core.domain.*;
 * 
 */
 @lombok.Getter @lombok.Setter
+@org.springframework.modulith.NamedInterface("events.DoctorCreated")
 public  class DoctorCreated  implements Serializable {
 
     @java.io.Serial

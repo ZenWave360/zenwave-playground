@@ -1,5 +1,5 @@
 @org.springframework.modulith.ApplicationModule(
-    displayName = "Surveys Module",
+displayName = "Clinical Surveys Backend",
     allowedDependencies = {"common"}
 )
 package io.zenwave360.example.clinicaltool.modules.surveys;

@@ -1,6 +1,6 @@
 config {
     title "Clinical Surveys Backend"
-    moduleBasePackage "io.zenwave360.example.clinicaltool.modules.surveys"
+    layout.moduleBasePackage "io.zenwave360.example.clinicaltool.modules.surveys"
     layout LayeredProjectLayout
 }
 

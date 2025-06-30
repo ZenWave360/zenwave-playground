@@ -245,7 +245,7 @@ components:
         searchTerms:
           type: "object"
           additionalProperties:
-            type: "string"
+            type: "object"
     Page:
       type: "object"
       required:

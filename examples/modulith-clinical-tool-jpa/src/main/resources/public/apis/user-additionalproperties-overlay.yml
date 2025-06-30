@@ -10,3 +10,8 @@ actions:
       type: "object"
       additionalProperties:
         type: "object"
+  - target: $.components.schemas.SearchCriteria.properties.searchTerms
+    update:
+      type: "object"
+      additionalProperties:
+        type: "object"

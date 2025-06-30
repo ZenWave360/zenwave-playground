@@ -1,11 +1,11 @@
 package io.zenwave360.example.clinicaltool.modules.masterdata.config;
 
 
-import io.zenwave360.example.clinicaltool.modules.masterdata.core.domain.*;
+import io.zenwave360.example.clinicaltool.modules.masterdata.domain.*;
 
 
-import io.zenwave360.example.clinicaltool.modules.masterdata.core.inbound.*;
-import io.zenwave360.example.clinicaltool.modules.masterdata.core.implementation.*;
+import io.zenwave360.example.clinicaltool.modules.masterdata.*;
+import io.zenwave360.example.clinicaltool.modules.masterdata.*;
 
 
     

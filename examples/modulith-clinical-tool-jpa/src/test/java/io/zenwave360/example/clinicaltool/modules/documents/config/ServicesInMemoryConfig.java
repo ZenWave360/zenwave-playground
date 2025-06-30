@@ -1,11 +1,11 @@
 package io.zenwave360.example.clinicaltool.modules.documents.config;
 
 
-import io.zenwave360.example.clinicaltool.modules.documents.core.domain.*;
+import io.zenwave360.example.clinicaltool.modules.documents.domain.*;
 
 
-import io.zenwave360.example.clinicaltool.modules.documents.core.inbound.*;
-import io.zenwave360.example.clinicaltool.modules.documents.core.implementation.*;
+import io.zenwave360.example.clinicaltool.modules.documents.*;
+import io.zenwave360.example.clinicaltool.modules.documents.*;
 
 
     

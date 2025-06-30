@@ -1,6 +1,6 @@
 config {
     title "Clinical Terms And Conditions Backend"
-    moduleBasePackage "io.zenwave360.example.clinicaltool.modules.termsandconditions"
+    layout.moduleBasePackage "io.zenwave360.example.clinicaltool.modules.termsandconditions"
     // you can choose: DefaultProjectLayout, CleanHexagonalProjectLayout, LayeredProjectLayout, SimpleDomainProjectLayout, HexagonalProjectLayout, CleanArchitectureProjectLayout
     layout SimpleDomainProjectLayout
 

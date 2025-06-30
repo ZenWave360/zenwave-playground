@@ -1,1 +1,0 @@
-org.springframework.modulith.core.ApplicationModuleDetectionStrategy=io.zenwave360.example.clinicaltool.config.CustomApplicationModuleDetectionStrategy
