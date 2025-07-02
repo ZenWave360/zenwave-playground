@@ -1,0 +1,308 @@
+---
+openapi: "3.0.1"
+info:
+  title: "User Managament API"
+  version: "0.0.1"
+  description: "User Managament API"
+  contact:
+    email: "email@domain.com"
+servers:
+- description: "localhost"
+  url: "http://localhost:8080/api"
+- description: "custom"
+  url: "{protocol}://{server}/{path}"
+  variables:
+    protocol:
+      enum:
+      - "http"
+      - "https"
+      default: "http"
+    server:
+      default: "localhost:8080"
+    path:
+      default: "api"
+tags:
+- name: "Default"
+- name: "User"
+paths:
+  /users/{username}:
+    get:
+      operationId: "findByUsername"
+      description: "findByUsername"
+      tags:
+      - "User"
+      parameters:
+      - name: "username"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    put:
+      operationId: "updateUser"
+      description: "updateUser"
+      tags:
+      - "User"
+      parameters:
+      - name: "username"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    delete:
+      operationId: "deleteUser"
+      description: "deleteUser"
+      tags:
+      - "User"
+      parameters:
+      - name: "username"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "204":
+          description: "OK"
+  /users:
+    post:
+      operationId: "createUser"
+      description: "createUser"
+      tags:
+      - "User"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "201":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+  /users/{username}/lock:
+    put:
+      operationId: "lockAccount"
+      description: "lockAccount"
+      tags:
+      - "User"
+      parameters:
+      - name: "username"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+  /users/{username}/unlock:
+    put:
+      operationId: "unLockAccount"
+      description: "unLockAccount"
+      tags:
+      - "User"
+      parameters:
+      - name: "username"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+  /users/search:
+    post:
+      operationId: "searchUsers"
+      description: "searchUsers"
+      tags:
+      - "User"
+      parameters:
+      - $ref: "#/components/parameters/page"
+      - $ref: "#/components/parameters/limit"
+      - $ref: "#/components/parameters/sort"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchCriteria"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserPaginated"
+  /users/list:
+    get:
+      operationId: "listUsers"
+      description: "listUsers"
+      tags:
+      - "User"
+      parameters:
+      - $ref: "#/components/parameters/page"
+      - $ref: "#/components/parameters/limit"
+      - $ref: "#/components/parameters/sort"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserPaginated"
+components:
+  schemas:
+    User:
+      type: "object"
+      x-business-entity: "User"
+      required:
+      - "username"
+      - "email"
+      - "roles"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+          readOnly: true
+        version:
+          type: "integer"
+          default: "null"
+          description: "Version of the document (required in PUT for concurrency control,\
+            \ should be null in POSTs)."
+        name:
+          type: "string"
+        username:
+          type: "string"
+        email:
+          type: "string"
+        password:
+          type: "string"
+        roles:
+          type: "array"
+          items:
+            type: "string"
+        enabled:
+          type: "boolean"
+        credentialsNonExpired:
+          type: "boolean"
+        accountNonExpired:
+          type: "boolean"
+        accountNonLocked:
+          type: "boolean"
+        additionalProperties:
+          type: "object"
+          additionalProperties:
+            type: "object"
+    UserPaginated:
+      allOf:
+      - $ref: "#/components/schemas/Page"
+      - properties:
+          content:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/User"
+    SearchCriteria:
+      type: "object"
+      x-business-entity: "SearchCriteria"
+      properties:
+        username:
+          type: "string"
+        email:
+          type: "string"
+        role:
+          type: "string"
+        enabled:
+          type: "boolean"
+        searchTerms:
+          type: "object"
+          additionalProperties:
+            type: "object"
+    Page:
+      type: "object"
+      required:
+      - "content"
+      - "totalElements"
+      - "totalPages"
+      - "size"
+      - "number"
+      properties:
+        number:
+          type: "integer"
+          minimum: 0
+        numberOfElements:
+          type: "integer"
+          minimum: 0
+        size:
+          type: "integer"
+          minimum: 0
+          maximum: 200
+          multipleOf: 25
+        totalElements:
+          type: "integer"
+        totalPages:
+          type: "integer"
+  parameters:
+    page:
+      name: "page"
+      in: "query"
+      description: "The number of results page"
+      schema:
+        type: "integer"
+        format: "int32"
+        default: 0
+    limit:
+      name: "limit"
+      in: "query"
+      description: "The number of results in a single page"
+      schema:
+        type: "integer"
+        format: "int32"
+        default: 20
+    sort:
+      name: "sort"
+      in: "query"
+      description: "The number of results page"
+      schema:
+        type: "array"
+        items:
+          type: "string"
+  securitySchemes:
+    basicAuth:
+      type: "http"
+      scheme: "basic"
+    bearerAuth:
+      type: "http"
+      scheme: "bearer"
+      bearerFormat: "JWT"
+security:
+- basicAuth: []
+- bearerAuth: []

@@ -1,0 +1,50 @@
+logging:
+  level:
+    io.zenwave360.example.clinicaltool: DEBUG
+    org.apache.kafka.clients.admin: WARN
+
+springdoc.swagger-ui.urls:
+  - name: Login Form
+    url: /apis/login-openapi.yml
+  - name: Clinical Tool - WebApp API
+    url: /apis/webapp-openapi.yml
+  - name: Clinical Tool - Mobile API
+    url: /apis/mobile-openapi.yml
+  - name: Documents API
+    url: /apis/documents-openapi.yml
+  - name: Master Data API
+    url: /apis/masterdata-openapi.yml
+  - name: Surveys - Backoffice API
+    url: /apis/surveys-backoffice-openapi.yml
+  - name: Surveys - Public API
+    url: /apis/surveys-public-openapi.yml
+  - name: User Management API
+    url: /apis/users-openapi.yml
+  - name: Terms And Conditions API
+    url: /apis/terms-and-conditions-openapi.yml
+
+management:
+  endpoints.web.exposure.include: "*"
+
+spring:
+  security:
+    user:
+      name: admin
+      password: password
+      roles: USER,ADMIN
+  jpa:
+    open-in-view: false
+    hibernate.ddl-auto: none
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
