@@ -1,11 +1,6 @@
 package io.zenwave360.example.applicantscoring.domain;
 
-import java.io.Serializable;
-import java.math.*;
-import java.time.*;
-import java.util.*;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.annotation.CreatedBy;
@@ -14,14 +9,19 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
 /**
-* 
-*/
-@lombok.Getter @lombok.Setter
+ *
+ */
+@lombok.Getter
+@lombok.Setter
 @Entity
 @Table(name = "applicant_scoring")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)@EntityListeners(AuditingEntityListener.class)
-public  class ApplicantScoring  implements Serializable {
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@EntityListeners(AuditingEntityListener.class)
+public class ApplicantScoring implements Serializable {
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;
@@ -34,19 +34,17 @@ public  class ApplicantScoring  implements Serializable {
     @Version
     private Integer version;
 
-  @Embedded
-    @AttributeOverride( name = "applicationNumber", column = @Column(name = "application_number_applicationNumber"))
-    private ApplicationNumber applicationNumber ;
+    @Embedded
+    @AttributeOverride(name = "applicationNumber", column = @Column(name = "application_number_applicationNumber"))
+    private ApplicationNumber applicationNumber;
 
-  @Embedded
-    @AttributeOverride( name = "city", column = @Column(name = "city_city"))
-    private City city ;
+    @Embedded
+    @AttributeOverride(name = "city", column = @Column(name = "city_city"))
+    private City city;
 
-  @Embedded
-    @AttributeOverride( name = "balanceAtBank", column = @Column(name = "balance_at_bank_balanceAtBank"))
-    private BalanceAtBank balanceAtBank ;
-
-
+    @Embedded
+    @AttributeOverride(name = "balanceAtBank", column = @Column(name = "balance_at_bank_balanceAtBank"))
+    private BalanceAtBank balanceAtBank;
 
     @CreatedBy
     @Column(name = "created_by", updatable = false)
@@ -61,23 +59,21 @@ public  class ApplicantScoring  implements Serializable {
     @Column(name = "last_modified_date", columnDefinition = "TIMESTAMP")
     protected LocalDateTime lastModifiedDate;
 
-
-
-/* https://vladmihalcea.com/the-best-way-to-implement-equals-hashcode-and-tostring-with-jpa-and-hibernate/ */
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
+    /* https://vladmihalcea.com/the-best-way-to-implement-equals-hashcode-and-tostring-with-jpa-and-hibernate/ */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ApplicantScoring)) {
+            return false;
+        }
+        ApplicantScoring other = (ApplicantScoring) o;
+        return getId() != null && getId().equals(other.getId());
     }
-    if (!(o instanceof ApplicantScoring)){
-      return false;
-    }
-    ApplicantScoring other = (ApplicantScoring) o;
-    return getId() != null && getId().equals(other.getId());
-  }
 
-  @Override
-  public int hashCode() {
-    return getClass().hashCode();
-  }
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

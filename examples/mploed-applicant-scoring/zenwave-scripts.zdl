@@ -37,8 +37,8 @@ config {
         SpringWebTestClientPlugin {
             openapiFile "src/main/resources/public/apis/openapi.yml"
             groupBy businessFlow
-            businessFlowTestName CreateUpdateDeleteCustomerIntegrationTest
-            operationIds createCustomer,updateCustomer,deleteCustomer,getCustomer
+            businessFlowTestName CreateUpdateFlowForApplicantScoringIntegrationTest
+            operationIds createApplicantScoring,getApplicationScoring,updateCity,updateBalanceAtBank,getApplicationScoring
         }
     }
 }

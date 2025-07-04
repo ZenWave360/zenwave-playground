@@ -44,15 +44,16 @@ public class SecurityConfiguration {
                             .requestMatchers("/.well-known/**").permitAll()
                             .anyRequest().authenticated()
                 )
-                .exceptionHandling((exceptions) -> exceptions
-                        // this disables the default login form, use login-openapi.yml for login in Swagger UI
-                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-                )
-                .oneTimeTokenLogin(Customizer.withDefaults())
-                .formLogin(form -> form
-                        .failureHandler((request, response, exception) -> response.setStatus(HttpStatus.UNAUTHORIZED.value()))
-                        .successHandler((request, response, authentication) -> response.setStatus(HttpStatus.OK.value()))
-                )
+                .httpBasic(Customizer.withDefaults())
+//                .exceptionHandling((exceptions) -> exceptions
+//                        // this disables the default login form, use login-openapi.yml for login in Swagger UI
+//                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+//                )
+//                .oneTimeTokenLogin(Customizer.withDefaults())
+//                .formLogin(form -> form
+//                        .failureHandler((request, response, exception) -> response.setStatus(HttpStatus.UNAUTHORIZED.value()))
+//                        .successHandler((request, response, authentication) -> response.setStatus(HttpStatus.OK.value()))
+//                )
         ;
         // @formatter:on
         return http.build();
