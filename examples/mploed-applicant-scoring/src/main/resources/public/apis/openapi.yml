@@ -1,45 +1,233 @@
 openapi: 3.0.1
-
 info:
-  title: Example API
-  description: Example API
-  version: 1.0.0
-
+  title: "Michael Plöd - Applicant Scoring"
+  version: 0.0.1
+  description: "Michael Plöd - Applicant Scoring"
+  contact:
+    email: email@domain.com
 servers:
-  - url: /
-    description: current
+  - description: localhost
+    url: http://localhost:8080/api
   - description: custom
-    url: "{protocol}://{server}"
+    url: "{protocol}://{server}/{path}"
     variables:
       protocol:
-        enum:
-          - http
-          - https
-        default: http
+        enum: ['http', 'https']
+        default: 'http'
       server:
-        default: localhost:8080
+        default: 'localhost:8080'
+      path:
+        default: 'api'
+tags:
+  - name: "Default"
+  - name: "ApplicantScoring"
+
 
 paths:
-  /hello:
+  /applicant-scoring/{id}:
     get:
-      summary: Hello
-      description: Hello
+      operationId: getApplicationScoring
+      description: "getApplicationScoring"
+      tags: [ApplicantScoring]
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
-        '200':
-          description: OK
+        "200":
+          description: "OK"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Hello'
+                $ref: "#/components/schemas/ApplicantScoring"
+    put:
+      operationId: updateApplicantScoring
+      description: "updateApplicantScoring"
+      tags: [ApplicantScoring]
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ApplicantScoringInput"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApplicantScoring"
+  /applicant-scoring:
+    post:
+      operationId: createApplicantScoring
+      description: "createApplicantScoring"
+      tags: [ApplicantScoring]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ApplicationNumberInput"
+      responses:
+        "201":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApplicantScoring"
+  /applicant-scoring/{id}/city:
+    post:
+      operationId: updateCity
+      description: "updateCity"
+      tags: [ApplicantScoring]
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CityInput"
+      responses:
+        "201":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApplicantScoring"
+  /applicant-scoring/{id}/balance-at-bank:
+    post:
+      operationId: updateBalanceAtBank
+      description: "updateBalanceAtBank"
+      tags: [ApplicantScoring]
+      parameters:
+        - name: "id"
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BalanceAtBankInput"
+      responses:
+        "201":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApplicantScoring"
 
 components:
   schemas:
-    Hello:
-      type: object
+    ApplicationNumberInput:
+      type: "object"
+      x-business-entity: "ApplicationNumberInput"
+      required:
+      - "applicationNumber"
       properties:
-        message:
-          type: string
-          example: "Hello, World!"
+        applicationNumber:
+          type: "string"
+          minLength: 3
+          maxLength: 254
+    CityInput:
+      type: "object"
+      x-business-entity: "CityInput"
+      required:
+      - "city"
+      properties:
+        city:
+          type: "string"
+          minLength: 3
+          maxLength: 254
+    BalanceAtBankInput:
+      type: "object"
+      x-business-entity: "BalanceAtBankInput"
+      required:
+      - "balanceAtBank"
+      properties:
+        balanceAtBank:
+          type: "number"
+          format: "double"
+    ApplicantScoringInput:
+      type: "object"
+      x-business-entity: "ApplicantScoringInput"
+      required:
+      - "applicationNumber"
+      - "city"
+      - "balanceAtBank"
+      properties:
+        applicationNumber:
+          type: "string"
+          minLength: 3
+          maxLength: 254
+        city:
+          type: "string"
+          minLength: 3
+          maxLength: 254
+        balanceAtBank:
+          type: "number"
+          format: "double"
+    ApplicantScoring:
+      type: "object"
+      x-business-entity: "ApplicantScoring"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+          readOnly: true
+        version:
+          type: "integer"
+          default: "null"
+          description: "Version of the document (required in PUT for concurrency control,\
+            \ should be null in POSTs)."
+        applicationNumber:
+          $ref: "#/components/schemas/ApplicationNumber"
+        city:
+          $ref: "#/components/schemas/City"
+        balanceAtBank:
+          $ref: "#/components/schemas/BalanceAtBank"
+    ApplicationNumber:
+      type: "object"
+      x-business-entity: "ApplicationNumber"
+      required:
+      - "applicationNumber"
+      properties:
+        applicationNumber:
+          type: "string"
+          minLength: 3
+          maxLength: 254
+    City:
+      type: "object"
+      x-business-entity: "City"
+      properties:
+        city:
+          type: "string"
+    BalanceAtBank:
+      type: "object"
+      x-business-entity: "BalanceAtBank"
+      properties:
+        balanceAtBank:
+          type: "number"
+          format: "double"
 
     Page:
       type: object
@@ -100,21 +288,6 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT    # optional, arbitrary value for documentation purposes
-    openIdConnect:
-      type: openIdConnect
-      openIdConnectUrl: /.well-known/openid-configuration
-    oauth2:
-      type: oauth2
-      flows:
-        authorizationCode:
-          authorizationUrl: /oauth2/authorize
-          tokenUrl: /oauth2/token
-          scopes:
-            read: Grants read access
-            write: Grants write access
-            admin: Grants access to admin operations
 security:
   - basicAuth: []  # <-- use the same name here
   - bearerAuth: []  # <-- use the same name here
-  - openIdConnect: []  # <-- use the same name here
-  - oauth2: [read, write]  # <-- use the same name here

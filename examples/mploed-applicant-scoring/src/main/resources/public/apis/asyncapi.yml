@@ -1,0 +1,96 @@
+asyncapi: 3.0.0
+info:
+  title: "Michael Plöd - Applicant Scoring"
+  version: 0.0.1
+  tags:
+    - name: "Default"
+    - name: "ApplicantScoring"
+
+defaultContentType: application/json
+
+channels:
+  ApplicantScoringChannel:
+    address: "applicant-scoring"
+    messages:
+      ApplicantScoringEventMessage:
+        $ref: '#/components/messages/ApplicantScoringEventMessage'
+
+operations:
+  onApplicantScoringEvent:
+    action: send
+    tags:
+      - name: ApplicantScoring
+    channel:
+      $ref: '#/channels/ApplicantScoringChannel'
+
+
+components:
+  messages:
+    ApplicantScoringEventMessage:
+      name: ApplicantScoringEventMessage
+      title: ""
+      summary: ""
+      traits:
+        - $ref: '#/components/messageTraits/CommonHeaders'
+      payload:
+        $ref: "#/components/schemas/ApplicantScoringEvent"
+
+  messageTraits:
+    CommonHeaders:
+      headers:
+        type: object
+        properties:
+          kafka_messageKey:
+            type: "integer"
+            format: "int64"
+            description: This header value will be populated automatically at runtime
+            x-runtime-expression: $message.payload#/id
+          # CloudEvents Attributes
+          ce-id:
+            type: string
+            description: Unique identifier for the event
+            x-runtime-expression: $message.payload#{#this.id}
+          ce-source:
+            type: string
+            description: URI identifying the context where event happened
+            x-runtime-expression: $message.payload#{"ApplicantScoring"}
+          ce-specversion:
+            type: string
+            description: CloudEvents specification version
+            x-runtime-expression: $message.payload#{"1.0"}
+          ce-type:
+            type: string
+            description: Event type
+            x-runtime-expression: $message.payload#{#this.getClass().getSimpleName()}
+          ce-time:
+            type: string
+            description: Timestamp of when the event happened
+            x-runtime-expression: $message.payload#{T(java.time.Instant).now().toString()}
+
+  schemas:
+    ApplicantScoringEvent:
+      type: "object"
+      x-business-entity: "ApplicantScoringEvent"
+      required:
+      - "applicationNumber"
+      - "city"
+      - "balanceAtBank"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        version:
+          type: "integer"
+          format: "int32"
+        applicationNumber:
+          type: "string"
+          minLength: 3
+          maxLength: 254
+        city:
+          type: "string"
+          minLength: 3
+          maxLength: 254
+        balanceAtBank:
+          type: "number"
+          format: "double"
+
