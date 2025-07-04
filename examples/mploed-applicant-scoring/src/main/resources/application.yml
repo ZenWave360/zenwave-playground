@@ -1,0 +1,52 @@
+logging:
+  level:
+    io.zenwave360.example.applicantscoring: DEBUG
+    org.apache.kafka.clients.admin: WARN
+
+springdoc.swagger-ui.urls:
+  - name: Login Form
+    url: /apis/login-openapi.yml
+  - name: Project Name
+    url: /apis/openapi.yml
+
+management:
+  endpoints.web.exposure.include: "*"
+
+app:
+spring:
+  security:
+    user:
+      name: admin
+      password: password
+      roles: USER,ADMIN
+  jpa:
+    open-in-view: false
+    hibernate.ddl-auto: none
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+  data:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  cloud:
+    stream:
+      kafka.binder.enable-observation: true
+      function:
+        definition: on-customer-event;
+      bindings:
+        on-customer-event-out-0:
+          destination: customer.events
