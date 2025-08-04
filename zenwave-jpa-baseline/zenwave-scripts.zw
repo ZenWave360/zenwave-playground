@@ -1,10 +1,24 @@
+// This is a ZenWave Scripts File (.zw)
+//
+// This file defines ZenWave SDK plugins and their configurations for SDK execution and code generation.
+//
+// Usage:
+// - Execute plugins using the Play button in IntelliJ IDEA ZenWave Model Editor
+// - Or Copy the generated command line hovering the play button on each plugin
+// - Or Run commands directly from terminal using the generated command line
+//
+// Plugin: https://plugins.jetbrains.com/plugin/22858-zenwave-domain-model-editor-for-zdl
+//
+// There are global properties that apply to all plugins, and plugin specific properties.
+// Configuration Precedence (highest to lowest):
+// 1. Command line arguments always have the highest precedence
+// 2. Plugin-specific properties (defined in this file)
+// 3. Global properties (defined in this file)
+// 4. Properties from referenced .zdl files
+//
 config {
-    title "ZenWave SDK - Mongodb BaseLine"
-    basePackage "io.zenwave360.example"
-    persistence mongodb
-    
 
-    specFile "zenwave-model.zdl"
+    // This is a global configuration that applies to all plugins.
     zdlFile "zenwave-model.zdl"
 
 
@@ -16,25 +30,27 @@ config {
 
 
     plugins {
-
+        /** Generates an OpenAPI 3.0 specification from the ZDL model. */
         ZDLToOpenAPIPlugin {
-            idType string
+            idType integer
+            idTypeFormat int64
             targetFile "src/main/resources/public/apis/openapi.yml"
         }
-
+        /** Generates an AsyncAPI 3.0 specification from the ZDL model. */
         ZDLToAsyncAPIPlugin {
             asyncapiVersion v3
-            idType string
+            idType integer
+            idTypeFormat int64
             targetFile "src/main/resources/public/apis/asyncapi.yml"
             // includeKafkaCommonHeaders true
         }
-
+        /** Generates a Backend Application from the ZDL model. (Headless Core) */
         BackendApplicationDefaultPlugin {
             useLombok true
             includeEmitEventsImplementation true
             // --force // overwite all files
         }
-
+        /** Generates Spring MVC controllers from the OpenAPI specification (Web Adapters). */
         OpenAPIControllersPlugin {
             openapiFile "src/main/resources/public/apis/openapi.yml"
         }

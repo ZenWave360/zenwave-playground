@@ -1,30 +1,75 @@
 /**
  * Sample ZenWave Model Definition.
- * Use zenwave-scripts.zdl to generate your code from this model definition.
+ *
+ * This model describes a simple Customer entity with a one-to-many relationship with PaymentMethod.
+ *
+ * (this is the javadoc for this module, associated to config section)
+ *
+ * Use zenwave-scripts.zw to generate your code from this model definition.
  */
+ config {
+    title "ZenWave SDK - Mongodb BaseLine"
+    basePackage "io.zenwave360.example"
+    persistence mongodb
+    // you can choose: DefaultProjectLayout, CleanHexagonalProjectLayout, LayeredProjectLayout, SimpleDomainProjectLayout, HexagonalProjectLayout, CleanArchitectureProjectLayout
+    layout LayeredProjectLayout
+
+    // ^ these are global properties that will affect all plugins, but are overriden by command line options
+}
+
+//
+// Domain Entities
+//
+
+@abstract
+entity BaseEntity {
+    // Common fields and annotations for all entities (e.g., @auditing)
+    // Create entity hierarchies with `@extends` for inheritance
+    // Use `@copy` to copy fields without inheritance (useful for DTOs and events, when inheriting is not desired/allowed)
+}
+
+
+// Customer is the main aggregate root - generates repository and can be used in services
 
 /**
 * Customer entity
 */
-@aggregate
-@auditing
+@aggregate // this marks a root aggregate, it will generate a repository
+@auditing  // adds auditing fields to the entity (createdBy, createdDate, lastModifiedBy, lastModifiedDate)
+@extends(BaseEntity) // extends BaseEntity
 entity Customer {
+    // 'id' and 'version' fields are added automatically
+
+    /** Customer name (javadoc can be on top or on the side) */
+    @naturalId // an aggregate can have one or multiple natural ids, it will generate some supporting methods in repository, service...
     name String required minlength(3) maxlength(254)
     email String required minlength(3) maxlength(254) pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)
+
+    // Nested arrays are supported in mongodb, they are embedded documents
+    // they are equivalent to use a reference to an @embedded entity, see below
     addresses Address[] minlength(1) maxlength(5) {
-        street String required maxlength(254)
+        street String required maxlength(254) /** Street name (javadoc on the side, in one line) */
         city String required maxlength(254)
     }
-    paymentMethods PaymentMethod[] {
-        type PaymentMethodType required
-        cardNumber String required
-    }
+    paymentMethods PaymentMethod[] // <- this (pointing to an @embedded entity) is equivalent to the above
 }
 
+@embedded // this marks an embedded entity, it will not generate id or version fields
+entity PaymentMethod {
+    type PaymentMethodType required
+    cardNumber String required
+}
+
+// Enums with IDs generate converters for database persistence (for hibernate/jpa)
 enum PaymentMethodType { VISA(1), MASTERCARD(2) }
 
 
-// you can create 'inputs' as dtos for your service methods, or use entities directly
+//
+// Data Transfer Objects (DTOs)
+//
+
+// `inputs`s are dtos for your service methods, (you can use entities directly)
+// you can also create `output`s as dtos for your service methods
 input CustomerSearchCriteria {
     name String
     email String
@@ -32,26 +77,111 @@ input CustomerSearchCriteria {
     state String
 }
 
-@rest("/customers")
-service CustomerService for (Customer) {
-    @post
-    createCustomer(Customer) Customer withEvents CustomerEvent
-    @get("/{id}")
-    getCustomer(id) Customer?
-    @put("/{id}")
-    updateCustomer(id, Customer) Customer? withEvents CustomerEvent
-    @delete("/{id}")
-    deleteCustomer(id) withEvents CustomerEvent
-    @post("/search")
-    @paginated
-    searchCustomers(CustomerSearchCriteria) Customer[]
+// inputs can also act as an ouput (if it suits your needs)
+input DocumentInfo {
+    uuid String
+    fileName String required
+    documentType String required
+    contentType String required
+    tags String[]
 }
 
-@copy(Customer)
+
+//
+// Service Layer
+//
+
+
+// services are the entry point for your bounded context.
+// @rest annotations are used to documentat how your core is connected to the outside world.
+//  they are also used to to generate openapi definitions by ZDLToOpenAPIPlugin
+//  using this annotations you can generate almost any openapi definition, including file upload/download
+/**
+ * Service for managing customers.
+ */
+@rest("/customers")
+service CustomerService for (Customer) { // "for" one or more entities annotated with `@aggregate`
+                                         // it will @autowire repositories in the service implementation
+
+// These are commands or methods.
+// They can have only two types of parameters, both are optional in any combination:
+// - `id`: acts on an entity by id (can be a `@natural id`)
+// - Type References: reference to an entity or input
+// Return types: entity, input/output DTOs, arrays, or optional (?)
+
+// withEvents: specifies events emitted when method executes
+// Supports alternative events: `withEvents OneEvent [SuccessEvent|FailureEvent] AnotherEvent`
+
+// javadoc can be on top (one or multiple lines) or on the side (one line)
+
+    /**
+     * Create a new customer.
+     * @param customer The customer to create.
+     * @return The created customer.
+     */
+    @post // HTTP POST, returns 201 by default, can be overriden with @post({path: "...", status: 200})
+    createCustomer(Customer) Customer withEvents CustomerEvent
+
+    @get("/{id}")
+    getCustomer(id) Customer?
+
+    // `@natural id` uses the entity's natural identifier instead of primary key
+    // it will affect how openapi and service interface are generated
+    // remember that one aggregate may have multiple natural ids, you need url params for all of them
+    @get("/by-name/{name}")
+    getCustomerByName(@natural id) Customer?
+
+    @put("/{id}")
+    updateCustomer(id, Customer) Customer? withEvents CustomerEvent
+
+    @delete("/{id}")
+    deleteCustomer(id) withEvents CustomerEvent /** Deletes a customer. (javadoc on the side, in one line) */
+
+    // Custom HTTP configuration and pagination support
+    @post({ path:"/search", status: 200 })
+    @paginated // will add pagination parameters to the openapi definition and service method (uses Pageable as oas style)
+    searchCustomers(CustomerSearchCriteria) Customer[]
+
+    // HTTP GET for file download
+    @get({path: "/{id}", params: {preview: boolean} }) // `preview` is just an extra query param
+    @filedownload("documentData.data") // `documentData.data` points to the field in the entity that contains the binary data
+    downloadDocument(id) DocumentInfo
+
+    // MultiPart file upload
+    @post({path: "/upload", status: 201})
+    @fileupload("file") // `file` is the name of the field attribute that contains the binary data
+    uploadDocument(DocumentInfo) DocumentInfo
+
+    // POST with custom configuration:
+    // - path param types are infered from CustomerSearchCriteria with same name
+    // - fields in CustomerSearchCriteria not present as path params are added as query params
+    // - extra query params can be added with the `params` attribute
+    @post({path: "/search/{state}/{city}", params: {createdBefore: LocalDate}, status: 200 })
+    withExtraParams(CustomerSearchCriteria)
+}
+
+
+//
+// Event Definitions
+//
+
+// an event annotated with @asyncapi is an external event
+//  it will be used to generate channel/message/payload in asyncapi definition with ZDLToAsyncAPIPlugin
+//  it also will `@autowire` an events producer in the service implementation following SpringCloudStreams3Plugin naming convention
+// if is not marked with @asyncapi, BackendApplicationDefaultPlugin will generate an internal EventProducer, useful for moduliths.
+
+@copy(Customer) // Copies all Customer fields except relationships and auto-generated fields
 @asyncapi({ channel: "CustomersChannel", topic: "customers" })
 event CustomerEvent {
-    id String
+    id String // Not copied by @copy (auto-generated field)
     version Integer
-    // all fields from Customer are copied here, but not relationships
+
+    // All Customer fields copied here, excluding relationships in JPA
     paymentMethods PaymentMethod[]
+
+    // @auditing fields not copied by @copy:
+    //    createdBy String
+    //    createdDate LocalDateTime
+    //    lastModifiedBy String
+    //    lastModifiedDate LocalDateTime
 }

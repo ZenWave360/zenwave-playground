@@ -1,7 +1,20 @@
 /**
  * Sample ZenWave Model Definition.
- * Use zenwave-scripts.zdl to generate your code from this model definition.
+ *
+ * This model describes a simple Customer entity with a one-to-many relationship with PaymentMethod.
+ *
+ * Use zenwave-scripts.zw to generate your code from this model definition.
  */
+config {
+    title "ZenWave SDK - Mongodb BaseLine"
+    basePackage "io.zenwave360.example"
+    persistence jpa
+    databaseType postgresql
+
+    // you can choose: DefaultProjectLayout, LayeredProjectLayout, SimpleDomainProjectLayout
+    //                 CleanHexagonalProjectLayout, HexagonalProjectLayout, CleanArchitectureProjectLayout
+    layout LayeredProjectLayout
+}
 
 /**
 * Customer entity
