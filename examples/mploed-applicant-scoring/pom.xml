@@ -27,15 +27,17 @@
 		<spring-boot.version>${project.parent.version}</spring-boot.version>
 		<spring-cloud.version>2025.0.0</spring-cloud.version>
 		<spring-cloud-stream-schema.version>2.2.1.RELEASE</spring-cloud-stream-schema.version>
+        <spring-modulith.version>1.4.1</spring-modulith.version>
+        <spring-modulith-events-scs.version>1.0.2</spring-modulith-events-scs.version>
 
-		<zenwave.version>2.0.2</zenwave.version>
+        <zenwave.version>2.0.2</zenwave.version>
 
-		<jakarta.validation-api.version>3.1.1</jakarta.validation-api.version>
-		<mapstruct.version>1.6.3</mapstruct.version>
-		<lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
-		<karate.version>1.4.1</karate.version>
-		<archunit-junit5.version>1.4.0</archunit-junit5.version>
-		<springdoc-openapi-starter-webmvc-ui.version>2.8.3</springdoc-openapi-starter-webmvc-ui.version>
+        <jakarta.validation-api.version>3.1.1</jakarta.validation-api.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+        <karate.version>1.4.1</karate.version>
+        <archunit-junit5.version>1.4.0</archunit-junit5.version>
+        <springdoc-openapi-starter-webmvc-ui.version>2.8.3</springdoc-openapi-starter-webmvc-ui.version>
         <spotless-maven-plugin.version>2.44.3</spotless-maven-plugin.version>
         <palantir-java-format.version>2.55.0</palantir-java-format.version>
     </properties>
@@ -94,6 +96,17 @@
 			<artifactId>spring-cloud-stream-schema</artifactId>
 			<version>${spring-cloud-stream-schema.version}</version>
 		</dependency>
+        <!-- transactional outbox -->
+        <dependency>
+            <groupId>org.springframework.modulith</groupId>
+            <artifactId>spring-modulith-starter-jdbc</artifactId>
+            <version>${spring-modulith.version}</version>
+        </dependency>
+        <dependency><!-- Spring Cloud Stream Externalization for Message<?> -->
+            <groupId>io.zenwave360.sdk</groupId>
+            <artifactId>spring-modulith-events-scs</artifactId>
+            <version>${spring-modulith-events-scs.version}</version>
+        </dependency>
 		<!-- distributed logs -->
 		<dependency>
 			<groupId>io.micrometer</groupId>
@@ -418,6 +431,7 @@
 									<configOptions>
 										<role>provider</role>
 										<style>imperative</style>
+                                        <transactionalOutbox>modulith</transactionalOutbox>
 										<modelPackage>${asyncApiModelPackage}</modelPackage>
 										<producerApiPackage>${asyncApiProducerApiPackage}</producerApiPackage>
 										<consumerApiPackage>${asyncApiConsumerApiPackage}</consumerApiPackage>

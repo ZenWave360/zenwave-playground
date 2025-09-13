@@ -14,6 +14,8 @@ management:
 
 app:
 spring:
+  modulith.events.externalization.enabled: true
+  modulith.events.jdbc.schema-initialization.enabled: true
   security:
     user:
       name: admin
