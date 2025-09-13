@@ -18,13 +18,6 @@
 			<id>confluent</id>
 			<url>https://packages.confluent.io/maven/</url>
 		</repository>
-		<repository>
-			<id>gh</id>
-			<url>https://raw.githubusercontent.com/ZenWave360/maven-snapshots/refs/heads/main</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
 	</repositories>
 
 	<properties>

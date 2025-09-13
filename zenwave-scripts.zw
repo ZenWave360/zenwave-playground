@@ -1,0 +1,19 @@
+config {
+
+    zdlFile "zenwave-model.zdl"
+
+    plugins {
+        /** Generates an OpenAPI 3.0 specification from the ZDL model. */
+        ZDLToOpenAPIPlugin {
+            idType integer
+            idTypeFormat int64
+            targetFile "src/main/resources/public/apis/openapi.yml"
+        }
+        /** Generates a Backend Application from the ZDL model. (Headless Core) */
+        BackendApplicationDefaultPlugin {
+            useLombok true
+            includeEmitEventsImplementation true
+            // --force // overwite all files
+        }
+    }
+}

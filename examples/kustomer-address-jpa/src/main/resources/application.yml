@@ -4,9 +4,7 @@ logging:
     org.apache.kafka.clients.admin: WARN
 
 springdoc.swagger-ui.urls:
-  - name: Login Form
-    url: /apis/login-openapi.yml
-  - name: Project Name
+  - name: ZenWave Kustomer JPA Example
     url: /apis/openapi.yml
 
 management:
