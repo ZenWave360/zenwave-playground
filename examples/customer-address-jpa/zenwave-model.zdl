@@ -39,7 +39,6 @@ entity PaymentMethod {
 enum PaymentMethodType { VISA(1), MASTERCARD(2) }
 
 relationship OneToMany {
-    @eager
     Customer{paymentMethods required maxlength(3)} to PaymentMethod{customer required}
 }
 

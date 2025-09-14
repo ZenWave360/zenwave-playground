@@ -43,7 +43,7 @@ With these REST Endpoints:
 
 And these Domain Events published to a Kafka Topic:
 
-![OpenAPI Endpoints](src/main/resources/public/apis/asyncapi-operations.png)
+![AsyncAPI Operations](src/main/resources/public/apis/asyncapi-operations.png)
 
 As defined on this [ZenWave Model (zenwave-model.zdl)](zenwave-model.zdl)
 
@@ -70,10 +70,10 @@ docker-compose up -d
 
 ```bash
 # Maven
-mvn spring-boot:run -Dspring-boot.run.profiles=local
+mvn spring-boot:run
 
 # Gradle
-./gradlew bootRun --args='--spring.profiles.active=local'
+./gradlew bootRun
 ```
 
 * Open [Swagger UI](http://localhost:8080/swagger-ui/index.html) in your browser.

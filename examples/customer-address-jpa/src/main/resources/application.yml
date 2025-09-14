@@ -18,7 +18,7 @@ spring:
 
   security:
     user:
-      name: user
+      name: admin
       password: password
   jpa:
     open-in-view: false
