@@ -1,143 +1,93 @@
-# Project Name
+# Clinical Tool - Modulith
 
-Project Description
+> Working in progress... As of now this repo only contains the code generated from ZenWave Models (about 80% of the final application).
 
+See https://www.zenwave360.io/docs/examples/ddd-examples/modulith-klinical-tool-jpa/ for detailed steps about how this Modular Monolith was designed and implemented.
 
-## Table of Contents
+This is a modular monolith clinical management system built with Spring Boot and ZenWave SDK. The application demonstrates Domain-Driven Design principles with multiple bounded contexts organized as modules.
 
+## Domain Model
 
-1. [Getting Started](#getting-started)
-   1. [Prerequisites](#prerequisites)
-2. [Technologies](#technologies)
-3. [Project Structure](#project-structure)
-   1. [Clean/Hexagonal Architecture](#clean-hexagonal-architecture)
-   2. [Traditional 3-Tier Architecture](#traditional-3-tier-architecture)
-   3. [Simple Domain Packaging](#simple-domain-packaging)
-4. [Authentication and Authorization](#authentication-and-authorization)
-   1. [Login](#login)
-   2. [Authentication and Session Management](#authentication-and-session-management)
-   3. [User Management](#user-management)
-   4. [OneTimeToken Configuration](#onetimetoken-configuration)
-5. [API First](#api-first)
-   1. [OpenAPI / SwaggerUI](#openapi--swaggerui)
-      1. [Customization](#customization)
-   2. [AsyncAPI / ZenWave SDK](#asyncapi--zenwave-sdk)
-6. [Domain Modeling and Code Generation with ZenWave SDK](#domain-modeling-and-code-generation-with-zenwave-sdk)
-   1. [Installing ZenWave SDK](#installing-zenwave-sdk)
-   2. [Modeling and Generating Code](#modeling-and-generating-code)
-7. [Testing](#testing)
-   1. [Rules of thumb for Testing](#rules-of-thumb-for-testing)
-8. [Code Formatting](#code-formatting)
+The system is organized into the following modules:
 
+![Domain Model](../modulith-clinical-tool-jpa/models/clinical-tool-c4.png)
+
+### Clinical Module
+- **Hospitals**: Medical facility management
+- **Doctors**: Healthcare provider management with specializations and hospital assignments
+- **Patients**: Complete patient management with personal information, contact details, and medical data
+
+### User Management Module
+- User authentication and authorization
+- Role-based access control
+- Account management (enabled/disabled, credentials expiration)
+- Extensible user profiles with additional properties
+
+### Documents Module
+- Document upload and download with file type validation
+- Document metadata management (filename, type, content type, tags)
+- Binary data storage with preview capabilities
+- RESTful file operations
+
+### Master Data Module
+- Centralized reference data management
+- Multi-language support for translations
+- Configurable data types: Gender, ID Document Types, Countries, Insurance Companies, Medical Areas
+- Key-value pair structure for flexible data organization
+
+### Terms and Conditions Module
+- Version-controlled terms and conditions management
+- Multi-language support
+- User acceptance tracking with timestamps
+- Date-based validity periods
+
+### Surveys Module
+- Generic survey management system
+- Multi-language question and answer support
+- Hierarchical survey structure (surveys → sections → questions)
+- Both back-office and public APIs
+
+## Requirements
+
+* JDK 21+
+* Maven 3.8.+
+* Docker Compose: in case you don't have Docker-Compose installed in your machine, install [Rancher Desktop](https://rancherdesktop.io/) and configure `dockerd` as engine (instead of `containerd`), this will include `docker` and `docker-compose` commands in your PATH.
+* Your favorite IDE
 
 ## Getting Started
 
+Use the following commands to run the application or tests:
 
-After cloning the project, you can start the project with the following command:
+* Start docker dependencies:
 
 ```bash
 docker-compose up -d
-mvn spring-boot:run -Dspring-boot.run.profiles=local
 ```
 
-### Prerequisites
-
-
-* Java 21+
-* Maven 3.6+
-* Docker/Docker Compose
-* Git and Git-Bash
-* JBang and ZenWave SDK (optional)
-* SDKMAN! (optional but highly recommended)
-
-
-## Technologies
-
-* Spring Boot 3.3.x
-* Spring Data JPA or MongoDB
-* Spring Data Elasticsearch
-* Spring Cloud Streams for Kafka, RabbitMQ, or other Message Brokers
-* Spring Security
-* KarateDSL for API Testing
-* ZenWave SDK for Domain Modeling and Code Generation (optional)
-
-
-### Authentication and Authorization
-
-The configuration files are `SecurityConfiguration`, `OneTimeTokenConfiguration`, `UserManagementConfig`.
-
-#### Login
-
-The project comes configured with **LoginForm Authentication** except for SwaggerUI which is configured for Basic Authentication for convenience.
-
-However, it has been configured for authentication exception handling with an entry point that sends a **"401 UNAUTHORIZED"** status code. This is convenient for REST API clients but has the consequence that SpringSecurity will not generate the HTML login form when a request requiring authentication is made and the user is not authenticated.
-
-To address this inconvenience, the project includes a `src/main/resources/public/apis/login-openapi.yml` file with the necessary requests for both sending a LoginForm Authentication request and requesting and using a One-Time Authentication Token.
-
-Default user is `admin/password`.
-
-
-## API First
-
-### OpenAPI / SwaggerUI
-
-
-The project uses `openapi-generator-maven-plugin` (see pom.xml) to generate SpringMVC interfaces and DTOs from the `src/main/resources/public/apis/openapi.yml` file.
-
-Generated sources are placed in `target/generated-sources/openapi` which becomes a source folder for the project. To implement the API, you can create a new `@RestController` and implement the generated interface.
-
-
-#### Customization
-
-
-You can customize generated code with this properties in `pom.xml` or directly in the plugin `openapi-generator-maven-plugin`: 
-```xml
-<openApiApiPackage>${basePackage}.adapters.web</openApiApiPackage>
-<openApiModelPackage>${basePackage}.adapters.web.model</openApiModelPackage>
-```
-
-SwaggerUI is available at http://localhost:8080/swagger-ui/index.html. If you need to add more OpenAPI files, you can customize SwaggerUI in `application.yml`:
-
-```yaml
-springdoc.swagger-ui.urls:
-   - name: Project Name
-     url: /apis/openapi.yml
-```
-
-URL is relative to `src/main/resources/public`.
-
-
-## Code Formating
-
-
-This project is configured to use [Spotless](https://github.com/diffplug/spotless) with Palantir Java Format as code formatter. You can apply code formatting from the command line with the following command:
+* Run the application:
 
 ```bash
-mvn spotless:apply
+mvn spring-boot:run
 ```
+
+* Open [Swagger UI](http://localhost:8080/swagger-ui/index.html) in your browser.
+  Use "Basic Authentication" with username `admin` and password `password` to authenticate.
+
+* Running Unit Tests:
 
 ```bash
-echo "hey"
+mvn clean test
 ```
 
-You can also configure your IDE for code automatic code formating with the following plugins:
+* Running Unit and Integration Tests:
 
-- https://plugins.jetbrains.com/plugin/13180-palantir-java-format
-- https://github.com/palantir/palantir-java-format/tree/develop/eclipse_plugin
+```bash
+mvn clean verify
+```
 
-Keep a consistent code style from the beginning of the project.
+* Stop docker dependencies:
 
-
-### Palantir IntelliJ plugin
-
-
-The plugin will be disabled by default on new projects. To manually enable it in the current project, go to `File→Settings...→palantir-java-format Settings` (or `IntelliJ IDEA→Preferences...→Other Settings→palantir-java-format Settings` on macOS) and check the Enable palantir-java-format checkbox.
-
-To enable it by default in new projects, use `File→Other Settings→Default Settings...`.
-
-When enabled, it will replace the normal Reformat Code action, which can be triggered from the Code menu or with the Ctrl-Alt-L (by default) keyboard shortcut.
-
-
-Happy Coding!! 🚀🚀🚀
-
+```bash
+docker-compose down
+```
 
