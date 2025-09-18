@@ -12,7 +12,6 @@ public class DefaultEventPublisher implements EventPublisher {
 
     private final ApplicationEventPublisher applicationEventPublisher;
 
-
     public void onDoctorCreated(DoctorCreated event) {
         applicationEventPublisher.publishEvent(event);
     }
