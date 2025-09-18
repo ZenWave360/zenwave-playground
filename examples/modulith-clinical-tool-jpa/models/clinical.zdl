@@ -202,9 +202,6 @@ service PatientsService for (Patient, ProvisionalPatient) {
     @get("/patients/{hisNumber}/{phoneNumber}")
     loadPatient(@natural id) Patient
 
-//    @entityForId(Patient)
-//    loadTemporaryPatient(@natural id) ProvisionalPatient
-
     /**
     * Persist a temporal patient in the database.
     */
