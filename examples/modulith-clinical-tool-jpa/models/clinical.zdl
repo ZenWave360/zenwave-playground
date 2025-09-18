@@ -1,7 +1,7 @@
 config {
     title "Clinical Tool Backend"
     layout.moduleBasePackage "io.zenwave360.example.clinicaltool.modules.clinical"
-    // you can choose: DefaultProjectLayout, CleanHexagonalProjectLayout, LayeredProjectLayout, SimpleDomainProjectLayout, HexagonalProjectLayout, CleanArchitectureProjectLayout
+    // you can choose different layouts, see docs at https://www.zenwave360.io/docs/
     layout CleanHexagonalProjectLayout
 }
 
