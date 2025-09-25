@@ -8,6 +8,8 @@ config {
     persistence jpa
     databaseType postgresql
 
+    layout CleanHexagonalProjectLayout
+
     // these should match the values of openapi-generator-maven-plugin
     // used by the OpenAPIControllersPlugin and SpringWebTestClientPlugin
     openApiApiPackage "{{basePackage}}.adapters.web"
