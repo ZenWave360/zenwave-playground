@@ -2,19 +2,12 @@ package io.zenwave360.example.clinicaltool.modules.masterdata;
 
 import io.zenwave360.example.clinicaltool.common.BaseRepositoryIntegrationTest;
 import io.zenwave360.example.clinicaltool.modules.masterdata.domain.*;
-import io.zenwave360.example.clinicaltool.modules.masterdata.MasterDataRepository;
-
-import java.util.HashSet;
-import java.util.HashMap;
-import java.util.List;
+import jakarta.persistence.EntityManager;
 import java.time.*;
-import java.math.BigDecimal;
-
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import jakarta.persistence.EntityManager;
 
 class MasterDataRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
 
@@ -29,7 +22,6 @@ class MasterDataRepositoryIntegrationTest extends BaseRepositoryIntegrationTest 
         var results = masterDataRepository.findAll();
         Assertions.assertFalse(results.isEmpty());
     }
-
 
     @Test
     void findByIdTest() {
@@ -47,8 +39,6 @@ class MasterDataRepositoryIntegrationTest extends BaseRepositoryIntegrationTest 
         masterData.setValue("");
         masterData.setTranslations(List.of(new MasterDataTranslation()));
 
-
-
         // Persist aggregate root
         var created = masterDataRepository.save(masterData);
 
@@ -57,8 +47,6 @@ class MasterDataRepositoryIntegrationTest extends BaseRepositoryIntegrationTest 
         entityManager.refresh(created);
         Assertions.assertNotNull(created.getId());
         Assertions.assertNotNull(created.getVersion());
-
-
     }
 
     @Test

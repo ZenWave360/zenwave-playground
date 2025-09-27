@@ -1,18 +1,15 @@
 package io.zenwave360.example.clinicaltool.modules.documents;
 
-import io.zenwave360.example.clinicaltool.modules.documents.*;
-import io.zenwave360.example.clinicaltool.modules.documents.dtos.*;
 import io.zenwave360.example.clinicaltool.modules.documents.config.ServicesInMemoryConfig;
-
+import io.zenwave360.example.clinicaltool.modules.documents.dtos.*;
+import java.math.*;
+import java.time.*;
+import java.util.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.math.*;
-import java.time.*;
-import java.util.*;
 
 /**
  * Test controller for DocumentApiController.
@@ -23,13 +20,12 @@ public class DocumentApiControllerTest {
 
     ServicesInMemoryConfig context = new ServicesInMemoryConfig();
 
-    DocumentApiController controller = new DocumentApiController( context.documentService() );
+    DocumentApiController controller = new DocumentApiController(context.documentService());
 
-	@BeforeEach
-	void setUp() {
-		context.reloadTestData();
-	}
-
+    @BeforeEach
+    void setUp() {
+        context.reloadTestData();
+    }
 
     @Test
     public void listDocumentInfoTest() {
@@ -41,7 +37,7 @@ public class DocumentApiControllerTest {
     @Test
     public void downloadDocumentTest() {
         Long id = null;
-Boolean preview = null;
+        Boolean preview = null;
         var response = controller.downloadDocument(id, preview);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
@@ -56,17 +52,16 @@ Boolean preview = null;
     @Test
     public void uploadDocumentTest() {
         org.springframework.web.multipart.MultipartFile file = null;
-Long id = null;
-Integer version = null;
-String uuid = null;
-String fileName = null;
-String documentType = null;
-String contentType = null;
-List<String> tags = null;
-DocumentDataDTO documentData = null;
-        var response = controller.uploadDocument(file, id, version, uuid, fileName, documentType, contentType, tags, documentData);
+        Long id = null;
+        Integer version = null;
+        String uuid = null;
+        String fileName = null;
+        String documentType = null;
+        String contentType = null;
+        List<String> tags = null;
+        DocumentDataDTO documentData = null;
+        var response = controller.uploadDocument(
+                file, id, version, uuid, fileName, documentType, contentType, tags, documentData);
         Assertions.assertEquals(201, response.getStatusCode().value());
     }
-
-
 }

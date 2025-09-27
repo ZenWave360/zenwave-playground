@@ -14,48 +14,34 @@ import org.springframework.data.domain.Pageable;
 @org.springframework.modulith.NamedInterface("MasterDataService")
 public interface MasterDataService {
 
-     /**
-      * 
-      *
-      */
-
-    public MasterData createMasterData(MasterData input)
-;
-     /**
-      * 
-      *
-      */
-
-    public Optional<MasterData> getMasterData(Long id)
-;
-     /**
-      * 
-      *
-      */
-
-    public Optional<MasterData> updateMasterData(Long id, MasterData input)
-;
-     /**
-      * 
-      *
-      */
-
-    public Page<MasterData> listMasterData(Pageable pageable)
-;
-     /**
-      * 
-      *
-      */
-
-    public void deleteMasterData(Long id)
-;
-     /**
-      * 
-      *
-      */
-
-    public List<MasterDataKeyValue> listMasterDataOfType(MasterDataType type, String lang)
-;
-
-
+    /**
+     *
+     *
+     */
+    public MasterData createMasterData(MasterData input);
+    /**
+     *
+     *
+     */
+    public Optional<MasterData> getMasterData(Long id);
+    /**
+     *
+     *
+     */
+    public Optional<MasterData> updateMasterData(Long id, MasterData input);
+    /**
+     *
+     *
+     */
+    public Page<MasterData> listMasterData(Pageable pageable);
+    /**
+     *
+     *
+     */
+    public void deleteMasterData(Long id);
+    /**
+     *
+     *
+     */
+    public List<MasterDataKeyValue> listMasterDataOfType(MasterDataType type, String lang);
 }

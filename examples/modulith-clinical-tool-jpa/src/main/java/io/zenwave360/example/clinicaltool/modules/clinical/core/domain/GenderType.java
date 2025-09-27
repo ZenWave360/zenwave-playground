@@ -1,4 +1,5 @@
 package io.zenwave360.example.clinicaltool.modules.clinical.core.domain;
+
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import java.util.Arrays;
@@ -7,7 +8,6 @@ import java.util.Arrays;
  * Enum for GenderType.
  */
 public enum GenderType {
-    
     MALE(1),
     FEMALE(2),
     OTHER(3),
@@ -24,8 +24,11 @@ public enum GenderType {
 
     public static GenderType fromValue(Integer value) {
         return Arrays.stream(GenderType.values())
-                .filter(e -> e.value.equals(value)).findFirst().orElse(null);
+                .filter(e -> e.value.equals(value))
+                .findFirst()
+                .orElse(null);
     }
+
     @Converter
     static class GenderTypeConverter implements AttributeConverter<GenderType, Integer> {
 
@@ -42,7 +45,5 @@ public enum GenderType {
         public GenderType convertToEntityAttribute(Integer dbData) {
             return GenderType.fromValue(dbData);
         }
-
     }
 }
-

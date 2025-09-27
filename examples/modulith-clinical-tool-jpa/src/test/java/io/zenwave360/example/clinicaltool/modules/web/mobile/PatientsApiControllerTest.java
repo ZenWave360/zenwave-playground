@@ -1,18 +1,15 @@
 package io.zenwave360.example.clinicaltool.modules.web.mobile;
 
-import io.zenwave360.example.clinicaltool.modules.web.mobile.*;
-import io.zenwave360.example.clinicaltool.modules.web.mobile.dtos.*;
 import io.zenwave360.example.clinicaltool.modules.clinical.config.ServicesInMemoryConfig;
-
+import io.zenwave360.example.clinicaltool.modules.web.mobile.dtos.*;
+import java.math.*;
+import java.time.*;
+import java.util.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.math.*;
-import java.time.*;
-import java.util.*;
 
 /**
  * Test controller for PatientsApiController.
@@ -23,13 +20,12 @@ public class PatientsApiControllerTest {
 
     ServicesInMemoryConfig context = new ServicesInMemoryConfig();
 
-    PatientsApiController controller = new PatientsApiController( context.patientsService() );
+    PatientsApiController controller = new PatientsApiController(context.patientsService());
 
-	@BeforeEach
-	void setUp() {
-		context.reloadTestData();
-	}
-
+    @BeforeEach
+    void setUp() {
+        context.reloadTestData();
+    }
 
     @Test
     public void getPatientProfileByIdTest() {
@@ -44,6 +40,4 @@ public class PatientsApiControllerTest {
         var response = controller.requestOptOut(id);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
-
-
 }

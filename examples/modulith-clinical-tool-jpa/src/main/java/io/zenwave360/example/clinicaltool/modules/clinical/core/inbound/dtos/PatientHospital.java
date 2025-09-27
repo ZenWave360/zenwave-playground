@@ -1,63 +1,38 @@
 package io.zenwave360.example.clinicaltool.modules.clinical.core.inbound.dtos;
 
 import io.zenwave360.example.clinicaltool.modules.clinical.core.domain.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.math.*;
 import java.time.*;
 import java.util.*;
-import jakarta.validation.constraints.*;
 
 /**
  * PatientHospital.
  */
-@lombok.Getter @lombok.Setter
-public  class PatientHospital  implements Serializable {
+@lombok.Getter
+@lombok.Setter
+public class PatientHospital implements Serializable {
 
+    private Long patientId;
 
-    
-    private Long patientId ;
+    private Long hospitalId;
 
-    
-    private Long hospitalId ;
+    private String hisNumber;
 
-    
-    private String hisNumber ;
+    private String fullName;
 
-    
-    private String fullName ;
+    private GenderType gender;
 
-    
-    private GenderType gender ;
+    private String dni;
 
-    
-    private String dni ;
+    private LocalDate birthDate;
 
-    
-    private LocalDate birthDate ;
+    private String phone;
 
-    
-    private String phone ;
+    private String email;
 
-    
-    private String email ;
+    private String insuranceCardNumber;
 
-    
-    private String insuranceCardNumber ;
-
-    
-    private String address ;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    private String address;
 }

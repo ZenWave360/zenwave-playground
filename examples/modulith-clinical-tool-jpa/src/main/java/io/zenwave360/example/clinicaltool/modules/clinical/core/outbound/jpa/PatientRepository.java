@@ -4,7 +4,6 @@ import io.zenwave360.example.clinicaltool.modules.clinical.core.domain.*;
 import java.math.*;
 import java.time.*;
 import java.util.*;
-
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -13,5 +12,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface PatientRepository extends JpaRepository<Patient, Long> {java.util.Optional<Patient> findByPhoneNumberAndHisNumber(String phoneNumber, String hisNumber);
+public interface PatientRepository extends JpaRepository<Patient, Long> {
+    java.util.Optional<Patient> findByPhoneNumberAndHisNumber(String phoneNumber, String hisNumber);
 }

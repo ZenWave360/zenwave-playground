@@ -3,18 +3,11 @@ package io.zenwave360.example.clinicaltool.modules.clinical.infrastructure.jpa;
 import io.zenwave360.example.clinicaltool.common.BaseRepositoryIntegrationTest;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.domain.*;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.outbound.jpa.HospitalRepository;
-
-import java.util.HashSet;
-import java.util.HashMap;
-import java.util.List;
+import jakarta.persistence.EntityManager;
 import java.time.*;
-import java.math.BigDecimal;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import jakarta.persistence.EntityManager;
 
 class HospitalRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
 
@@ -29,7 +22,6 @@ class HospitalRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
         var results = hospitalRepository.findAll();
         Assertions.assertFalse(results.isEmpty());
     }
-
 
     @Test
     void findByIdTest() {
@@ -46,8 +38,6 @@ class HospitalRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
         hospital.setLang("");
         hospital.setTimezone("");
 
-
-
         // Persist aggregate root
         var created = hospitalRepository.save(hospital);
 
@@ -56,8 +46,6 @@ class HospitalRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
         entityManager.refresh(created);
         Assertions.assertNotNull(created.getId());
         Assertions.assertNotNull(created.getVersion());
-
-
     }
 
     @Test

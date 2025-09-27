@@ -21,5 +21,4 @@ public class JacksonConfiguration {
     public Jdk8Module jdk8TimeModule() {
         return new Jdk8Module();
     }
-
 }

@@ -3,6 +3,8 @@ package io.zenwave360.example.clinicaltool.modules.documents;
 import io.zenwave360.example.clinicaltool.modules.documents.dtos.DocumentDataDTO;
 import io.zenwave360.example.clinicaltool.modules.documents.dtos.DocumentInfoDTO;
 import io.zenwave360.example.clinicaltool.modules.documents.mappers.DocumentDTOsMapper;
+import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.NativeWebRequest;
-
-import java.util.List;
-import java.util.Optional;
-
 
 /**
  * REST controller for DocumentApi.
@@ -65,8 +63,7 @@ public class DocumentApiController implements DocumentApi {
         var documentInfo = documentService.downloadDocument(id);
         byte[] bytes = null; // TODO get bytes from documentData.data
         ByteArrayResource resource = new ByteArrayResource(bytes);
-        return ResponseEntity
-                .status(200)
+        return ResponseEntity.status(200)
                 .header("Content-Disposition", "inline") // or attachment; filename=example.pdf
                 .contentType(MediaType.APPLICATION_OCTET_STREAM) // TODO: set content type
                 .body(resource);
@@ -80,21 +77,46 @@ public class DocumentApiController implements DocumentApi {
     }
 
     @Override
-    public ResponseEntity<DocumentInfoDTO> uploadDocument(org.springframework.web.multipart.MultipartFile file, Long id, Integer version, String uuid, String fileName, String documentType, String contentType, List<String> tags, DocumentDataDTO documentData) {
-        log.debug("REST request to uploadDocument: {}, {}, {}, {}, {}, {}, {}, {}, {}", file, id, version, uuid, fileName, documentType, contentType, tags, documentData);
-        var input = mapper.asDocumentInfo(file, id, version, uuid, fileName, documentType, contentType, tags, documentData);
+    public ResponseEntity<DocumentInfoDTO> uploadDocument(
+            org.springframework.web.multipart.MultipartFile file,
+            Long id,
+            Integer version,
+            String uuid,
+            String fileName,
+            String documentType,
+            String contentType,
+            List<String> tags,
+            DocumentDataDTO documentData) {
+        log.debug(
+                "REST request to uploadDocument: {}, {}, {}, {}, {}, {}, {}, {}, {}",
+                file,
+                id,
+                version,
+                uuid,
+                fileName,
+                documentType,
+                contentType,
+                tags,
+                documentData);
+        var input =
+                mapper.asDocumentInfo(file, id, version, uuid, fileName, documentType, contentType, tags, documentData);
         var documentInfo = documentService.uploadDocument(input);
         DocumentInfoDTO responseDTO = mapper.asDocumentInfoDTO(documentInfo);
         return ResponseEntity.status(201).body(responseDTO);
     }
 
     protected Pageable pageOf(Integer page, Integer limit, List<String> sort) {
-        Sort sortOrder = sort != null ? Sort.by(sort.stream().map(sortParam -> {
-            String[] parts = sortParam.split(":");
-            String property = parts[0];
-            Sort.Direction direction = parts.length > 1 ? Sort.Direction.fromString(parts[1]) : Sort.Direction.ASC;
-            return new Sort.Order(direction, property);
-        }).toList()) : Sort.unsorted();
+        Sort sortOrder = sort != null
+                ? Sort.by(sort.stream()
+                        .map(sortParam -> {
+                            String[] parts = sortParam.split(":");
+                            String property = parts[0];
+                            Sort.Direction direction =
+                                    parts.length > 1 ? Sort.Direction.fromString(parts[1]) : Sort.Direction.ASC;
+                            return new Sort.Order(direction, property);
+                        })
+                        .toList())
+                : Sort.unsorted();
         return PageRequest.of(page != null ? page : 0, limit != null ? limit : 10, sortOrder);
     }
 }

@@ -2,19 +2,11 @@ package io.zenwave360.example.clinicaltool.modules.termsandconditions;
 
 import io.zenwave360.example.clinicaltool.common.BaseRepositoryIntegrationTest;
 import io.zenwave360.example.clinicaltool.modules.termsandconditions.domain.*;
-import io.zenwave360.example.clinicaltool.modules.termsandconditions.AcceptedTermsAndConditionsRepository;
-
-import java.util.HashSet;
-import java.util.HashMap;
-import java.util.List;
+import jakarta.persistence.EntityManager;
 import java.time.*;
-import java.math.BigDecimal;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import jakarta.persistence.EntityManager;
 
 class AcceptedTermsAndConditionsRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
 
@@ -30,11 +22,11 @@ class AcceptedTermsAndConditionsRepositoryIntegrationTest extends BaseRepository
         Assertions.assertFalse(results.isEmpty());
     }
 
-
     @Test
     void findByIdTest() {
         var id = 1L;
-        var acceptedTermsAndConditions = acceptedTermsAndConditionsRepository.findById(id).orElseThrow();
+        var acceptedTermsAndConditions =
+                acceptedTermsAndConditionsRepository.findById(id).orElseThrow();
         Assertions.assertNotNull(acceptedTermsAndConditions.getId());
         Assertions.assertNotNull(acceptedTermsAndConditions.getVersion());
     }
@@ -46,8 +38,6 @@ class AcceptedTermsAndConditionsRepositoryIntegrationTest extends BaseRepository
         acceptedTermsAndConditions.setTermsAndConditionsId(0L);
         acceptedTermsAndConditions.setAcceptedDate(Instant.now());
 
-
-
         // Persist aggregate root
         var created = acceptedTermsAndConditionsRepository.save(acceptedTermsAndConditions);
 
@@ -56,14 +46,13 @@ class AcceptedTermsAndConditionsRepositoryIntegrationTest extends BaseRepository
         entityManager.refresh(created);
         Assertions.assertNotNull(created.getId());
         Assertions.assertNotNull(created.getVersion());
-
-
     }
 
     @Test
     void updateTest() {
         var id = 1L;
-        var acceptedTermsAndConditions = acceptedTermsAndConditionsRepository.findById(id).orElseThrow();
+        var acceptedTermsAndConditions =
+                acceptedTermsAndConditionsRepository.findById(id).orElseThrow();
         acceptedTermsAndConditions.setUserId(0L);
         acceptedTermsAndConditions.setTermsAndConditionsId(0L);
         acceptedTermsAndConditions.setAcceptedDate(Instant.now());

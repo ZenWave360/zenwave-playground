@@ -1,4 +1,5 @@
 package io.zenwave360.example.clinicaltool.modules.surveys.domain;
+
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import java.util.Arrays;
@@ -7,7 +8,6 @@ import java.util.Arrays;
  * Enum for QuestionType.
  */
 public enum QuestionType {
-    
     YES_NO(1),
     MULTIPLE_SELECTION(2),
     SINGLE_SELECTION(3),
@@ -28,8 +28,11 @@ public enum QuestionType {
 
     public static QuestionType fromValue(Integer value) {
         return Arrays.stream(QuestionType.values())
-                .filter(e -> e.value.equals(value)).findFirst().orElse(null);
+                .filter(e -> e.value.equals(value))
+                .findFirst()
+                .orElse(null);
     }
+
     @Converter
     static class QuestionTypeConverter implements AttributeConverter<QuestionType, Integer> {
 
@@ -46,7 +49,5 @@ public enum QuestionType {
         public QuestionType convertToEntityAttribute(Integer dbData) {
             return QuestionType.fromValue(dbData);
         }
-
     }
 }
-

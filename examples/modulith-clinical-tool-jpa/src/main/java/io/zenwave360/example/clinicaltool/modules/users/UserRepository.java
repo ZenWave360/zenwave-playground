@@ -4,7 +4,6 @@ import io.zenwave360.example.clinicaltool.modules.users.domain.*;
 import java.math.*;
 import java.time.*;
 import java.util.*;
-
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -13,5 +12,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {java.util.Optional<User> findByUsername(String username);
+public interface UserRepository extends JpaRepository<User, Long> {
+    java.util.Optional<User> findByUsername(String username);
 }

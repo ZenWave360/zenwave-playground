@@ -1,18 +1,15 @@
 package io.zenwave360.example.clinicaltool.modules.web.webapp;
 
-import io.zenwave360.example.clinicaltool.modules.web.webapp.*;
-import io.zenwave360.example.clinicaltool.modules.web.webapp.dtos.*;
 import io.zenwave360.example.clinicaltool.modules.clinical.config.ServicesInMemoryConfig;
-
+import io.zenwave360.example.clinicaltool.modules.web.webapp.dtos.*;
+import java.math.*;
+import java.time.*;
+import java.util.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.math.*;
-import java.time.*;
-import java.util.*;
 
 /**
  * Test controller for HospitalApiController.
@@ -23,13 +20,12 @@ public class HospitalApiControllerTest {
 
     ServicesInMemoryConfig context = new ServicesInMemoryConfig();
 
-    HospitalApiController controller = new HospitalApiController( context.hospitalService() );
+    HospitalApiController controller = new HospitalApiController(context.hospitalService());
 
-	@BeforeEach
-	void setUp() {
-		context.reloadTestData();
-	}
-
+    @BeforeEach
+    void setUp() {
+        context.reloadTestData();
+    }
 
     @Test
     public void getHospitalTest() {
@@ -41,7 +37,7 @@ public class HospitalApiControllerTest {
     @Test
     public void updateHospitalTest() {
         Long id = null;
-HospitalDTO reqBody = null;
+        HospitalDTO reqBody = null;
         var response = controller.updateHospital(id, reqBody);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
@@ -55,7 +51,7 @@ HospitalDTO reqBody = null;
 
     @Test
     public void listHospitalsTest() {
-        
+
         var response = controller.listHospitals();
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
@@ -69,7 +65,7 @@ HospitalDTO reqBody = null;
 
     @Test
     public void listDoctorsTest() {
-        
+
         var response = controller.listDoctors();
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
@@ -77,7 +73,7 @@ HospitalDTO reqBody = null;
     @Test
     public void updateDoctorTest() {
         Long id = null;
-DoctorDTO reqBody = null;
+        DoctorDTO reqBody = null;
         var response = controller.updateDoctor(id, reqBody);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
@@ -102,6 +98,4 @@ DoctorDTO reqBody = null;
         var response = controller.listHospitalPatients(hospitalId);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
-
-
 }

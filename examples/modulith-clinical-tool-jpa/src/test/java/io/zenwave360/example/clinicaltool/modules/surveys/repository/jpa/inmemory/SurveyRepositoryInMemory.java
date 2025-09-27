@@ -9,8 +9,9 @@ import java.util.*;
 public class SurveyRepositoryInMemory extends InMemoryJpaRepository<Survey> implements SurveyRepository {
     @Override
     public java.util.Optional<Survey> findByNameAndHospitalId(String name, Long hospitalId) {
-        return getEntities().values().stream().filter(e ->
-             isSameValue(name, readField(e, "name")) && isSameValue(hospitalId, readField(e, "hospitalId")) 
-        ).findFirst();
+        return getEntities().values().stream()
+                .filter(e ->
+                        isSameValue(name, readField(e, "name")) && isSameValue(hospitalId, readField(e, "hospitalId")))
+                .findFirst();
     }
 }

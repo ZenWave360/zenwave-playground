@@ -1,4 +1,5 @@
 package io.zenwave360.example.clinicaltool.modules.clinical.core.domain;
+
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import java.util.Arrays;
@@ -7,7 +8,6 @@ import java.util.Arrays;
  * Enum for IdentityDocumentType.
  */
 public enum IdentityDocumentType {
-    
     DNI(1),
     NIE(2),
     PASSPORT(3),
@@ -24,8 +24,11 @@ public enum IdentityDocumentType {
 
     public static IdentityDocumentType fromValue(Integer value) {
         return Arrays.stream(IdentityDocumentType.values())
-                .filter(e -> e.value.equals(value)).findFirst().orElse(null);
+                .filter(e -> e.value.equals(value))
+                .findFirst()
+                .orElse(null);
     }
+
     @Converter
     static class IdentityDocumentTypeConverter implements AttributeConverter<IdentityDocumentType, Integer> {
 
@@ -42,7 +45,5 @@ public enum IdentityDocumentType {
         public IdentityDocumentType convertToEntityAttribute(Integer dbData) {
             return IdentityDocumentType.fromValue(dbData);
         }
-
     }
 }
-

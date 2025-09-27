@@ -12,6 +12,7 @@ import java.net.URISyntaxException;
 import java.math.*;
 import java.time.*;
 import java.util.*;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.mapstruct.factory.Mappers;
@@ -45,6 +46,7 @@ public class CustomerApiController implements CustomerApi {
 
 
     private CustomerService customerService;
+
     @Autowired
     public CustomerApiController setCustomerService(CustomerService customerService) {
         this.customerService = customerService;
@@ -55,9 +57,9 @@ public class CustomerApiController implements CustomerApi {
     private CustomerDTOsMapper mapper = CustomerDTOsMapper.INSTANCE;
 
     public CustomerApiController(CustomerService customerService) {
-        
+
         this.customerService = customerService;
-        
+
     }
 
     public Optional<NativeWebRequest> getRequest() {
@@ -65,17 +67,19 @@ public class CustomerApiController implements CustomerApi {
     }
 
 
-
     @Override
     public ResponseEntity<CustomerDTO> createCustomer(CustomerDTO reqBody) {
-        log.debug("REST request to createCustomer: {}", reqBody);var input = mapper.asCustomer(reqBody);var customer =  customerService.createCustomer(input);
+        log.debug("REST request to createCustomer: {}", reqBody);
+        var input = mapper.asCustomer(reqBody);
+        var customer = customerService.createCustomer(input);
         CustomerDTO responseDTO = mapper.asCustomerDTO(customer);
         return ResponseEntity.status(201).body(responseDTO);
     }
 
     @Override
     public ResponseEntity<CustomerDTO> getCustomer(Long id) {
-        log.debug("REST request to getCustomer: {}", id);var customer =  customerService.getCustomer(id);
+        log.debug("REST request to getCustomer: {}", id);
+        var customer = customerService.getCustomer(id);
         if (customer.isPresent()) {
             CustomerDTO responseDTO = mapper.asCustomerDTO(customer.get());
             return ResponseEntity.status(200).body(responseDTO);
@@ -86,7 +90,9 @@ public class CustomerApiController implements CustomerApi {
 
     @Override
     public ResponseEntity<CustomerDTO> updateCustomer(Long id, CustomerDTO reqBody) {
-        log.debug("REST request to updateCustomer: {}, {}", id, reqBody);var input = mapper.asCustomer(reqBody);var customer =  customerService.updateCustomer(id, input);
+        log.debug("REST request to updateCustomer: {}, {}", id, reqBody);
+        var input = mapper.asCustomer(reqBody);
+        var customer = customerService.updateCustomer(id, input);
         if (customer.isPresent()) {
             CustomerDTO responseDTO = mapper.asCustomerDTO(customer.get());
             return ResponseEntity.status(200).body(responseDTO);
@@ -104,17 +110,20 @@ public class CustomerApiController implements CustomerApi {
 
     @Override
     public ResponseEntity<CustomerPaginatedDTO> searchCustomers(Integer page, Integer limit, List<String> sort, CustomerSearchCriteriaDTO reqBody) {
-        log.debug("REST request to searchCustomers: {}, {}, {}, {}", page, limit, sort, reqBody);var input = mapper.asCustomerSearchCriteria(reqBody);var customerPage =  customerService.searchCustomers(input, pageOf(page, limit, sort));
+        log.debug("REST request to searchCustomers: {}, {}, {}, {}", page, limit, sort, reqBody);
+        var input = mapper.asCustomerSearchCriteria(reqBody);
+        var customerPage = customerService.searchCustomers(input, pageOf(page, limit, sort));
         var responseDTO = mapper.asCustomerPaginatedDTO(customerPage);
         return ResponseEntity.status(200).body(responseDTO);
     }
-  protected Pageable pageOf(Integer page, Integer limit, List<String> sort) {
-    Sort sortOrder = sort != null ? Sort.by(sort.stream().map(sortParam -> {
-    String[] parts = sortParam.split(":");
-    String property = parts[0];
-    Sort.Direction direction = parts.length > 1 ? Sort.Direction.fromString(parts[1]) : Sort.Direction.ASC;
-    return new Sort.Order(direction, property);
-    }).toList()) : Sort.unsorted();
-    return PageRequest.of(page != null ? page : 0, limit != null ? limit : 10, sortOrder);
-  }
+
+    protected Pageable pageOf(Integer page, Integer limit, List<String> sort) {
+        Sort sortOrder = sort != null ? Sort.by(sort.stream().map(sortParam -> {
+            String[] parts = sortParam.split(":");
+            String property = parts[0];
+            Sort.Direction direction = parts.length > 1 ? Sort.Direction.fromString(parts[1]) : Sort.Direction.ASC;
+            return new Sort.Order(direction, property);
+        }).toList()) : Sort.unsorted();
+        return PageRequest.of(page != null ? page : 0, limit != null ? limit : 10, sortOrder);
+    }
 }

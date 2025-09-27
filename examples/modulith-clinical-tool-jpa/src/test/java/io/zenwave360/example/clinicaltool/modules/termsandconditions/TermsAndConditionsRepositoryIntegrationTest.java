@@ -2,19 +2,11 @@ package io.zenwave360.example.clinicaltool.modules.termsandconditions;
 
 import io.zenwave360.example.clinicaltool.common.BaseRepositoryIntegrationTest;
 import io.zenwave360.example.clinicaltool.modules.termsandconditions.domain.*;
-import io.zenwave360.example.clinicaltool.modules.termsandconditions.TermsAndConditionsRepository;
-
-import java.util.HashSet;
-import java.util.HashMap;
-import java.util.List;
+import jakarta.persistence.EntityManager;
 import java.time.*;
-import java.math.BigDecimal;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import jakarta.persistence.EntityManager;
 
 class TermsAndConditionsRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
 
@@ -29,7 +21,6 @@ class TermsAndConditionsRepositoryIntegrationTest extends BaseRepositoryIntegrat
         var results = termsAndConditionsRepository.findAll();
         Assertions.assertFalse(results.isEmpty());
     }
-
 
     @Test
     void findByIdTest() {
@@ -47,8 +38,6 @@ class TermsAndConditionsRepositoryIntegrationTest extends BaseRepositoryIntegrat
         termsAndConditions.setContentVersion("");
         termsAndConditions.setStartDate(LocalDate.now());
 
-
-
         // Persist aggregate root
         var created = termsAndConditionsRepository.save(termsAndConditions);
 
@@ -57,8 +46,6 @@ class TermsAndConditionsRepositoryIntegrationTest extends BaseRepositoryIntegrat
         entityManager.refresh(created);
         Assertions.assertNotNull(created.getId());
         Assertions.assertNotNull(created.getVersion());
-
-
     }
 
     @Test

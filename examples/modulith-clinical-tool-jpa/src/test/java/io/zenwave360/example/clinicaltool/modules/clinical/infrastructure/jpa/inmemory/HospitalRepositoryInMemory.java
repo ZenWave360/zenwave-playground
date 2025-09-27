@@ -6,5 +6,4 @@ import java.math.*;
 import java.time.*;
 import java.util.*;
 
-public class HospitalRepositoryInMemory extends InMemoryJpaRepository<Hospital> implements HospitalRepository {
-}
+public class HospitalRepositoryInMemory extends InMemoryJpaRepository<Hospital> implements HospitalRepository {}

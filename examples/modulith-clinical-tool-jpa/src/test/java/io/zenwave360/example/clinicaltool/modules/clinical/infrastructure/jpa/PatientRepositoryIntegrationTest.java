@@ -3,18 +3,13 @@ package io.zenwave360.example.clinicaltool.modules.clinical.infrastructure.jpa;
 import io.zenwave360.example.clinicaltool.common.BaseRepositoryIntegrationTest;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.domain.*;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.outbound.jpa.PatientRepository;
-
-import java.util.HashSet;
-import java.util.HashMap;
-import java.util.List;
+import jakarta.persistence.EntityManager;
 import java.time.*;
-import java.math.BigDecimal;
-
+import java.util.HashSet;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import jakarta.persistence.EntityManager;
 
 class PatientRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
 
@@ -29,7 +24,6 @@ class PatientRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
         var results = patientRepository.findAll();
         Assertions.assertFalse(results.isEmpty());
     }
-
 
     @Test
     void findByIdTest() {
@@ -54,7 +48,6 @@ class PatientRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
         patient.setGeneralInfo(new GeneralInfo());
         patient.setHealthInsuranceInfo(new HealthInsuranceInfo());
         patient.setDocumentIds(List.of(0L));
-
 
         // OneToMany medicalContacts owner: true
         var medicalContacts = new MedicalContact();
@@ -109,7 +102,6 @@ class PatientRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
         patient.setPatientWearables(new HashSet<>());
         patient.addPatientWearables(patientWearables);
 
-
         // Persist aggregate root
         var created = patientRepository.save(patient);
 
@@ -120,7 +112,6 @@ class PatientRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
         Assertions.assertNotNull(created.getVersion());
         Assertions.assertNotNull(created.getCreatedBy());
         Assertions.assertNotNull(created.getCreatedDate());
-
 
         Assertions.assertTrue(patient.getMedicalContacts().stream().allMatch(item -> item.getId() != null));
         Assertions.assertTrue(patient.getPersonalContacts().stream().allMatch(item -> item.getId() != null));

@@ -1,5 +1,7 @@
 package io.zenwave360.example.clinicaltool.config;
 
+import java.util.List;
+import java.util.Optional;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -21,9 +23,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.List;
-import java.util.Optional;
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true)
@@ -32,29 +31,29 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // @formatter:off
-        http
-                .cors(Customizer.withDefaults())
+        http.cors(Customizer.withDefaults())
                 .headers(headers -> headers.frameOptions(FrameOptionsConfig::disable))
                 .csrf(CsrfConfigurer::disable)
                 // consider disabling session management for stateless applications with SessionCreationPolicy.STATELESS
-                .authorizeHttpRequests(auth ->
-                        auth
-                            .requestMatchers("/api/user", "/api/user/**").hasRole("ADMIN") // usermanagement
-                            .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
-                            .requestMatchers("/.well-known/**").permitAll()
-                            .anyRequest().authenticated()
-                )
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/user", "/api/user/**")
+                        .hasRole("ADMIN") // usermanagement
+                        .requestMatchers("/actuator/health", "/actuator/health/**")
+                        .permitAll()
+                        .requestMatchers("/.well-known/**")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated())
                 .exceptionHandling((exceptions) -> exceptions
                         // this disables the default login form, use login-openapi.yml for login in Swagger UI
-                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-                )
+                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .oneTimeTokenLogin(Customizer.withDefaults())
-//                .formLogin(form -> form
-//                        .failureHandler((request, response, exception) -> response.setStatus(HttpStatus.UNAUTHORIZED.value()))
-//                        .successHandler((request, response, authentication) -> response.setStatus(HttpStatus.OK.value()))
-//                )
-                .httpBasic(Customizer.withDefaults())
-        ;
+                //                .formLogin(form -> form
+                //                        .failureHandler((request, response, exception) ->
+                // response.setStatus(HttpStatus.UNAUTHORIZED.value()))
+                //                        .successHandler((request, response, authentication) ->
+                // response.setStatus(HttpStatus.OK.value()))
+                //                )
+                .httpBasic(Customizer.withDefaults());
         // @formatter:on
         return http.build();
     }
@@ -70,9 +69,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain swaggerSecurityFilterChain(HttpSecurity http) throws Exception {
         // @formatter:off
         http.securityMatcher("/swagger-ui/**", "/v3/api-docs/**", "/apis/**")
-                .authorizeHttpRequests(auth ->
-                        auth.anyRequest().hasRole("ADMIN")
-                )
+                .authorizeHttpRequests(auth -> auth.anyRequest().hasRole("ADMIN"))
                 .csrf(CsrfConfigurer::disable)
                 .httpBasic(httpBasic -> httpBasic.realmName("Swagger Realm"));
         // @formatter:on
@@ -112,17 +109,13 @@ public class SecurityConfiguration {
             private static String extractPrincipal(Authentication authentication) {
                 if (authentication == null) {
                     return null;
-                }
-                else if (authentication.getPrincipal() instanceof UserDetails springSecurityUser) {
+                } else if (authentication.getPrincipal() instanceof UserDetails springSecurityUser) {
                     return springSecurityUser.getUsername();
-                }
-                else if (authentication.getPrincipal() instanceof String stringPrincipal) {
+                } else if (authentication.getPrincipal() instanceof String stringPrincipal) {
                     return stringPrincipal;
                 }
                 return null;
             }
-
         };
     }
-
 }

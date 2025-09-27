@@ -1,5 +1,16 @@
 package io.zenwave360.example.clinicaltool.modules.clinical.infrastructure.jpa.inmemory;
 
+import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -8,19 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.FluentQuery;
-import org.apache.commons.lang3.reflect.FieldUtils;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 public class InMemoryJpaRepository<T> implements JpaRepository<T, Long> {
 
@@ -53,22 +51,24 @@ public class InMemoryJpaRepository<T> implements JpaRepository<T, Long> {
 
     protected <F> F readField(Object target, String fieldName) {
         try {
-          return (F) FieldUtils.readField(target, fieldName, true);
+            return (F) FieldUtils.readField(target, fieldName, true);
         } catch (IllegalAccessException e) {
-          throw new IllegalArgumentException("Field not found or not accessible: " + fieldName);
+            throw new IllegalArgumentException("Field not found or not accessible: " + fieldName);
         }
     }
 
     protected void writeField(Object target, String fieldName, Object value) {
         try {
-          FieldUtils.writeField(target, fieldName, value, true);
+            FieldUtils.writeField(target, fieldName, value, true);
         } catch (IllegalAccessException e) {
-          throw new IllegalArgumentException("Field not found or not accessible: " + fieldName);
+            throw new IllegalArgumentException("Field not found or not accessible: " + fieldName);
         }
     }
 
     protected <F> List<T> findByField(String fieldName, F value) {
-        return entities.values().stream().filter(entity -> isSameValue(value, readField(entity, fieldName))).collect(Collectors.toList());
+        return entities.values().stream()
+                .filter(entity -> isSameValue(value, readField(entity, fieldName)))
+                .collect(Collectors.toList());
     }
 
     protected <F> T findByUniqueField(String fieldName, F value) {
@@ -78,7 +78,8 @@ public class InMemoryJpaRepository<T> implements JpaRepository<T, Long> {
         } else if (foundEntities.size() == 1) {
             return foundEntities.get(0);
         } else {
-            throw new IllegalArgumentException(String.format("Field %s is not unique, found %s entities: %s", fieldName, foundEntities.size(), foundEntities));
+            throw new IllegalArgumentException(String.format(
+                    "Field %s is not unique, found %s entities: %s", fieldName, foundEntities.size(), foundEntities));
         }
     }
 
@@ -120,12 +121,12 @@ public class InMemoryJpaRepository<T> implements JpaRepository<T, Long> {
         if (entitiesToSave == null) {
             throw new IllegalArgumentException("entitiesToSave must not be null");
         }
-        return StreamSupport.stream(entitiesToSave.spliterator(), false).map(e -> save(e)).collect(Collectors.toList());
+        return StreamSupport.stream(entitiesToSave.spliterator(), false)
+                .map(e -> save(e))
+                .collect(Collectors.toList());
     }
 
-    public void flush() {
-
-    }
+    public void flush() {}
 
     public <S extends T> S saveAndFlush(S entity) {
         return null;
@@ -148,7 +149,9 @@ public class InMemoryJpaRepository<T> implements JpaRepository<T, Long> {
     }
 
     public List<T> findAllById(Iterable<Long> ids) {
-        return entities.values().stream().filter(e -> contains(ids, readField(e, "id"))).collect(Collectors.toList());
+        return entities.values().stream()
+                .filter(e -> contains(ids, readField(e, "id")))
+                .collect(Collectors.toList());
     }
 
     public long count() {
@@ -192,17 +195,11 @@ public class InMemoryJpaRepository<T> implements JpaRepository<T, Long> {
         entities.clear();
     }
 
-    public void deleteAllInBatch(Iterable<T> entities) {
+    public void deleteAllInBatch(Iterable<T> entities) {}
 
-    }
+    public void deleteAllByIdInBatch(Iterable<Long> longs) {}
 
-    public void deleteAllByIdInBatch(Iterable<Long> longs) {
-
-    }
-
-    public void deleteAllInBatch() {
-
-    }
+    public void deleteAllInBatch() {}
 
     public List<T> findAll(Sort sort) {
         return null;
@@ -239,7 +236,8 @@ public class InMemoryJpaRepository<T> implements JpaRepository<T, Long> {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    public <S extends T, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+    public <S extends T, R> R findBy(
+            Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 }

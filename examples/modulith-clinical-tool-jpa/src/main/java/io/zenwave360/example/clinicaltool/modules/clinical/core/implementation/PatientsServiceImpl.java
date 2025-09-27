@@ -9,12 +9,11 @@ import io.zenwave360.example.clinicaltool.modules.clinical.core.inbound.dtos.Pat
 import io.zenwave360.example.clinicaltool.modules.clinical.core.outbound.events.EventPublisher;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.outbound.jpa.PatientRepository;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.outbound.jpa.ProvisionalPatientRepository;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * Service Implementation for managing [Patient, ProvisionalPatient].
@@ -37,12 +36,16 @@ public class PatientsServiceImpl implements PatientsService {
 
     public Patient loadPatient(String phoneNumber, String hisNumber) {
         log.debug("Request loadPatient: {} {}", phoneNumber, hisNumber);
-        return patientRepository.findByPhoneNumberAndHisNumber(phoneNumber, hisNumber).orElseThrow();
+        return patientRepository
+                .findByPhoneNumberAndHisNumber(phoneNumber, hisNumber)
+                .orElseThrow();
     }
 
     public Patient partialPatientUpdate(String phoneNumber, String hisNumber, java.util.Map input) {
         log.debug("Request partialPatientUpdate: {} {} {}", phoneNumber, hisNumber, input);
-        var patient = patientRepository.findByPhoneNumberAndHisNumber(phoneNumber, hisNumber).map(existingPatient -> {
+        var patient = patientRepository
+                .findByPhoneNumberAndHisNumber(phoneNumber, hisNumber)
+                .map(existingPatient -> {
                     return patientsServiceMapper.update(existingPatient, input);
                 })
                 .map(patientRepository::save)
@@ -64,13 +67,14 @@ public class PatientsServiceImpl implements PatientsService {
     @Transactional
     public Optional<Patient> updatePatient(Long id, Patient input) {
         log.debug("Request updatePatient: {} {}", id, input);
-        var patient = patientRepository.findById(id).map(existingPatient -> {
+        var patient = patientRepository
+                .findById(id)
+                .map(existingPatient -> {
                     return patientsServiceMapper.update(existingPatient, input);
                 })
                 .map(patientRepository::save);
         return patient;
     }
-
 
     public Optional<Patient> getPatient(Long id) {
         log.debug("[CRUD] Request to get Patient : {}", id);
@@ -80,9 +84,11 @@ public class PatientsServiceImpl implements PatientsService {
 
     public PatientProfile getPatientProfileById(Long id) {
         log.debug("Request getPatientProfileById: {}", id);
-        return patientRepository.findById(id).map(patientsServiceMapper::asPatientProfile).orElseThrow();
+        return patientRepository
+                .findById(id)
+                .map(patientsServiceMapper::asPatientProfile)
+                .orElseThrow();
     }
-
 
     public void requestOptOut(Long id) {
         log.debug("Request requestOptOut: {}", id);
@@ -90,11 +96,9 @@ public class PatientsServiceImpl implements PatientsService {
         // TODO: implement this method
     }
 
-
     public void associateDocumentWithPatient(DocumentSignatureRequestedInput input) {
         log.debug("Request associateDocumentWithPatient: {}", input);
         var patient = new Patient();
         // TODO: implement this method
     }
-
 }

@@ -3,18 +3,11 @@ package io.zenwave360.example.clinicaltool.modules.clinical.infrastructure.jpa;
 import io.zenwave360.example.clinicaltool.common.BaseRepositoryIntegrationTest;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.domain.*;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.outbound.jpa.DoctorRepository;
-
-import java.util.HashSet;
-import java.util.HashMap;
-import java.util.List;
+import jakarta.persistence.EntityManager;
 import java.time.*;
-import java.math.BigDecimal;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import jakarta.persistence.EntityManager;
 
 class DoctorRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
 
@@ -29,7 +22,6 @@ class DoctorRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
         var results = doctorRepository.findAll();
         Assertions.assertFalse(results.isEmpty());
     }
-
 
     @Test
     void findByIdTest() {
@@ -54,8 +46,6 @@ class DoctorRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
         doctor.setPhoneNumber("");
         doctor.setLang("");
 
-
-
         // Persist aggregate root
         var created = doctorRepository.save(doctor);
 
@@ -66,8 +56,6 @@ class DoctorRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
         Assertions.assertNotNull(created.getVersion());
         Assertions.assertNotNull(created.getCreatedBy());
         Assertions.assertNotNull(created.getCreatedDate());
-
-
     }
 
     @Test

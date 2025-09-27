@@ -4,7 +4,6 @@ import io.zenwave360.example.clinicaltool.modules.surveys.domain.*;
 import java.math.*;
 import java.time.*;
 import java.util.*;
-
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -13,5 +12,4 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface QuestionRepository extends JpaRepository<Question, Long> {
-}
+public interface QuestionRepository extends JpaRepository<Question, Long> {}

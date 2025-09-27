@@ -1,18 +1,15 @@
 package io.zenwave360.example.clinicaltool.modules.termsandconditions;
 
-import io.zenwave360.example.clinicaltool.modules.termsandconditions.*;
-import io.zenwave360.example.clinicaltool.modules.termsandconditions.dtos.*;
 import io.zenwave360.example.clinicaltool.modules.termsandconditions.config.ServicesInMemoryConfig;
-
+import io.zenwave360.example.clinicaltool.modules.termsandconditions.dtos.*;
+import java.math.*;
+import java.time.*;
+import java.util.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.math.*;
-import java.time.*;
-import java.util.*;
 
 /**
  * Test controller for TermsAndConditionsApiController.
@@ -23,17 +20,17 @@ public class TermsAndConditionsApiControllerTest {
 
     ServicesInMemoryConfig context = new ServicesInMemoryConfig();
 
-    TermsAndConditionsApiController controller = new TermsAndConditionsApiController( context.termsAndConditionsService() );
+    TermsAndConditionsApiController controller =
+            new TermsAndConditionsApiController(context.termsAndConditionsService());
 
-	@BeforeEach
-	void setUp() {
-		context.reloadTestData();
-	}
-
+    @BeforeEach
+    void setUp() {
+        context.reloadTestData();
+    }
 
     @Test
     public void listTermsAndConditionsTest() {
-        
+
         var response = controller.listTermsAndConditions();
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
@@ -55,7 +52,7 @@ public class TermsAndConditionsApiControllerTest {
     @Test
     public void updateTermsAndConditionsTest() {
         Long id = null;
-TermsAndConditionsDTO reqBody = null;
+        TermsAndConditionsDTO reqBody = null;
         var response = controller.updateTermsAndConditions(id, reqBody);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
@@ -73,6 +70,4 @@ TermsAndConditionsDTO reqBody = null;
         var response = controller.acceptTermsAndConditions(reqBody);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
-
-
 }

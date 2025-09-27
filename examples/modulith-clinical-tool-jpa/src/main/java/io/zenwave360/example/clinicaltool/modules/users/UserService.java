@@ -14,62 +14,44 @@ import org.springframework.data.domain.Pageable;
 @org.springframework.modulith.NamedInterface("UserService")
 public interface UserService {
 
-     /**
-      * 
-      *
-      */
-
-    public Optional<User> findByUsername(String username)
-;
-     /**
-      * 
-      *
-      */
-
-    public User createUser(User input)
-;
-     /**
-      * 
-      *
-      */
-
-    public Optional<User> updateUser(String username, User input)
-;
-     /**
-      * 
-      *
-      */
-
-    public Optional<User> lockAccount(String username)
-;
-     /**
-      * 
-      *
-      */
-
-    public Optional<User> unLockAccount(String username)
-;
-     /**
-      * 
-      *
-      */
-
-    public void deleteUser(String username)
-;
-     /**
-      * 
-      *
-      */
-
-    public Page<User> searchUsers(SearchCriteria input, Pageable pageable)
-;
-     /**
-      * 
-      *
-      */
-
-    public Page<User> listUsers(Pageable pageable)
-;
-
-
+    /**
+     *
+     *
+     */
+    public Optional<User> findByUsername(String username);
+    /**
+     *
+     *
+     */
+    public User createUser(User input);
+    /**
+     *
+     *
+     */
+    public Optional<User> updateUser(String username, User input);
+    /**
+     *
+     *
+     */
+    public Optional<User> lockAccount(String username);
+    /**
+     *
+     *
+     */
+    public Optional<User> unLockAccount(String username);
+    /**
+     *
+     *
+     */
+    public void deleteUser(String username);
+    /**
+     *
+     *
+     */
+    public Page<User> searchUsers(SearchCriteria input, Pageable pageable);
+    /**
+     *
+     *
+     */
+    public Page<User> listUsers(Pageable pageable);
 }

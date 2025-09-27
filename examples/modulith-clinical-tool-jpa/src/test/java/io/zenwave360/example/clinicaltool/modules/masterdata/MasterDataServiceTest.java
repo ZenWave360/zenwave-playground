@@ -1,36 +1,24 @@
 package io.zenwave360.example.clinicaltool.modules.masterdata;
 
-import io.zenwave360.example.clinicaltool.modules.masterdata.config.*;
-import io.zenwave360.example.clinicaltool.modules.masterdata.domain.*;
-import io.zenwave360.example.clinicaltool.modules.masterdata.*;
-import io.zenwave360.example.clinicaltool.modules.masterdata.dtos.*;
-import io.zenwave360.example.clinicaltool.modules.masterdata.mappers.*;
-import io.zenwave360.example.clinicaltool.modules.masterdata.*;
-import io.zenwave360.example.clinicaltool.modules.masterdata.inmemory.*;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageRequest;
-
-import java.util.Map;
-import java.util.Optional;
-import java.time.*;
-import java.math.BigDecimal;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
+
+import io.zenwave360.example.clinicaltool.modules.masterdata.config.*;
+import io.zenwave360.example.clinicaltool.modules.masterdata.domain.*;
+import io.zenwave360.example.clinicaltool.modules.masterdata.dtos.*;
+import io.zenwave360.example.clinicaltool.modules.masterdata.inmemory.*;
+import io.zenwave360.example.clinicaltool.modules.masterdata.mappers.*;
+import java.time.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Acceptance Test for MasterDataService.
  */
-class MasterDataServiceTest  {
+class MasterDataServiceTest {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -39,12 +27,10 @@ class MasterDataServiceTest  {
 
     MasterDataRepositoryInMemory masterDataRepository = context.masterDataRepository();
 
-	@BeforeEach
-	void setUp() {
-		context.reloadTestData();
-	}
-
-
+    @BeforeEach
+    void setUp() {
+        context.reloadTestData();
+    }
 
     @Test
     void createMasterDataTest() {
@@ -57,14 +43,14 @@ class MasterDataServiceTest  {
         var masterData = masterDataService.createMasterData(input);
         assertNotNull(masterData.getId());
         assertTrue(masterDataRepository.containsEntity(masterData));
-}
+    }
 
     @Test
     void getMasterDataTest() {
         Long id = null;
         var masterData = masterDataService.getMasterData(id);
         assertTrue(masterData.isPresent());
-}
+    }
 
     @Test
     void updateMasterDataTest() {
@@ -79,13 +65,13 @@ class MasterDataServiceTest  {
         var masterData = masterDataService.updateMasterData(id, input);
         assertTrue(masterData.isPresent());
         assertTrue(masterDataRepository.containsEntity(masterData.get()));
-}
+    }
 
     @Test
     void listMasterDataTest() {
         // var results = masterDataService.listMasterData(PageRequest.of(0, 10));
         // assertNotNull(results);
-}
+    }
 
     @Test
     void deleteMasterDataTest() {
@@ -93,10 +79,9 @@ class MasterDataServiceTest  {
         // assertTrue(masterDataRepository.containsKey(id));
         masterDataService.deleteMasterData(id);
         // assertFalse(masterDataRepository.containsKey(id));
-}
+    }
 
     @Test
-    void listMasterDataOfTypeTest() {// TODO: implement this test
-}
-
+    void listMasterDataOfTypeTest() { // TODO: implement this test
+    }
 }

@@ -1,18 +1,15 @@
 package io.zenwave360.example.clinicaltool.modules.masterdata;
 
-import io.zenwave360.example.clinicaltool.modules.masterdata.*;
-import io.zenwave360.example.clinicaltool.modules.masterdata.dtos.*;
 import io.zenwave360.example.clinicaltool.modules.masterdata.config.ServicesInMemoryConfig;
-
+import io.zenwave360.example.clinicaltool.modules.masterdata.dtos.*;
+import java.math.*;
+import java.time.*;
+import java.util.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.math.*;
-import java.time.*;
-import java.util.*;
 
 /**
  * Test controller for MasterDataApiController.
@@ -23,13 +20,12 @@ public class MasterDataApiControllerTest {
 
     ServicesInMemoryConfig context = new ServicesInMemoryConfig();
 
-    MasterDataApiController controller = new MasterDataApiController( context.masterDataService() );
+    MasterDataApiController controller = new MasterDataApiController(context.masterDataService());
 
-	@BeforeEach
-	void setUp() {
-		context.reloadTestData();
-	}
-
+    @BeforeEach
+    void setUp() {
+        context.reloadTestData();
+    }
 
     @Test
     public void createMasterDataTest() {
@@ -41,8 +37,8 @@ public class MasterDataApiControllerTest {
     @Test
     public void listMasterDataTest() {
         Integer page = null;
-Integer limit = null;
-List<String> sort = null;
+        Integer limit = null;
+        List<String> sort = null;
         var response = controller.listMasterData(page, limit, sort);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
@@ -57,7 +53,7 @@ List<String> sort = null;
     @Test
     public void updateMasterDataTest() {
         Long id = null;
-MasterDataDTO reqBody = null;
+        MasterDataDTO reqBody = null;
         var response = controller.updateMasterData(id, reqBody);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
@@ -72,10 +68,8 @@ MasterDataDTO reqBody = null;
     @Test
     public void listMasterDataOfTypeTest() {
         String type = null;
-String lang = null;
+        String lang = null;
         var response = controller.listMasterDataOfType(type, lang);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
-
-
 }

@@ -1,36 +1,26 @@
 package io.zenwave360.example.clinicaltool.modules.clinical.core.implementation;
 
-import io.zenwave360.example.clinicaltool.modules.clinical.config.*;
-import io.zenwave360.example.clinicaltool.modules.clinical.core.domain.*;
-import io.zenwave360.example.clinicaltool.modules.clinical.core.inbound.*;
-import io.zenwave360.example.clinicaltool.modules.clinical.core.inbound.dtos.*;
-import io.zenwave360.example.clinicaltool.modules.clinical.core.implementation.mappers.*;
-import io.zenwave360.example.clinicaltool.modules.clinical.core.outbound.jpa.*;
-import io.zenwave360.example.clinicaltool.modules.clinical.infrastructure.jpa.inmemory.*;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageRequest;
-
-import java.util.Map;
-import java.util.Optional;
-import java.time.*;
-import java.math.BigDecimal;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
+
+import io.zenwave360.example.clinicaltool.modules.clinical.config.*;
+import io.zenwave360.example.clinicaltool.modules.clinical.core.domain.*;
+import io.zenwave360.example.clinicaltool.modules.clinical.core.implementation.mappers.*;
+import io.zenwave360.example.clinicaltool.modules.clinical.core.inbound.*;
+import io.zenwave360.example.clinicaltool.modules.clinical.core.inbound.dtos.*;
+import io.zenwave360.example.clinicaltool.modules.clinical.core.outbound.jpa.*;
+import io.zenwave360.example.clinicaltool.modules.clinical.infrastructure.jpa.inmemory.*;
+import java.time.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Acceptance Test for HospitalService.
  */
-class HospitalServiceTest  {
+class HospitalServiceTest {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -41,19 +31,17 @@ class HospitalServiceTest  {
 
     DoctorRepositoryInMemory doctorRepository = context.doctorRepository();
 
-	@BeforeEach
-	void setUp() {
-		context.reloadTestData();
-	}
-
-
+    @BeforeEach
+    void setUp() {
+        context.reloadTestData();
+    }
 
     @Test
     void getHospitalTest() {
         Long id = null;
         var hospital = hospitalService.getHospital(id);
-        assertTrue(hospital.isPresent());// TODO: implement this test
-}
+        assertTrue(hospital.isPresent()); // TODO: implement this test
+    }
 
     @Test
     void createHospitalTest() {
@@ -64,8 +52,8 @@ class HospitalServiceTest  {
         // input.setTimezone("");
         var hospital = hospitalService.createHospital(input);
         assertNotNull(hospital.getId());
-        assertTrue(hospitalRepository.containsEntity(hospital));// TODO: implement this test
-}
+        assertTrue(hospitalRepository.containsEntity(hospital)); // TODO: implement this test
+    }
 
     @Test
     void updateHospitalTest() {
@@ -78,17 +66,17 @@ class HospitalServiceTest  {
         // assertTrue(hospitalRepository.containsKey(id));
         var hospital = hospitalService.updateHospital(id, input);
         assertTrue(hospital.isPresent());
-        assertTrue(hospitalRepository.containsEntity(hospital.get()));// TODO: implement this test
-}
+        assertTrue(hospitalRepository.containsEntity(hospital.get())); // TODO: implement this test
+    }
 
     @Test
     void listHospitalsTest() {
         // var results = hospitalService.listHospitals(PageRequest.of(0, 10));
         // assertNotNull(results);// TODO: implement this test
-}
+    }
 
     @Test
-    void createDoctorTest() {// TODO: implement this test
+    void createDoctorTest() { // TODO: implement this test
         Doctor input = null; // TODO
         // TODO fill input data
         // input.setUserId(0L);
@@ -103,10 +91,10 @@ class HospitalServiceTest  {
         var doctor = hospitalService.createDoctor(input);
         assertNotNull(doctor.getId());
         assertTrue(doctorRepository.containsEntity(doctor));
-}
+    }
 
     @Test
-    void updateDoctorTest() {// TODO: implement this test
+    void updateDoctorTest() { // TODO: implement this test
         Long id = null;
         Doctor input = null; // TODO
         // TODO fill input data
@@ -123,27 +111,26 @@ class HospitalServiceTest  {
         var doctor = hospitalService.updateDoctor(id, input);
         assertTrue(doctor.isPresent());
         assertTrue(doctorRepository.containsEntity(doctor.get()));
-}
+    }
 
     @Test
-    void getDoctorTest() {// TODO: implement this test
+    void getDoctorTest() { // TODO: implement this test
         Long id = null;
         var doctor = hospitalService.getDoctor(id);
         assertTrue(doctor.isPresent());
-}
+    }
 
     @Test
-    void listDoctorsTest() {// TODO: implement this test
+    void listDoctorsTest() { // TODO: implement this test
         // var results = hospitalService.listDoctors(PageRequest.of(0, 10));
         // assertNotNull(results);
-}
+    }
 
     @Test
-    void listHospitalDoctorsTest() {// TODO: implement this test// TODO: implement this test
-}
+    void listHospitalDoctorsTest() { // TODO: implement this test// TODO: implement this test
+    }
 
     @Test
-    void listHospitalPatientsTest() {// TODO: implement this test// TODO: implement this test
-}
-
+    void listHospitalPatientsTest() { // TODO: implement this test// TODO: implement this test
+    }
 }

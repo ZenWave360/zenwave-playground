@@ -1,17 +1,19 @@
 // formatter:off
 package io.zenwave360.example.clinicaltool.modules.clinical;
 
-import com.tngtech.archunit.core.importer.ImportOption.DoNotIncludeTests;
-import com.tngtech.archunit.junit.AnalyzeClasses;
-import com.tngtech.archunit.junit.ArchTest;
-import com.tngtech.archunit.lang.ArchRule;
-
 import static com.tngtech.archunit.base.DescribedPredicate.alwaysTrue;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
 import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 import static com.tngtech.archunit.library.Architectures.onionArchitecture;
 
-@AnalyzeClasses(packages = "io.zenwave360.example.clinicaltool.modules.clinical", importOptions = DoNotIncludeTests.class)
+import com.tngtech.archunit.core.importer.ImportOption.DoNotIncludeTests;
+import com.tngtech.archunit.junit.AnalyzeClasses;
+import com.tngtech.archunit.junit.ArchTest;
+import com.tngtech.archunit.lang.ArchRule;
+
+@AnalyzeClasses(
+        packages = "io.zenwave360.example.clinicaltool.modules.clinical",
+        importOptions = DoNotIncludeTests.class)
 class ArchitectureTest {
 
     /**
@@ -27,36 +29,58 @@ class ArchitectureTest {
      */
     @ArchTest
     static final ArchRule respectsLayersForHexagonalArchitecture = layeredArchitecture()
-        .consideringOnlyDependenciesInAnyPackage("io.zenwave360.example.clinicaltool.modules.clinical..")
-        .layer("Any").definedBy("..")
-        .layer("Config").definedBy("..config..")
-        .layer("Core").definedBy("..core..")
-        .layer("Domain").definedBy("..core.domain..")
-        .layer("Models").definedBy("..core.domain..", "..core.inbound.dtos..")
-        .optionalLayer("SearchModel").definedBy("..core.domain.search..")
-        .optionalLayer("InfrastructureSearch").definedBy("..core.outbound.search..")
-        .layer("CoreImplementation").definedBy("..core.implementation..")
-        .layer("CoreInbound").definedBy("..core.inbound")
-        .layer("CoreOutbound").definedBy("..core.outbound..")
-        .optionalLayer("Infrastructure").definedBy("..infrastructure..")
-        .optionalLayer("Adapters").definedBy("..adapters..")
-        .optionalLayer("Utils").definedBy("..utils..")
-
-        .whereLayer("Utils").mayOnlyBeAccessedByLayers("Any")
-        .whereLayer("Config").mayNotBeAccessedByAnyLayer()
-        .whereLayer("CoreImplementation").mayNotBeAccessedByAnyLayer()
-        .whereLayer("CoreImplementation").mayOnlyAccessLayers("Utils", "Core", "CoreInbound", "CoreOutbound", "Domain")
-        .whereLayer("Infrastructure").mayOnlyBeAccessedByLayers("Config", "Core")
-        .whereLayer("Infrastructure").mayOnlyAccessLayers("CoreOutbound", "Models", "Utils")
-        .whereLayer("CoreInbound").mayOnlyAccessLayers("Models")
-        .whereLayer("CoreInbound").mayOnlyBeAccessedByLayers("CoreImplementation", "Adapters")
-        .whereLayer("CoreOutbound").mayOnlyAccessLayers("Models")
-        .whereLayer("CoreOutbound").mayOnlyBeAccessedByLayers("CoreImplementation", "Infrastructure", "InfrastructureSearch")
-        .whereLayer("Domain").mayOnlyAccessLayers("Domain")
-        .whereLayer("SearchModel").mayOnlyAccessLayers("Domain")
-
-        .ignoreDependency(resideInAPackage("..config.."), alwaysTrue())
-        ;
+            .consideringOnlyDependenciesInAnyPackage("io.zenwave360.example.clinicaltool.modules.clinical..")
+            .layer("Any")
+            .definedBy("..")
+            .layer("Config")
+            .definedBy("..config..")
+            .layer("Core")
+            .definedBy("..core..")
+            .layer("Domain")
+            .definedBy("..core.domain..")
+            .layer("Models")
+            .definedBy("..core.domain..", "..core.inbound.dtos..")
+            .optionalLayer("SearchModel")
+            .definedBy("..core.domain.search..")
+            .optionalLayer("InfrastructureSearch")
+            .definedBy("..core.outbound.search..")
+            .layer("CoreImplementation")
+            .definedBy("..core.implementation..")
+            .layer("CoreInbound")
+            .definedBy("..core.inbound")
+            .layer("CoreOutbound")
+            .definedBy("..core.outbound..")
+            .optionalLayer("Infrastructure")
+            .definedBy("..infrastructure..")
+            .optionalLayer("Adapters")
+            .definedBy("..adapters..")
+            .optionalLayer("Utils")
+            .definedBy("..utils..")
+            .whereLayer("Utils")
+            .mayOnlyBeAccessedByLayers("Any")
+            .whereLayer("Config")
+            .mayNotBeAccessedByAnyLayer()
+            .whereLayer("CoreImplementation")
+            .mayNotBeAccessedByAnyLayer()
+            .whereLayer("CoreImplementation")
+            .mayOnlyAccessLayers("Utils", "Core", "CoreInbound", "CoreOutbound", "Domain")
+            .whereLayer("Infrastructure")
+            .mayOnlyBeAccessedByLayers("Config", "Core")
+            .whereLayer("Infrastructure")
+            .mayOnlyAccessLayers("CoreOutbound", "Models", "Utils")
+            .whereLayer("CoreInbound")
+            .mayOnlyAccessLayers("Models")
+            .whereLayer("CoreInbound")
+            .mayOnlyBeAccessedByLayers("CoreImplementation", "Adapters")
+            .whereLayer("CoreOutbound")
+            .mayOnlyAccessLayers("Models")
+            .whereLayer("CoreOutbound")
+            .mayOnlyBeAccessedByLayers("CoreImplementation", "Infrastructure", "InfrastructureSearch")
+            .whereLayer("Domain")
+            .mayOnlyAccessLayers("Domain")
+            .whereLayer("SearchModel")
+            .mayOnlyAccessLayers("Domain")
+            .ignoreDependency(resideInAPackage("..config.."), alwaysTrue());
 
     /**
      * Validates that dependencies go from the outer layers to the inner layers, and not the other way around.
@@ -65,13 +89,11 @@ class ArchitectureTest {
      */
     @ArchTest
     static final ArchRule respectsOnionArchitecture = onionArchitecture()
-        .withOptionalLayers(true)
-        .domainModels("..core.domain..")
-        .domainServices("..core.inbound..", "..core.outbound..")
-        .applicationServices("..core.implementation..")
-        .adapter("inbound", "..adapters.(*)..")
-        .adapter("outbound", "..infrastructure.(*)..")
-
-        .ignoreDependency(resideInAPackage("..config.."), alwaysTrue())
-        ;
+            .withOptionalLayers(true)
+            .domainModels("..core.domain..")
+            .domainServices("..core.inbound..", "..core.outbound..")
+            .applicationServices("..core.implementation..")
+            .adapter("inbound", "..adapters.(*)..")
+            .adapter("outbound", "..infrastructure.(*)..")
+            .ignoreDependency(resideInAPackage("..config.."), alwaysTrue());
 }
