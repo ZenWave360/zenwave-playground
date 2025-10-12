@@ -37,8 +37,8 @@ public class SecurityConfiguration {
                                 .requestMatchers("/.well-known/**").permitAll()
                                 .anyRequest().authenticated()
                 )
-                .formLogin(Customizer.withDefaults())
-//                .httpBasic(Customizer.withDefaults())
+//                .formLogin(Customizer.withDefaults())
+                .httpBasic(Customizer.withDefaults())
         ;
         // @formatter:on
         return http.build();

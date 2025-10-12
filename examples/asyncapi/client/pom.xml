@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.5.0</version>
+        <relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+    <groupId>io.example.asyncapi</groupId>
+    <artifactId>client</artifactId>
+    <version>1.0.0</version>
+    <name>AsyncAPI Example Client</name>
+    <description>AsyncAPI Example Client</description>
+
+	<properties>
+        <java.version>21</java.version>
+
+        <basePackage>io.example.asyncapi.client</basePackage>
+        <asyncApiModelPackage>${basePackage}.events.dtos</asyncApiModelPackage>
+        <asyncApiProducerApiPackage>${basePackage}.events</asyncApiProducerApiPackage>
+        <asyncApiConsumerApiPackage>${basePackage}.adapters.commands</asyncApiConsumerApiPackage>
+
+        <spring-boot.version>${project.parent.version}</spring-boot.version>
+        <spring-cloud.version>2025.0.0</spring-cloud.version>
+        <spring-cloud-stream-schema.version>2.2.1.RELEASE</spring-cloud-stream-schema.version>
+
+        <zenwave.version>2.2.0-SNAPSHOT</zenwave.version>
+
+        <jakarta.validation-api.version>3.1.1</jakarta.validation-api.version>
+
+        <spotless-maven-plugin.version>2.44.3</spotless-maven-plugin.version>
+        <palantir-java-format.version>2.55.0</palantir-java-format.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<!-- kafka -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-stream-kafka</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-stream-schema</artifactId>
+			<version>${spring-cloud-stream-schema.version}</version>
+		</dependency>
+		<!-- utils -->
+		<dependency>
+			<groupId>jakarta.validation</groupId>
+			<artifactId>jakarta.validation-api</artifactId>
+			<version>${jakarta.validation-api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.diffplug.spotless</groupId>
+				<artifactId>spotless-maven-plugin</artifactId>
+				<version>${spotless-maven-plugin.version}</version>
+				<configuration>
+					<java>
+						<palantirJavaFormat>
+							<version>${palantir-java-format.version}</version>
+							<style>PALANTIR</style>
+							<formatJavadoc>false</formatJavadoc>
+						</palantirJavaFormat>
+					</java>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>asyncapi-code-generation</id>
+			<activation>
+				<file>
+					<exists>${project.basedir}/src/main/resources/public/apis/asyncapi.yml</exists>
+				</file>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>io.zenwave360.sdk</groupId>
+						<artifactId>zenwave-sdk-maven-plugin</artifactId>
+						<version>${zenwave.version}</version>
+						<configuration>
+							<inputSpec>${project.basedir}/src/main/resources/public/apis/asyncapi.yml</inputSpec>
+							<skip>false</skip>
+							<addCompileSourceRoot>true</addCompileSourceRoot>
+							<addTestCompileSourceRoot>true</addTestCompileSourceRoot>
+						</configuration>
+						<executions>
+							<!-- DTOs -->
+							<execution>
+								<id>generate-asyncapi-dtos</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+								<configuration>
+									<generatorName>jsonschema2pojo</generatorName>
+									<configOptions>
+										<modelPackage>${asyncApiModelPackage}</modelPackage>
+										<jsonschema2pojo.isUseJakartaValidation>true</jsonschema2pojo.isUseJakartaValidation>
+										<jsonschema2pojo.useLongIntegers>true</jsonschema2pojo.useLongIntegers>
+										<jsonschema2pojo.includeAdditionalProperties>true</jsonschema2pojo.includeAdditionalProperties>
+									</configOptions>
+								</configuration>
+							</execution>
+							<!-- Generate PROVIDER -->
+							<execution>
+								<id>generate-asyncapi</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+								<configuration>
+									<generatorName>spring-cloud-streams3</generatorName>
+									<configOptions>
+										<role>provider</role>
+										<style>imperative</style>
+										<modelPackage>${asyncApiModelPackage}</modelPackage>
+										<producerApiPackage>${asyncApiProducerApiPackage}</producerApiPackage>
+										<consumerApiPackage>${asyncApiConsumerApiPackage}</consumerApiPackage>
+									</configOptions>
+								</configuration>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>io.zenwave360.sdk.plugins</groupId>
+								<artifactId>asyncapi-spring-cloud-streams3</artifactId>
+								<version>${zenwave.version}</version>
+							</dependency>
+							<dependency>
+								<groupId>io.zenwave360.sdk.plugins</groupId>
+								<artifactId>asyncapi-jsonschema2pojo</artifactId>
+								<version>${zenwave.version}</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+</project>

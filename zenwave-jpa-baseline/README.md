@@ -30,7 +30,7 @@ After cloning the project, you can start the project with the following command:
 
 ```bash
 docker-compose up -d
-mvn spring-boot:run -Dspring-boot.run.profiles=local
+mvn spring-boot:run
 ```
 
 ### Prerequisites

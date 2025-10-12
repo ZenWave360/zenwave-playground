@@ -6,7 +6,7 @@
  * Use zenwave-scripts.zw to generate your code from this model definition.
  */
 config {
-    title "ZenWave SDK - Mongodb BaseLine"
+    title "ZenWave SDK - JPA BaseLine"
     basePackage "io.zenwave360.example"
     persistence jpa
     databaseType postgresql
