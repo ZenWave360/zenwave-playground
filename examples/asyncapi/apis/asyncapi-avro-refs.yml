@@ -43,7 +43,7 @@ components:
       payload:
         schemaFormat: application/vnd.apache.avro+json;version=1.9.0
         schema:
-          $ref: "./avro/CustomerEvent.avsc"
+          $ref: "avro/CustomerEvent.avsc"
     CustomerDeletedEventMessage:
       name: CustomerDeletedEventMessage
       title: ""
@@ -53,7 +53,7 @@ components:
       payload:
         schemaFormat: application/vnd.apache.avro+json;version=1.9.0
         schema:
-          $ref: "./avro/CustomerDeletedEvent.avsc"
+          $ref: "avro/CustomerDeletedEvent.avsc"
 
   messageTraits:
     CommonHeaders:
