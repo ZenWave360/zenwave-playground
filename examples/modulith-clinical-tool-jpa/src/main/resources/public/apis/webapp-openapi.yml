@@ -319,21 +319,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Patient"
-  /patients/{id}/opt-out:
-    post:
-      operationId: requestOptOut
-      description: "requestOptOut"
-      tags: [Patients]
-      parameters:
-        - name: "id"
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        "200":
-          description: "OK"
 
 components:
   schemas:
@@ -440,9 +425,6 @@ components:
         userId:
           type: "integer"
           format: "int64"
-        spikeUUID:
-          type: "string"
-          description: "se modifica directamente via Spike webhook en WearableDataRepository"
         hospitalId:
           type: "integer"
           format: "int64"
@@ -809,7 +791,7 @@ components:
     sort:
       name: sort
       in: query
-      description: The number of results page
+      description: Sort results by field name and direction (asc or desc)
       schema:
         type: array
         items:

@@ -35,24 +35,21 @@ public class SecurityConfiguration {
                 .headers(headers -> headers.frameOptions(FrameOptionsConfig::disable))
                 .csrf(CsrfConfigurer::disable)
                 // consider disabling session management for stateless applications with SessionCreationPolicy.STATELESS
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/user", "/api/user/**")
-                        .hasRole("ADMIN") // usermanagement
-                        .requestMatchers("/actuator/health", "/actuator/health/**")
-                        .permitAll()
-                        .requestMatchers("/.well-known/**")
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated())
-                .exceptionHandling((exceptions) -> exceptions
-                        // this disables the default login form, use login-openapi.yml for login in Swagger UI
-                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-                .oneTimeTokenLogin(Customizer.withDefaults())
-                //                .formLogin(form -> form
-                //                        .failureHandler((request, response, exception) ->
-                // response.setStatus(HttpStatus.UNAUTHORIZED.value()))
-                //                        .successHandler((request, response, authentication) ->
-                // response.setStatus(HttpStatus.OK.value()))
-                //                )
+                .authorizeHttpRequests(auth ->
+                        auth.requestMatchers("/api/user", "/api/user/**").hasRole("ADMIN") // usermanagement
+                        .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
+                        .requestMatchers("/.well-known/**").permitAll()
+                        .anyRequest().authenticated())
+//                .exceptionHandling((exceptions) -> exceptions
+//                        // this disables the default login form, use login-openapi.yml for login in Swagger UI
+//                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+//                .oneTimeTokenLogin(Customizer.withDefaults())
+                .formLogin(form -> form
+                        .failureHandler((request, response, exception) ->
+                                response.setStatus(HttpStatus.UNAUTHORIZED.value()))
+                        .successHandler((request, response, authentication) ->
+                                response.setStatus(HttpStatus.OK.value()))
+                )
                 .httpBasic(Customizer.withDefaults());
         // @formatter:on
         return http.build();

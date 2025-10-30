@@ -2,8 +2,7 @@ package io.zenwave360.example.clinicaltool.modules.users;
 
 import io.zenwave360.example.clinicaltool.modules.users.domain.*;
 import io.zenwave360.example.clinicaltool.modules.users.dtos.*;
-import java.math.*;
-import java.time.*;
+
 import java.util.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,12 +32,12 @@ public interface UserService {
      *
      *
      */
-    public Optional<User> lockAccount(String username);
+    public Optional<User> enableAccount(String username);
     /**
      *
      *
      */
-    public Optional<User> unLockAccount(String username);
+    public Optional<User> diableAccount(String username);
     /**
      *
      *

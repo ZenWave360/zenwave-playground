@@ -55,6 +55,7 @@ config {
         ZDLToOpenAPIPlugin {
             title "Documents API"
             zdlFile "models/documents.zdl"
+            openapiOverlayFiles "src/main/resources/public/apis/documents-openapi-overlay.yml"
             targetFile "src/main/resources/public/apis/documents-openapi.yml"
         }
 
@@ -92,7 +93,7 @@ config {
 
         BackendApplicationDefaultPlugin {
             zdlFile "models/documents.zdl"
-            // --force // overwite all files
+             // --force // overwite all files
         }
 
         BackendApplicationDefaultPlugin {

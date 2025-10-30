@@ -7,4 +7,14 @@ import java.time.*;
 import java.util.*;
 
 public class TermsAndConditionsRepositoryInMemory extends InMemoryJpaRepository<TermsAndConditions>
-        implements TermsAndConditionsRepository {}
+        implements TermsAndConditionsRepository {
+
+    @Override public TermsAndConditions findOneByLangAndStartDateAfterOrderByStartDateAsc(
+            String lang, LocalDate localDate) {
+        return getEntities().values().stream()
+                .filter(e -> isSameValue(lang, readField(e, "lang"))
+                        && isSameValue(localDate, readField(e, "startDate"))) // FIXME
+                .findFirst()
+                .orElse(null);
+    }
+}

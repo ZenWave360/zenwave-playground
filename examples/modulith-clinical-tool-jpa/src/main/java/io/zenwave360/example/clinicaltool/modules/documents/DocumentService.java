@@ -16,7 +16,7 @@ public interface DocumentService {
      *
      *
      */
-    public List<DocumentInfo> listDocumentInfo(Long documentIds);
+    public List<DocumentInfo> listDocumentInfo(List<Long> documentIds);
     /**
      *
      *

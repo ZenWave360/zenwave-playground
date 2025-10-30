@@ -3,8 +3,7 @@ package io.zenwave360.example.clinicaltool.modules.masterdata;
 import io.zenwave360.example.clinicaltool.modules.masterdata.domain.*;
 import io.zenwave360.example.clinicaltool.modules.masterdata.dtos.*;
 import io.zenwave360.example.clinicaltool.modules.masterdata.mappers.*;
-import java.math.*;
-import java.time.*;
+
 import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +70,7 @@ public class MasterDataServiceImpl implements MasterDataService {
     public List<MasterDataKeyValue> listMasterDataOfType(MasterDataType type, String lang) {
         log.debug("Request listMasterDataOfType: {} {}", type, lang);
 
-        var masterData = masterDataRepository.findAll();
-        return masterDataServiceMapper.asMasterDataKeyValueList(masterData);
+        var masterData = masterDataRepository.findByType(type);
+        return masterDataServiceMapper.asMasterDataKeyValueList(masterData, lang);
     }
 }

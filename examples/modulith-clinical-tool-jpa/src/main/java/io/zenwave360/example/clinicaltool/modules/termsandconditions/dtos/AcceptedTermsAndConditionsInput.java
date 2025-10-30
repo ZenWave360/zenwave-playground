@@ -15,5 +15,8 @@ import java.util.*;
 public class AcceptedTermsAndConditionsInput implements Serializable {
 
     @NotNull
+    private Long userId;
+
+    @NotNull
     private Long termsAndConditionsId;
 }

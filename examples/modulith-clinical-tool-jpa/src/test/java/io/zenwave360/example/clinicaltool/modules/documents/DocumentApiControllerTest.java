@@ -29,7 +29,7 @@ public class DocumentApiControllerTest {
 
     @Test
     public void listDocumentInfoTest() {
-        Long documentIds = null;
+        List<Long> documentIds = null;
         var response = controller.listDocumentInfo(documentIds);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
@@ -52,16 +52,9 @@ public class DocumentApiControllerTest {
     @Test
     public void uploadDocumentTest() {
         org.springframework.web.multipart.MultipartFile file = null;
-        Long id = null;
-        Integer version = null;
         String uuid = null;
-        String fileName = null;
-        String documentType = null;
-        String contentType = null;
         List<String> tags = null;
-        DocumentDataDTO documentData = null;
-        var response = controller.uploadDocument(
-                file, id, version, uuid, fileName, documentType, contentType, tags, documentData);
+        var response = controller.uploadDocument(uuid, tags, file);
         Assertions.assertEquals(201, response.getStatusCode().value());
     }
 }

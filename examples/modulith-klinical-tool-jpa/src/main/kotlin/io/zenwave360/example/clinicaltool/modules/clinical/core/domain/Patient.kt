@@ -15,7 +15,7 @@ import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 
 /**
-* 
+*
 */
 @Entity
 @Table(name = "patient")
@@ -32,22 +32,16 @@ data class Patient(
     @Column(name = "user_id")
     var userId: Long?  = null,
 
-    /**
-    * se modifica directamente via Spike webhook en WearableDataRepository
-    */
-    @Column(name = "spike_uuid")
-    var spikeUUID: String?  = null,
-
     @NotNull@Column(name = "hospital_id", nullable = false)
     var hospitalId: Long?  = null,
 
     @Column(name = "profile_picture_id")
     var profilePictureId: Long?  = null,
 
-    @NotNull @Size(max = 20)@Column(name = "phone_number", nullable = false, length = 20) @org.hibernate.annotations.NaturalId 
+    @NotNull @Size(max = 20)@Column(name = "phone_number", nullable = false, length = 20) @org.hibernate.annotations.NaturalId
     var phoneNumber: String?  = null,
 
-    @NotNull @Size(max = 100)@Column(name = "his_number", nullable = false, length = 100) @org.hibernate.annotations.NaturalId 
+    @NotNull @Size(max = 100)@Column(name = "his_number", nullable = false, length = 100) @org.hibernate.annotations.NaturalId
     var hisNumber: String?  = null,
 
     @NotNull @Size(max = 100) @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}")@Column(name = "email", nullable = false, length = 100)
@@ -77,7 +71,7 @@ data class Patient(
     @AttributeOverride(name = "insuranceCardNumber", column = Column(name = "health_insurance_info_insuranceCardNumber"))
     var healthInsuranceInfo: HealthInsuranceInfo?  = null,
 
-    
+
     @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.JSON)
     @Column(name = "document_ids")
     var documentIds: MutableList<Long> = mutableListOf()
@@ -85,60 +79,60 @@ data class Patient(
 
 
     ,
-        
+
     @NotNull
-    
+
 @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @com.fasterxml.jackson.annotation.JsonManagedReference
 
 
     var medicalContacts: Set<MedicalContact> = mutableSetOf(),
-    
-    
-        
+
+
+
     @NotNull
-    
+
 @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @com.fasterxml.jackson.annotation.JsonManagedReference
 
 
     var personalContacts: Set<PersonalContact> = mutableSetOf(),
-    
-    
-        
+
+
+
     @NotNull
-    
+
 @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @com.fasterxml.jackson.annotation.JsonManagedReference
 
 
     var patientAddresses: Set<PatientAddress> = mutableSetOf(),
-    
-    
-        
+
+
+
     @NotNull
-    
+
 @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @com.fasterxml.jackson.annotation.JsonManagedReference
 
 
     var hospitalAddresses: Set<HospitalAddress> = mutableSetOf(),
-    
-    
-        
+
+
+
     @NotNull
-    
+
 @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @com.fasterxml.jackson.annotation.JsonManagedReference
 
 
     var patientWearables: Set<PatientWearable> = mutableSetOf()
-    
+
 )  : Serializable {
 
     companion object {

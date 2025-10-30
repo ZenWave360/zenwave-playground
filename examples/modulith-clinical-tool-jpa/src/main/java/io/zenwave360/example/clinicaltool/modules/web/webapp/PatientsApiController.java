@@ -17,7 +17,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 /**
  * REST controller for PatientsApi.
  */
-@RestController
+@RestController("webappPatientsApiController")
 @RequestMapping("/api")
 public class PatientsApiController implements PatientsApi {
 
@@ -93,13 +93,6 @@ public class PatientsApiController implements PatientsApi {
         } else {
             return ResponseEntity.notFound().build();
         }
-    }
-
-    @Override
-    public ResponseEntity<Void> requestOptOut(Long id) {
-        log.debug("REST request to requestOptOut: {}", id);
-        patientsService.requestOptOut(id);
-        return ResponseEntity.status(200).build();
     }
 
     protected Pageable pageOf(Integer page, Integer limit, List<String> sort) {

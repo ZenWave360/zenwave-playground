@@ -3,6 +3,7 @@ package io.zenwave360.example.clinicaltool.modules.documents.mappers;
 import io.zenwave360.example.clinicaltool.common.mappers.BaseMapper;
 import io.zenwave360.example.clinicaltool.modules.documents.domain.*;
 import io.zenwave360.example.clinicaltool.modules.documents.dtos.*;
+import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -19,10 +20,6 @@ public interface DocumentServiceMapper {
 
     @Mapping(target = "id", ignore = true)
     DocumentInfo update(@MappingTarget DocumentInfo entity, DocumentInfo input);
-    // DocumentIdsnull-DocumentInfo listDocumentInfo
-    DocumentInfo asDocumentInfo(Long documentIds);
 
-    @Mapping(target = "id", ignore = true)
-    DocumentInfo update(@MappingTarget DocumentInfo entity, Long documentIds);
     // output mappings
 }

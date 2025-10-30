@@ -3,8 +3,7 @@ package io.zenwave360.example.clinicaltool.modules.users;
 import io.zenwave360.example.clinicaltool.modules.users.domain.*;
 import io.zenwave360.example.clinicaltool.modules.users.dtos.*;
 import io.zenwave360.example.clinicaltool.modules.users.mappers.*;
-import java.math.*;
-import java.time.*;
+
 import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,9 +88,9 @@ public class UserApiController implements UserApi {
     }
 
     @Override
-    public ResponseEntity<UserDTO> lockAccount(String username) {
-        log.debug("REST request to lockAccount: {}", username);
-        var user = userService.lockAccount(username);
+    public ResponseEntity<UserDTO> enableAccount(String username) {
+        log.debug("REST request to enableAccount: {}", username);
+        var user = userService.enableAccount(username);
         if (user.isPresent()) {
             UserDTO responseDTO = mapper.asUserDTO(user.get());
             return ResponseEntity.status(200).body(responseDTO);
@@ -101,9 +100,9 @@ public class UserApiController implements UserApi {
     }
 
     @Override
-    public ResponseEntity<UserDTO> unLockAccount(String username) {
-        log.debug("REST request to unLockAccount: {}", username);
-        var user = userService.unLockAccount(username);
+    public ResponseEntity<UserDTO> disableAccount(String username) {
+        log.debug("REST request to disableAccount: {}", username);
+        var user = userService.diableAccount(username);
         if (user.isPresent()) {
             UserDTO responseDTO = mapper.asUserDTO(user.get());
             return ResponseEntity.status(200).body(responseDTO);

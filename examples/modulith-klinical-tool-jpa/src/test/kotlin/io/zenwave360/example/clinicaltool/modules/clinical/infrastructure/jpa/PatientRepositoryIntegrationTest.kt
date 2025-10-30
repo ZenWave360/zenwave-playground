@@ -44,7 +44,6 @@ class PatientRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
     fun saveTest() {
         val patient = Patient()
         patient.userId = 0L
-        patient.spikeUUID = ""
         patient.hospitalId = 0L
         patient.profilePictureId = 0L
         patient.phoneNumber = ""
@@ -133,7 +132,6 @@ class PatientRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
         val id = 1L
         val patient = patientRepository.findById(id).orElseThrow()
         patient.userId = 0L
-        patient.spikeUUID = ""
         patient.hospitalId = 0L
         patient.profilePictureId = 0L
         patient.phoneNumber = ""
@@ -145,7 +143,6 @@ class PatientRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
 
         val updated = patientRepository.save(patient)
         Assertions.assertEquals(0L, updated.userId)
-        Assertions.assertEquals("", updated.spikeUUID)
         Assertions.assertEquals(0L, updated.hospitalId)
         Assertions.assertEquals(0L, updated.profilePictureId)
         Assertions.assertEquals("", updated.phoneNumber)

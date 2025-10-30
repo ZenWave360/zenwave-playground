@@ -66,10 +66,4 @@ public class PatientsApiControllerTest {
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
 
-    @Test
-    public void requestOptOutTest() {
-        Long id = null;
-        var response = controller.requestOptOut(id);
-        Assertions.assertEquals(200, response.getStatusCode().value());
-    }
 }

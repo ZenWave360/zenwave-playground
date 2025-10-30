@@ -44,15 +44,15 @@ service UserService for (User) {
     @put("/{username}")
     updateUser(@natural id, User) User?
 
-    @put(path: "/{username}/lock", status: 200)
-    lockAccount(@natural id) User?
-    @put(path: "/{username}/unlock", status: 200)
-    unLockAccount(@natural id) User?
+    @put(path: "/{username}/enable", status: 200)
+    enableAccount(@natural id) User?
+    @put(path: "/{username}/disable", status: 200)
+    disableAccount(@natural id) User?
     @delete("/{username}")
     deleteUser(@natural id)
 
     @post(path: "/search", status: 200) @paginated
     searchUsers(SearchCriteria) User[]
-    @get("/list") @paginated
+    @get @paginated
     listUsers() User[]
 }

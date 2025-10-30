@@ -1,40 +1,44 @@
-openapi: 3.0.1
+---
+openapi: "3.0.1"
 info:
   title: "Documents API"
-  version: 0.0.1
+  version: "0.0.1"
   description: "Documents API"
   contact:
-    email: email@domain.com
+    email: "email@domain.com"
 servers:
-  - description: localhost
-    url: http://localhost:8080/api
-  - description: custom
-    url: "{protocol}://{server}/{path}"
-    variables:
-      protocol:
-        enum: ['http', 'https']
-        default: 'http'
-      server:
-        default: 'localhost:8080'
-      path:
-        default: 'api'
+- description: "localhost"
+  url: "http://localhost:8080/api"
+- description: "custom"
+  url: "{protocol}://{server}/{path}"
+  variables:
+    protocol:
+      enum:
+      - "http"
+      - "https"
+      default: "http"
+    server:
+      default: "localhost:8080"
+    path:
+      default: "api"
 tags:
-  - name: "Default"
-  - name: "Document"
-
-
+- name: "Default"
+- name: "Document"
 paths:
   /documents/:
     get:
-      operationId: listDocumentInfo
+      operationId: "listDocumentInfo"
       description: "listDocumentInfo"
-      tags: [Document]
+      tags:
+      - "Document"
       parameters:
-        - name: "documentIds"
-          in: query
-          schema:
-            type: integer
-            format: int64
+      - name: "documentIds"
+        in: "query"
+        schema:
+          type: "array"
+          items:
+            type: "integer"
+            format: "int64"
       responses:
         "200":
           description: "OK"
@@ -44,65 +48,83 @@ paths:
                 $ref: "#/components/schemas/DocumentInfoList"
   /documents/{id}:
     get:
-      operationId: downloadDocument
+      operationId: "downloadDocument"
       description: "downloadDocument"
-      tags: [Document]
+      tags:
+      - "Document"
       parameters:
-        - name: "id"
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
-        - name: "preview"
-          in: query
-          schema:
-            type: boolean
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+          format: "int64"
+      - name: "preview"
+        in: "query"
+        schema:
+          type: "boolean"
       responses:
         "200":
           description: "OK"
           headers:
             Content-Disposition:
-              description: "Controls file download behavior. Values: 'inline' (display in browser) or 'attachment; filename=example.pdf' (download file)"
+              description: "Controls file download behavior. Values: 'inline' (display\
+                \ in browser) or 'attachment; filename=example.pdf' (download file)"
               schema:
-                type: string
+                type: "string"
           content:
             '*/*':
               schema:
-                type: string
-                format: binary
+                type: "string"
+                format: "binary"
     delete:
-      operationId: deleteDocumentInfo
+      operationId: "deleteDocumentInfo"
       description: "deleteDocumentInfo"
-      tags: [Document]
+      tags:
+      - "Document"
       parameters:
-        - name: "id"
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+          format: "int64"
       responses:
         "204":
           description: "OK"
   /documents/upload:
     post:
-      operationId: uploadDocument
+      operationId: "uploadDocument"
       description: "uploadDocument"
-      tags: [Document]
+      tags:
+      - "Document"
+      parameters:
+      - name: "uuid"
+        in: "query"
+        required: false
+        schema:
+          type: "string"
+      - name: "tags"
+        in: "query"
+        required: false
+        style: "form"
+        explode: true
+        schema:
+          type: "array"
+          items:
+            type: "string"
       requestBody:
         required: true
         content:
           multipart/form-data:
             schema:
-              allOf:
-                - type: object
-                  properties:
-                    file:
-                      type: string
-                      format: binary
-                - $ref: "#/components/schemas/DocumentInfo"
-                
+              type: "object"
+              required:
+              - "file"
+              properties:
+                file:
+                  type: "string"
+                  format: "binary"
       responses:
         "201":
           description: "OK"
@@ -110,7 +132,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DocumentInfo"
-
 components:
   schemas:
     DocumentInfo:
@@ -166,66 +187,63 @@ components:
         data:
           type: "string"
           format: "binary"
-
     Page:
-      type: object
+      type: "object"
       required:
-        - "content"
-        - "totalElements"
-        - "totalPages"
-        - "size"
-        - "number"
+      - "content"
+      - "totalElements"
+      - "totalPages"
+      - "size"
+      - "number"
       properties:
         number:
-          type: integer
+          type: "integer"
           minimum: 0
         numberOfElements:
-          type: integer
+          type: "integer"
           minimum: 0
         size:
-          type: integer
+          type: "integer"
           minimum: 0
           maximum: 200
           multipleOf: 25
         totalElements:
-          type: integer
+          type: "integer"
         totalPages:
-          type: integer
-
+          type: "integer"
   parameters:
     page:
-      name: page
-      in: query
-      description: The number of results page
+      name: "page"
+      in: "query"
+      description: "The number of results page"
       schema:
-        type: integer
-        format: int32
+        type: "integer"
+        format: "int32"
         default: 0
     limit:
-      name: limit
-      in: query
-      description: The number of results in a single page
+      name: "limit"
+      in: "query"
+      description: "The number of results in a single page"
       schema:
-        type: integer
-        format: int32
+        type: "integer"
+        format: "int32"
         default: 20
     sort:
-      name: sort
-      in: query
-      description: The number of results page
+      name: "sort"
+      in: "query"
+      description: "Sort results by field name and direction (asc or desc)"
       schema:
-        type: array
+        type: "array"
         items:
-          type: string
-
+          type: "string"
   securitySchemes:
-    basicAuth:     # <-- arbitrary name for the security scheme
-      type: http
-      scheme: basic
-    bearerAuth:     # <-- arbitrary name for the security scheme
-      type: http
-      scheme: bearer
-      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+    basicAuth:
+      type: "http"
+      scheme: "basic"
+    bearerAuth:
+      type: "http"
+      scheme: "bearer"
+      bearerFormat: "JWT"
 security:
-  - basicAuth: []  # <-- use the same name here
-  - bearerAuth: []  # <-- use the same name here
+- basicAuth: []
+- bearerAuth: []

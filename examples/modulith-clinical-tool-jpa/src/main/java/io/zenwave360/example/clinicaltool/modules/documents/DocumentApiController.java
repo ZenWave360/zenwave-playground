@@ -1,10 +1,13 @@
 package io.zenwave360.example.clinicaltool.modules.documents;
 
-import io.zenwave360.example.clinicaltool.modules.documents.dtos.DocumentDataDTO;
-import io.zenwave360.example.clinicaltool.modules.documents.dtos.DocumentInfoDTO;
-import io.zenwave360.example.clinicaltool.modules.documents.mappers.DocumentDTOsMapper;
-import java.util.List;
-import java.util.Optional;
+import io.zenwave360.example.clinicaltool.modules.documents.domain.*;
+import io.zenwave360.example.clinicaltool.modules.documents.dtos.*;
+import io.zenwave360.example.clinicaltool.modules.documents.mappers.*;
+import java.math.*;
+import java.time.*;
+import java.util.*;
+
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.NativeWebRequest;
 
 /**
@@ -42,6 +44,7 @@ public class DocumentApiController implements DocumentApi {
     private DocumentDTOsMapper mapper = DocumentDTOsMapper.INSTANCE;
 
     public DocumentApiController(DocumentService documentService) {
+
         this.documentService = documentService;
     }
 
@@ -50,7 +53,7 @@ public class DocumentApiController implements DocumentApi {
     }
 
     @Override
-    public ResponseEntity<List<DocumentInfoDTO>> listDocumentInfo(Long documentIds) {
+    public ResponseEntity<List<DocumentInfoDTO>> listDocumentInfo(List<Long> documentIds) {
         log.debug("REST request to listDocumentInfo: {}", documentIds);
         var documentInfo = documentService.listDocumentInfo(documentIds);
         var responseDTO = mapper.asDocumentInfoDTOList(documentInfo);
@@ -61,7 +64,7 @@ public class DocumentApiController implements DocumentApi {
     public ResponseEntity<Resource> downloadDocument(Long id, Boolean preview) {
         log.debug("REST request to downloadDocument: {}, {}", id, preview);
         var documentInfo = documentService.downloadDocument(id);
-        byte[] bytes = null; // TODO get bytes from documentData.data
+        byte[] bytes = documentInfo.getDocumentData().getData();
         ByteArrayResource resource = new ByteArrayResource(bytes);
         return ResponseEntity.status(200)
                 .header("Content-Disposition", "inline") // or attachment; filename=example.pdf
@@ -78,28 +81,11 @@ public class DocumentApiController implements DocumentApi {
 
     @Override
     public ResponseEntity<DocumentInfoDTO> uploadDocument(
-            org.springframework.web.multipart.MultipartFile file,
-            Long id,
-            Integer version,
             String uuid,
-            String fileName,
-            String documentType,
-            String contentType,
             List<String> tags,
-            DocumentDataDTO documentData) {
-        log.debug(
-                "REST request to uploadDocument: {}, {}, {}, {}, {}, {}, {}, {}, {}",
-                file,
-                id,
-                version,
-                uuid,
-                fileName,
-                documentType,
-                contentType,
-                tags,
-                documentData);
-        var input =
-                mapper.asDocumentInfo(file, id, version, uuid, fileName, documentType, contentType, tags, documentData);
+            org.springframework.web.multipart.MultipartFile file) {
+        log.debug("REST request to uploadDocument: {}, {}, {}", file, uuid, tags);
+        var input = mapper.asDocumentInfo(file, uuid, tags);
         var documentInfo = documentService.uploadDocument(input);
         DocumentInfoDTO responseDTO = mapper.asDocumentInfoDTO(documentInfo);
         return ResponseEntity.status(201).body(responseDTO);

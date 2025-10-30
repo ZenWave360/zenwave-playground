@@ -1,0 +1,47 @@
+overlay: 1.0.0
+info:
+  title: "Documents Upload Overlay"
+  version: 0.0.1
+  description: "Overlay for Documents upload request body"
+
+actions:
+  - target: $.paths['/documents/upload'].post
+    update:
+      operationId: "uploadDocument"
+      description: "uploadDocument"
+      tags:
+        - "Document"
+      parameters:
+        - name: "uuid"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+        - name: "tags"
+          in: "query"
+          required: false
+          style: "form"
+          explode: true
+          schema:
+            type: "array"
+            items:
+              type: "string"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: "object"
+              required:
+                - "file"
+              properties:
+                file:
+                  type: "string"
+                  format: "binary"
+      responses:
+        "201":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DocumentInfo"

@@ -13,4 +13,11 @@ public class MasterDataRepositoryInMemory extends InMemoryJpaRepository<MasterDa
                 .filter(e -> isSameValue(type, readField(e, "type")) && isSameValue(key, readField(e, "key")))
                 .findFirst();
     }
+
+    @Override
+    public List<MasterData> findByType(MasterDataType type) {
+        return getEntities().values().stream()
+                .filter(e -> isSameValue(type, readField(e, "type")))
+                .toList();
+    }
 }

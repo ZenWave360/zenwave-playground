@@ -57,16 +57,16 @@ public class UserApiControllerTest {
     }
 
     @Test
-    public void lockAccountTest() {
+    public void enableAccountTest() {
         String username = null;
-        var response = controller.lockAccount(username);
+        var response = controller.enableAccount(username);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
 
     @Test
-    public void unLockAccountTest() {
+    public void disableAccountTest() {
         String username = null;
-        var response = controller.unLockAccount(username);
+        var response = controller.disableAccount(username);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
 

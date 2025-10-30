@@ -440,9 +440,6 @@ components:
         userId:
           type: "integer"
           format: "int64"
-        spikeUUID:
-          type: "string"
-          description: "se modifica directamente via Spike webhook en WearableDataRepository"
         hospitalId:
           type: "integer"
           format: "int64"

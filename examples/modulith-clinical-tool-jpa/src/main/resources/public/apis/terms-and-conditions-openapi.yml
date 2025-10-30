@@ -171,8 +171,12 @@ components:
       type: "object"
       x-business-entity: "AcceptedTermsAndConditionsInput"
       required:
+      - "userId"
       - "termsAndConditionsId"
       properties:
+        userId:
+          type: "integer"
+          format: "int64"
         termsAndConditionsId:
           type: "integer"
           format: "int64"
@@ -222,7 +226,7 @@ components:
     sort:
       name: sort
       in: query
-      description: The number of results page
+      description: Sort results by field name and direction (asc or desc)
       schema:
         type: array
         items:

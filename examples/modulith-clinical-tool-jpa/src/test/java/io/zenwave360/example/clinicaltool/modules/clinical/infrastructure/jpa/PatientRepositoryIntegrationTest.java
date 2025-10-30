@@ -39,7 +39,6 @@ class PatientRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
     void saveTest() {
         Patient patient = new Patient();
         patient.setUserId(0L);
-        patient.setSpikeUUID("");
         patient.setHospitalId(0L);
         patient.setProfilePictureId(0L);
         patient.setPhoneNumber("");
@@ -125,7 +124,6 @@ class PatientRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
         var id = 1L;
         var patient = patientRepository.findById(id).orElseThrow();
         patient.setUserId(0L);
-        patient.setSpikeUUID("");
         patient.setHospitalId(0L);
         patient.setProfilePictureId(0L);
         patient.setPhoneNumber("");
@@ -137,7 +135,6 @@ class PatientRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
 
         patient = patientRepository.save(patient);
         Assertions.assertEquals(0L, patient.getUserId());
-        Assertions.assertEquals("", patient.getSpikeUUID());
         Assertions.assertEquals(0L, patient.getHospitalId());
         Assertions.assertEquals(0L, patient.getProfilePictureId());
         Assertions.assertEquals("", patient.getPhoneNumber());

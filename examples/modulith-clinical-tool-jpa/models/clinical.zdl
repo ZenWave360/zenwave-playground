@@ -30,7 +30,6 @@ entity Doctor {
 @auditing
 entity Patient {
     userId Long
-    spikeUUID String /** se modifica directamente via Spike webhook en WearableDataRepository */
     hospitalId Long required
     profilePictureId Long
 

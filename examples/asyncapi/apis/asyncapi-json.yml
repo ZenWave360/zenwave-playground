@@ -101,7 +101,7 @@ components:
           format: "int64"
 
     Address:
-      type: "object"
+      type: object
       x-business-entity: "Address"
       required:
         - "street"

@@ -25,7 +25,7 @@ public class DocumentServiceImpl implements DocumentService {
 
     private final DocumentInfoRepository documentInfoRepository;
 
-    public List<DocumentInfo> listDocumentInfo(Long documentIds) {
+    public List<DocumentInfo> listDocumentInfo(List<Long> documentIds) {
         log.debug("Request listDocumentInfo: {}", documentIds);
 
         var documentInfos = documentInfoRepository.findAll();
@@ -38,11 +38,11 @@ public class DocumentServiceImpl implements DocumentService {
         return documentInfoRepository.findById(id).orElseThrow();
     }
 
+    @Transactional
     public DocumentInfo uploadDocument(DocumentInfo input) {
         log.debug("Request uploadDocument: {}", input);
-
         var documentInfo = documentServiceMapper.update(new DocumentInfo(), input);
-        // TODO: implement this method
+        documentInfoRepository.save(documentInfo);
         return documentInfo;
     }
 

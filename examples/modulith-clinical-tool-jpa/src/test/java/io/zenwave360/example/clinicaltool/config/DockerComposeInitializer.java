@@ -18,7 +18,7 @@ import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.testcontainers.DockerClientFactory;
-import org.testcontainers.containers.DockerComposeContainer;
+import org.testcontainers.containers.ComposeContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
 public class DockerComposeInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
@@ -41,8 +41,7 @@ public class DockerComposeInitializer implements ApplicationContextInitializer<C
             new Service("kafka", 9092, "KAFKA_BOOTSTRAP_SERVERS", "%s:%s"));
 
     static String HOST = DockerClientFactory.instance().dockerHostIpAddress();
-    static DockerComposeContainer container =
-            new DockerComposeContainer(new File(DOCKER_COMPOSE_FILE)).withEnv("HOST", HOST);
+    static ComposeContainer container = new ComposeContainer(new File(DOCKER_COMPOSE_FILE)).withEnv("HOST", HOST);
 
     static {
         for (Service service : SERVICES) {

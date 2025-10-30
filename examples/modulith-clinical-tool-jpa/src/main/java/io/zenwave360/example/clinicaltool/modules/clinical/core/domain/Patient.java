@@ -38,12 +38,6 @@ public class Patient implements Serializable {
     @Column(name = "user_id")
     private Long userId;
 
-    /**
-     * se modifica directamente via Spike webhook en WearableDataRepository
-     */
-    @Column(name = "spike_uuid")
-    private String spikeUUID;
-
     @NotNull
     @Column(name = "hospital_id", nullable = false)
     private Long hospitalId;

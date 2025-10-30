@@ -8,6 +8,7 @@ import java.time.*;
 import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,7 +47,6 @@ public class TermsAndConditionsServiceImpl implements TermsAndConditionsService 
         log.debug("[CRUD] Request to save TermsAndConditions: {}", input);
         var termsAndConditions = termsAndConditionsServiceMapper.update(new TermsAndConditions(), input);
         termsAndConditions = termsAndConditionsRepository.save(termsAndConditions);
-        // TODO: may need to reload the entity to fetch relationships 'mapped by id'
         return termsAndConditions;
     }
 
@@ -65,17 +65,23 @@ public class TermsAndConditionsServiceImpl implements TermsAndConditionsService 
 
     public Optional<TermsAndConditions> getCurrentTermsAndConditions(String lang) {
         log.debug("Request getCurrentTermsAndConditions: {}", lang);
-
-        var termsAndConditions = termsAndConditionsServiceMapper.update(new TermsAndConditions(), lang);
-        // TODO: implement this method
+        var yesterday = LocalDate.now().minusDays(1);
+        var termsAndConditions = termsAndConditionsRepository.findOneByLangAndStartDateAfterOrderByStartDateAsc(lang, yesterday);
         return Optional.ofNullable(termsAndConditions);
     }
 
+    @Transactional
     public void acceptTermsAndConditions(AcceptedTermsAndConditionsInput input) {
         log.debug("Request acceptTermsAndConditions: {}", input);
-
-        var termsAndConditions = new TermsAndConditions();
-        // TODO: implement this method
-
+        var acceptedTermsAndConditions = acceptedTermsAndConditionsRepository
+                .findByUserId(input.getUserId())
+                .or(() -> Optional.of(new AcceptedTermsAndConditions().setUserId(input.getUserId())))
+                .map(existingAcceptedTermsAndConditions -> {
+                    return existingAcceptedTermsAndConditions
+                            .setTermsAndConditionsId(input.getTermsAndConditionsId())
+                            .setAcceptedDate(Instant.now());
+                })
+                .map(acceptedTermsAndConditionsRepository::save);
+//        return acceptedTermsAndConditions;
     }
 }

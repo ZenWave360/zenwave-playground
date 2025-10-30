@@ -35,8 +35,7 @@ public class DocumentData implements Serializable {
     private byte[] data;
 
     @NotNull
-    @MapsId
-    @JoinColumn(name = "id")
+    @JoinColumn(unique = true)
     @OneToOne(fetch = FetchType.LAZY)
     private DocumentInfo document;
 

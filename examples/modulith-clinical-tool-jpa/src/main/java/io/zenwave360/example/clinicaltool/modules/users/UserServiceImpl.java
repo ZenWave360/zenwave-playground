@@ -55,14 +55,14 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    public Optional<User> lockAccount(String username) {
-        log.debug("Request lockAccount: {}", username);
+    public Optional<User> enableAccount(String username) {
+        log.debug("Request enableAccount: {}", username);
 
         return userRepository.findByUsername(username);
     }
 
-    public Optional<User> unLockAccount(String username) {
-        log.debug("Request unLockAccount: {}", username);
+    public Optional<User> diableAccount(String username) {
+        log.debug("Request diableAccount: {}", username);
 
         return userRepository.findByUsername(username);
     }

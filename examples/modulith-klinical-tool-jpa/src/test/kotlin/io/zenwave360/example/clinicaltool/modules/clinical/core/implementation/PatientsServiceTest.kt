@@ -61,7 +61,6 @@ class PatientsServiceTest {
         val input: Patient = Patient() // TODO
         // TODO fill input data
         // input.userId = 0L
-        // input.spikeUUID = ""
         // input.hospitalId = 0L
         // input.profilePictureId = 0L
         // input.phoneNumber = ""
@@ -81,7 +80,6 @@ class PatientsServiceTest {
         val input: Patient = Patient() // TODO
         // TODO fill input data
         // input.userId = 0L
-        // input.spikeUUID = ""
         // input.hospitalId = 0L
         // input.profilePictureId = 0L
         // input.phoneNumber = ""

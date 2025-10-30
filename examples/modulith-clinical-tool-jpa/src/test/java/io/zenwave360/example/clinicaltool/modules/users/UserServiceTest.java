@@ -77,11 +77,11 @@ class UserServiceTest {
     }
 
     @Test
-    void lockAccountTest() { // TODO: implement this test
+    void enableAccountTest() { // TODO: implement this test
     }
 
     @Test
-    void unLockAccountTest() { // TODO: implement this test
+    void diableAccountTest() { // TODO: implement this test
     }
 
     @Test

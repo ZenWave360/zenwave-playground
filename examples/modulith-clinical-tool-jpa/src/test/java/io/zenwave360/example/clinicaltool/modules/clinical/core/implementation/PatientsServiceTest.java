@@ -49,7 +49,6 @@ class PatientsServiceTest {
         Patient input = null; // TODO
         // TODO fill input data
         // input.setUserId(0L);
-        // input.setSpikeUUID("");
         // input.setHospitalId(0L);
         // input.setProfilePictureId(0L);
         // input.setPhoneNumber("");
@@ -69,7 +68,6 @@ class PatientsServiceTest {
         Patient input = null; // TODO
         // TODO fill input data
         // input.setUserId(0L);
-        // input.setSpikeUUID("");
         // input.setHospitalId(0L);
         // input.setProfilePictureId(0L);
         // input.setPhoneNumber("");

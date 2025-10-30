@@ -17,13 +17,13 @@ public class HealthInsuranceInfo implements Serializable {
 
     @java.io.Serial
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
-
-    @Version
-    private Integer version;
+//
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+//    private Long id;
+//
+//    @Version
+//    private Integer version;
 
     @NotNull
     @Size(max = 100)
@@ -35,21 +35,21 @@ public class HealthInsuranceInfo implements Serializable {
     @Column(name = "insurance_card_number", nullable = false, length = 20)
     private String insuranceCardNumber;
 
-    /* https://vladmihalcea.com/the-best-way-to-implement-equals-hashcode-and-tostring-with-jpa-and-hibernate/ */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof HealthInsuranceInfo)) {
-            return false;
-        }
-        HealthInsuranceInfo other = (HealthInsuranceInfo) o;
-        return getId() != null && getId().equals(other.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
+//    /* https://vladmihalcea.com/the-best-way-to-implement-equals-hashcode-and-tostring-with-jpa-and-hibernate/ */
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) {
+//            return true;
+//        }
+//        if (!(o instanceof HealthInsuranceInfo)) {
+//            return false;
+//        }
+//        HealthInsuranceInfo other = (HealthInsuranceInfo) o;
+//        return getId() != null && getId().equals(other.getId());
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return getClass().hashCode();
+//    }
 }

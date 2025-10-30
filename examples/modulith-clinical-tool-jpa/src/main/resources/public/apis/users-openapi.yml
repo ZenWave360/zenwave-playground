@@ -101,10 +101,26 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
-  /users/{username}/lock:
+    get:
+      operationId: "listUsers"
+      description: "listUsers"
+      tags:
+      - "User"
+      parameters:
+      - $ref: "#/components/parameters/page"
+      - $ref: "#/components/parameters/limit"
+      - $ref: "#/components/parameters/sort"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserPaginated"
+  /users/{username}/enable:
     put:
-      operationId: "lockAccount"
-      description: "lockAccount"
+      operationId: "enableAccount"
+      description: "enableAccount"
       tags:
       - "User"
       parameters:
@@ -120,10 +136,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
-  /users/{username}/unlock:
+  /users/{username}/disable:
     put:
-      operationId: "unLockAccount"
-      description: "unLockAccount"
+      operationId: "disableAccount"
+      description: "disableAccount"
       tags:
       - "User"
       parameters:
@@ -155,23 +171,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/SearchCriteria"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserPaginated"
-  /users/list:
-    get:
-      operationId: "listUsers"
-      description: "listUsers"
-      tags:
-      - "User"
-      parameters:
-      - $ref: "#/components/parameters/page"
-      - $ref: "#/components/parameters/limit"
-      - $ref: "#/components/parameters/sort"
       responses:
         "200":
           description: "OK"
@@ -290,7 +289,7 @@ components:
     sort:
       name: "sort"
       in: "query"
-      description: "The number of results page"
+      description: "Sort results by field name and direction (asc or desc)"
       schema:
         type: "array"
         items:

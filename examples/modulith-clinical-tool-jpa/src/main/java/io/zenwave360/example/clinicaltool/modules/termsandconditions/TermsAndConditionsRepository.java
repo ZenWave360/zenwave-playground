@@ -12,4 +12,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface TermsAndConditionsRepository extends JpaRepository<TermsAndConditions, Long> {}
+public interface TermsAndConditionsRepository extends JpaRepository<TermsAndConditions, Long> {
+    TermsAndConditions findOneByLangAndStartDateAfterOrderByStartDateAsc(String lang, LocalDate localDate);
+}
