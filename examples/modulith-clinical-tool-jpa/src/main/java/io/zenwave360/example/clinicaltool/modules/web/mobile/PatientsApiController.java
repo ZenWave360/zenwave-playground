@@ -53,13 +53,6 @@ public class PatientsApiController implements PatientsApi {
         return ResponseEntity.status(200).body(responseDTO);
     }
 
-    @Override
-    public ResponseEntity<Void> requestOptOut(Long id) {
-        log.debug("REST request to requestOptOut: {}", id);
-        patientsService.requestOptOut(id);
-        return ResponseEntity.status(200).build();
-    }
-
     protected Pageable pageOf(Integer page, Integer limit, List<String> sort) {
         Sort sortOrder = sort != null
                 ? Sort.by(sort.stream()

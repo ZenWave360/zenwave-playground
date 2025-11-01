@@ -210,7 +210,7 @@ paths:
   /patients/{hisNumber}/{phoneNumber}:
     get:
       operationId: loadPatient
-      description: "Loads a saved temporal patient or new one if not found."
+      description: "loadPatient"
       tags: [Patients]
       parameters:
         - name: "hisNumber"
@@ -232,7 +232,7 @@ paths:
                 $ref: "#/components/schemas/Patient"
     patch:
       operationId: partialPatientUpdate
-      description: "Persist a temporal patient in the database."
+      description: "partialPatientUpdate"
       tags: [Patients]
       parameters:
         - name: "hisNumber"
@@ -261,7 +261,7 @@ paths:
   /patients:
     post:
       operationId: createPatient
-      description: "Persite a patient in the database and deletes any temporal data."
+      description: "createPatient"
       tags: [Patients]
       requestBody:
         required: true
@@ -279,7 +279,7 @@ paths:
   /patients/{id}:
     put:
       operationId: updatePatient
-      description: "Updates a patient in the database."
+      description: "updatePatient"
       tags: [Patients]
       parameters:
         - name: "id"
@@ -303,7 +303,7 @@ paths:
                 $ref: "#/components/schemas/Patient"
     get:
       operationId: getPatient
-      description: "Load a patient by id"
+      description: "getPatient"
       tags: [Patients]
       parameters:
         - name: "id"

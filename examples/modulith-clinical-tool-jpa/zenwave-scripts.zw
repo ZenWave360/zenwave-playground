@@ -35,7 +35,7 @@ config {
             title "Clinical Tool - Mobile API"
             zdlFiles "models/clinical.zdl"
             targetFile "src/main/resources/public/apis/mobile-openapi.yml"
-            operationIdsToInclude "getPatientProfileById,requestOptOut"
+            operationIdsToInclude "getPatientProfileById"
         }
 
         ZDLToOpenAPIPlugin {

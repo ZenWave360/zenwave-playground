@@ -2,6 +2,7 @@ package io.zenwave360.example.clinicaltool.modules.clinical.core.implementation;
 
 import io.zenwave360.example.clinicaltool.modules.clinical.core.domain.Patient;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.implementation.mappers.EventsMapper;
+import io.zenwave360.example.clinicaltool.modules.clinical.core.implementation.mappers.PatchMapper;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.implementation.mappers.PatientsServiceMapper;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.inbound.PatientsService;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.inbound.dtos.DocumentSignatureRequestedInput;
@@ -46,7 +47,7 @@ public class PatientsServiceImpl implements PatientsService {
         var patient = patientRepository
                 .findByPhoneNumberAndHisNumber(phoneNumber, hisNumber)
                 .map(existingPatient -> {
-                    return patientsServiceMapper.update(existingPatient, input);
+                    return PatchMapper.patch(existingPatient, input);
                 })
                 .map(patientRepository::save)
                 .orElseThrow();
@@ -88,12 +89,6 @@ public class PatientsServiceImpl implements PatientsService {
                 .findById(id)
                 .map(patientsServiceMapper::asPatientProfile)
                 .orElseThrow();
-    }
-
-    public void requestOptOut(Long id) {
-        log.debug("Request requestOptOut: {}", id);
-        var patient = new Patient();
-        // TODO: implement this method
     }
 
     public void associateDocumentWithPatient(DocumentSignatureRequestedInput input) {

@@ -195,47 +195,26 @@ input DocumentSignatureRequestedInput {
 
 @rest
 service PatientsService for (Patient, ProvisionalPatient) {
-    /**
-    * Loads a saved temporal patient or new one if not found.
-    */
+
     @get("/patients/{hisNumber}/{phoneNumber}")
     loadPatient(@natural id) Patient
 
-    /**
-    * Persist a temporal patient in the database.
-    */
-    @patch("/patients/{hisNumber}/{phoneNumber}")
-    partialPatientUpdate(@natural id, Patient) Patient
-
-    /**
-    * Persite a patient in the database and deletes any temporal data.
-    */
     @post("/patients")
     createPatient(Patient) Patient withEvents PatientCreated
 
-    /**
-    * Updates a patient in the database.
-    */
+    @patch("/patients/{hisNumber}/{phoneNumber}")
+    partialPatientUpdate(@natural id, Patient) Patient
+
     @put("/patients/{id}")
     updatePatient(id, Patient) Patient?
 
-    /**
-    * Load a patient by id
-    */
     @get("/patients/{id}")
     getPatient(id) Patient?
 
-    /**
-    * Load a patient profile by id to mobile app.
-    */
     @get("/patients/{id}/profile")
     @policies(isMobile)
     @entityForId(Patient)
     getPatientProfileById(id) PatientProfile
-
-    @post({ path: "/patients/{id}/opt-out", status: 200 })
-    @entityForId(Patient)
-    requestOptOut(id)
 
     @listener({model: "models/documents.zdl", event: DocumentSignatureRequested})
     associateDocumentWithPatient(DocumentSignatureRequestedInput)

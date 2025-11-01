@@ -18,13 +18,6 @@ public class GeneralInfo implements Serializable {
     @java.io.Serial
     private static final long serialVersionUID = 1L;
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-//    private Long id;
-//
-//    @Version
-//    private Integer version;
-
     @NotNull
     @Size(max = 100)
     @Column(name = "name", nullable = false, length = 100)
@@ -64,22 +57,4 @@ public class GeneralInfo implements Serializable {
     @Size(max = 3)
     @Column(name = "lang", length = 3)
     private String lang;
-
-//    /* https://vladmihalcea.com/the-best-way-to-implement-equals-hashcode-and-tostring-with-jpa-and-hibernate/ */
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) {
-//            return true;
-//        }
-//        if (!(o instanceof GeneralInfo)) {
-//            return false;
-//        }
-//        GeneralInfo other = (GeneralInfo) o;
-//        return getId() != null && getId().equals(other.getId());
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return getClass().hashCode();
-//    }
 }
