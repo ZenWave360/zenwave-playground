@@ -1,0 +1,60 @@
+logging:
+  level:
+    io.zenwave360.example: DEBUG
+    org.apache.kafka.clients.admin: WARN
+
+springdoc.swagger-ui.urls:
+  - name: ZenWave SDK - JPA BaseLine
+    url: /apis/openapi.yml
+
+management:
+  endpoints.web.exposure.include: "*"
+
+spring:
+  security:
+    user:
+      name: user
+      password: password
+      roles: USER
+  jpa:
+    open-in-view: false
+    hibernate.ddl-auto: none
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.LongDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      enable-auto-commit: false
+      auto-offset-reset: earliest
+      properties:
+        spring.deserializer.value.delegate.class: io.confluent.kafka.serializers.KafkaAvroDeserializer
+        schema.registry.url: ${SCHEMA_REGISTRY_URL}
+        specific.avro.reader: true
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.LongSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      properties:
+        schema.registry.url: ${SCHEMA_REGISTRY_URL}
+    listener:
+      ack-mode: manual
+
+app:
+  kafka:
+    topics:
+      shopping-cart-channel:
+        topic: shopping-cart
+        groupId: shopping-cart-client-group
+        containerFactory: shoppingCartRetryableContainerFactory

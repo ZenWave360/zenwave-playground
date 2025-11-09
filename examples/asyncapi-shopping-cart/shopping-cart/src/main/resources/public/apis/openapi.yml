@@ -1,0 +1,254 @@
+openapi: 3.0.1
+info:
+  title: "AsyncAPI Shopping Cart Example (Provider)"
+  version: 0.0.1
+  description: "AsyncAPI Shopping Cart Example (Provider)"
+  contact:
+    email: email@domain.com
+servers:
+  - description: localhost
+    url: http://localhost:8080/api
+  - description: custom
+    url: "{protocol}://{server}/{path}"
+    variables:
+      protocol:
+        enum: ['http', 'https']
+        default: 'http'
+      server:
+        default: 'localhost:8080'
+      path:
+        default: 'api'
+tags:
+  - name: "Default"
+  - name: "ShoppingCart"
+
+
+paths:
+  /shopping-cart/{customerId}:
+    get:
+      operationId: loadShoppingCart
+      description: "loadShoppingCart"
+      tags: [ShoppingCart]
+      parameters:
+        - name: "customerId"
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ShoppingCart"
+    delete:
+      operationId: checkoutShoppingCart
+      description: "checkoutShoppingCart"
+      tags: [ShoppingCart]
+      parameters:
+        - name: "customerId"
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: "OK"
+  /shopping-cart/{customerId}/items:
+    post:
+      operationId: addItem
+      description: "addItem"
+      tags: [ShoppingCart]
+      parameters:
+        - name: "customerId"
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Item"
+      responses:
+        "201":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ShoppingCart"
+  /shopping-cart/{customerId}/items/{name}:
+    delete:
+      operationId: removeItem
+      description: "removeItem"
+      tags: [ShoppingCart]
+      parameters:
+        - name: "customerId"
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: "name"
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ShoppingCart"
+    put:
+      operationId: updateItemQuantity
+      description: "updateItemQuantity"
+      tags: [ShoppingCart]
+      parameters:
+        - name: "customerId"
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: "name"
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Item"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ShoppingCart"
+  /shopping-cart:
+    get:
+      operationId: listShoppingCarts
+      description: "listShoppingCarts"
+      tags: [ShoppingCart]
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ShoppingCartList"
+
+components:
+  schemas:
+    Item:
+      type: "object"
+      x-business-entity: "Item"
+      required:
+      - "name"
+      - "quantity"
+      properties:
+        name:
+          type: "string"
+          maxLength: 254
+        quantity:
+          type: "integer"
+          format: "int32"
+    ShoppingCart:
+      type: "object"
+      x-business-entity: "ShoppingCart"
+      required:
+      - "customerId"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+          readOnly: true
+        version:
+          type: "integer"
+          default: "null"
+          description: "Version of the document (required in PUT for concurrency control,\
+            \ should be null in POSTs)."
+        customerId:
+          type: "integer"
+          format: "int64"
+        items:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Item"
+    ShoppingCartList:
+      type: "array"
+      items:
+        $ref: "#/components/schemas/ShoppingCart"
+
+    Page:
+      type: object
+      required:
+        - "content"
+        - "totalElements"
+        - "totalPages"
+        - "size"
+        - "number"
+      properties:
+        number:
+          type: integer
+          minimum: 0
+        numberOfElements:
+          type: integer
+          minimum: 0
+        size:
+          type: integer
+          minimum: 0
+          maximum: 200
+          multipleOf: 25
+        totalElements:
+          type: integer
+        totalPages:
+          type: integer
+
+  parameters:
+    page:
+      name: page
+      in: query
+      description: The number of results page
+      schema:
+        type: integer
+        format: int32
+        default: 0
+    limit:
+      name: limit
+      in: query
+      description: The number of results in a single page
+      schema:
+        type: integer
+        format: int32
+        default: 20
+    sort:
+      name: sort
+      in: query
+      description: Sort results by field name and direction (asc or desc)
+      schema:
+        type: array
+        items:
+          type: string
+
+  securitySchemes:
+    basicAuth:     # <-- arbitrary name for the security scheme
+      type: http
+      scheme: basic
+    bearerAuth:     # <-- arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+security:
+  - basicAuth: []  # <-- use the same name here
+  - bearerAuth: []  # <-- use the same name here

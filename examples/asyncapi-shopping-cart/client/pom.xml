@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.example.asyncapi.shoppingcart</groupId>
+        <artifactId>parent-project</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>client</artifactId>
+    <name>AsyncAPI Example Client</name>
+    <description>AsyncAPI Example Client</description>
+
+	<properties>
+        <basePackage>io.example.asyncapi.shoppingcart.client</basePackage>
+
+        <asyncapiPrefix>classpath:io/example/asyncapi/shoppingcart/apis</asyncapiPrefix>
+        <asyncapi.inputSpec>${asyncapiPrefix}/asyncapi.yml</asyncapi.inputSpec>
+        <asyncapi.avro.imports>
+            ${asyncapiPrefix}/avro/
+        </asyncapi.avro.imports>
+
+        <asyncApiProducerApiPackage>${basePackage}.events</asyncApiProducerApiPackage>
+        <asyncApiConsumerApiPackage>${basePackage}.events</asyncApiConsumerApiPackage>
+	</properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>io.zenwave360.sdk</groupId>
+                <artifactId>zenwave-sdk-maven-plugin</artifactId>
+                <version>${zenwave.version}</version>
+                <configuration>
+                    <inputSpec>${asyncapi.inputSpec}</inputSpec>
+                    <skip>false</skip>
+                    <addCompileSourceRoot>true</addCompileSourceRoot>
+                    <addTestCompileSourceRoot>true</addTestCompileSourceRoot>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>generate-asyncapi</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <generatorName>AsyncAPIGenerator</generatorName>
+                            <configOptions>
+                                <role>client</role>
+                                <templates>SpringKafka</templates>
+                                <!-- required for json, here it uses avro package <modelPackage>${asyncApiModelPackage}</modelPackage>-->
+                                <producerApiPackage>${asyncApiProducerApiPackage}</producerApiPackage>
+                                <consumerApiPackage>${asyncApiConsumerApiPackage}</consumerApiPackage>
+                                <avroCompilerProperties.imports>${asyncapi.avro.imports}</avroCompilerProperties.imports>
+
+<!--                                <operationIds>onCustomerDeletedEvent</operationIds>-->
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.zenwave360.sdk.plugins</groupId>
+                        <artifactId>asyncapi-generator</artifactId>
+                        <version>${zenwave.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.avro</groupId>
+                        <artifactId>avro-compiler</artifactId>
+                        <version>${avro.version}</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>com.fasterxml.jackson.core</groupId>
+                                <artifactId>jackson-core</artifactId>
+                            </exclusion>
+                            <exclusion>
+                                <groupId>com.fasterxml.jackson.core</groupId>
+                                <artifactId>jackson-databind</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                    <dependency>
+                        <groupId>io.example.asyncapi.shoppingcart</groupId>
+                        <artifactId>shopping-cart-apis</artifactId>
+                        <version>1.0.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>${spotless-maven-plugin.version}</version>
+                <configuration>
+                    <java>
+                        <palantirJavaFormat>
+                            <version>${palantir-java-format.version}</version>
+                            <style>PALANTIR</style>
+                            <formatJavadoc>false</formatJavadoc>
+                        </palantirJavaFormat>
+                    </java>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+	<dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- kafka -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+        <!-- avro -->
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+            <version>${avro.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-avro</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-avro-serializer</artifactId>
+            <version>5.3.0</version>
+        </dependency>
+		<!-- utils -->
+		<dependency>
+			<groupId>jakarta.validation</groupId>
+			<artifactId>jakarta.validation-api</artifactId>
+			<version>${jakarta.validation-api.version}</version>
+		</dependency>
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+	</dependencies>
+
+</project>

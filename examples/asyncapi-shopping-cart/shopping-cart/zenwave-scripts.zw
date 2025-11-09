@@ -1,0 +1,40 @@
+config {
+
+    // This is a global configuration that applies to all plugins.
+    zdlFile "zenwave-model.zdl"
+
+
+    // these should match the values of openapi-generator-maven-plugin
+    // used by the OpenAPIControllersPlugin and SpringWebTestClientPlugin
+    openApiApiPackage "{{basePackage}}.web"
+    openApiModelPackage "{{basePackage}}.web.model"
+    openApiModelNameSuffix DTO
+
+    plugins {
+        /** Generates an AsyncAPI v3 specification from the ZDL model. */
+        ZDLToAsyncAPIPlugin {
+            schemaFormat avro
+            idType integer
+            idTypeFormat int64
+            avroPackage io.example.asyncapi.shoppingcart.events.avro
+            includeCloudEventsHeaders true
+            includeKafkaCommonHeaders true
+            targetFile "../apis/asyncapi.yml"
+        }
+        /** Generates an OpenAPI 3.0 specification from the ZDL model. */
+        ZDLToOpenAPIPlugin {
+            idType integer
+            idTypeFormat int64
+            targetFile "src/main/resources/public/apis/openapi.yml"
+        }
+        /** Generates a Backend Application from the ZDL model. (Headless Core) */
+        BackendApplicationDefaultPlugin {
+            useLombok true
+            --force
+        }
+        /** Generates Spring MVC controllers from the OpenAPI specification (Web Adapters). */
+        OpenAPIControllersPlugin {
+            openapiFile "src/main/resources/public/apis/openapi.yml"
+        }
+    }
+}

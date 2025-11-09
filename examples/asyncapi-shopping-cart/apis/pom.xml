@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.example.asyncapi.shoppingcart</groupId>
+        <artifactId>parent-project</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>shopping-cart-apis</artifactId>
+    <packaging>jar</packaging>
+    <name>AsyncAPI/Avro APIs</name>
+    <description>AsyncAPI/Avro definition files</description>
+
+    <properties>
+        <apisPackage>io/example/asyncapi/shoppingcart/apis</apisPackage>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}/${apisPackage}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}</directory>
+                                    <includes>
+                                        <include>**/*</include>
+                                    </includes>
+                                    <excludes>
+                                        <exclude>pom.xml</exclude>
+                                        <exclude>target</exclude>
+                                        <exclude>.*</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

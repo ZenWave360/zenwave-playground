@@ -1,0 +1,75 @@
+config {
+    title "AsyncAPI Shopping Cart Example (Provider)"
+    basePackage "io.example.asyncapi.shoppingcart"
+    persistence jpa
+    databaseType postgresql
+
+    layout SimpleDomainProjectLayout
+    layout.asyncApiModelPackage "{{basePackage}}.events.avro"
+}
+
+@aggregate
+@auditing
+entity ShoppingCart {
+    @naturalId
+    customerId Long required unique
+    @json items Item[] {
+       name String required maxlength(254)
+       quantity Integer required min(1)
+   }
+}
+
+@inline
+input ItemName {
+    name String required maxlength(254)
+}
+
+@rest("/shopping-cart")
+service ShoppingCartService for (ShoppingCart) {
+    @get("/{customerId}")
+    loadShoppingCart(@natural id) ShoppingCart withEvents ShoppingCartCreated
+    @post("/{customerId}/items")
+    addItem(@natural id, Item) ShoppingCart withEvents ShoppingCartCreated ShoppingCartItemAdded
+    @delete("/{customerId}/items/{name}")
+    removeItem(@natural id, ItemName) ShoppingCart withEvents ShoppingCartItemRemoved
+    @put("/{customerId}/items/{name}")
+    updateItemQuantity(@natural id, Item) ShoppingCart withEvents ShoppingCartItemUpdated
+    @delete("/{customerId}")
+    checkoutShoppingCart(@natural id) withEvents ShoppingCartCheckedOut
+
+    @get
+    listShoppingCarts() ShoppingCart[]
+}
+
+@asyncapi({ channel: "ShoppingCartChannel", topic: "shopping-cart", key: "customerId" })
+event ShoppingCartCreated {
+    customerId Long required unique
+}
+
+@asyncapi({ channel: "ShoppingCartChannel", topic: "shopping-cart", key: "customerId" })
+event ShoppingCartItemAdded {
+    customerId Long required unique
+    shoppingCart ShoppingCart
+    item Item
+}
+
+@asyncapi({ channel: "ShoppingCartChannel", topic: "shopping-cart", key: "customerId" })
+event ShoppingCartItemRemoved {
+    customerId Long required unique
+    shoppingCart ShoppingCart
+    item Item
+}
+
+@asyncapi({ channel: "ShoppingCartChannel", topic: "shopping-cart", key: "customerId" })
+event ShoppingCartItemUpdated {
+    customerId Long required unique
+    shoppingCart ShoppingCart
+    item Item
+    previousItem Item
+}
+
+@asyncapi({ channel: "ShoppingCartChannel", topic: "shopping-cart", key: "customerId" })
+event ShoppingCartCheckedOut {
+    customerId Long required unique
+    shoppingCart ShoppingCart
+}
