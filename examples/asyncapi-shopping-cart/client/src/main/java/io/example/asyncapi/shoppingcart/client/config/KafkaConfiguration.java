@@ -1,14 +1,8 @@
-package io.example.asyncapi.client.config;
+package io.example.asyncapi.shoppingcart.client.config;
 
-import io.confluent.kafka.serializers.KafkaAvroDeserializer;
-import io.confluent.kafka.serializers.KafkaAvroSerializer;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.LongDeserializer;
-import org.apache.kafka.common.serialization.LongSerializer;
+import io.example.asyncapi.shoppingcart.client.events.ShoppingCartDltHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
@@ -17,8 +11,6 @@ import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.retrytopic.RetryTopicConfiguration;
 import org.springframework.kafka.retrytopic.RetryTopicConfigurationBuilder;
 import org.springframework.kafka.retrytopic.TopicSuffixingStrategy;
-import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
-import org.springframework.util.backoff.FixedBackOff;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,7 +48,13 @@ public class KafkaConfiguration {
      * - Includes all exceptions for retry
      */
     @Bean
-    public RetryTopicConfiguration shoppingCartRetryTopicConfiguration(KafkaTemplate<Long, Object> kafkaTemplate) {
+    public RetryTopicConfiguration shoppingCartRetryTopicConfiguration(ProducerFactory<Long, Object> defaultProducerFactory) {
+
+        Map<String, Object> props = new HashMap<>(defaultProducerFactory.getConfigurationProperties());
+        props.put("value.subject.name.strategy", "io.confluent.kafka.serializers.subject.TopicRecordNameStrategy");
+        ProducerFactory<Long, Object> customProducerFactory = new DefaultKafkaProducerFactory<>(props);
+        var kafkaTemplate = new KafkaTemplate<>(customProducerFactory);
+
         return RetryTopicConfigurationBuilder
                 .newInstance()
                 .maxAttempts(5) // 5 retry attempts before DLT
@@ -66,8 +64,8 @@ public class KafkaConfiguration {
                 .setTopicSuffixingStrategy(TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE) // Adds attempt number
                 .includeTopic("shopping-cart") // Apply to shopping-cart topic
                 .doNotRetryOnDltFailure() // Don't retry if DLT processing fails
-                .dltHandlerMethod("io.example.asyncapi.client.events.ShoppingCartDltHandler", "handleDlt")
-                .create(kafkaTemplate);
+                .dltHandlerMethod("shoppingCartDltHandler", "handleDlt")
+                .create(kafkaTemplate); // Use custom template
     }
 }
 

@@ -10,6 +10,12 @@ springdoc.swagger-ui.urls:
 management:
   endpoints.web.exposure.include: "*"
 
+app:
+  kafka:
+    topics:
+      shopping-cart-channel:
+        topic: shopping-cart
+
 spring:
   security:
     user:
@@ -34,22 +40,31 @@ spring:
         useServerPrepStmts: true
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    properties:
+      specific.avro.reader: true
+      schema.registry.url: ${SCHEMA_REGISTRY_URL}
     producer:
       key-serializer: org.apache.kafka.common.serialization.LongSerializer
       value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
       properties:
-        schema.registry.url: ${SCHEMA_REGISTRY_URL}
         value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicRecordNameStrategy
     consumer:
       key-deserializer: org.apache.kafka.common.serialization.LongDeserializer
       value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
       properties:
         schema.registry.url: ${SCHEMA_REGISTRY_URL}
-        value.subject.name.strategy: io.confluent.kafka.serializers.subject.TopicRecordNameStrategy
 
-app:
-  kafka:
-    topics:
-      shopping-cart-channel:
-        topic: shopping-cart
+  cloud:
+    stream:
+      kafka.binder.enable-observation: true
+      function:
+        definition: shopping-cart-channel
+      bindings:
+        shopping-cart-channel-out-0:
+          destination: shopping-cart
+          content-type: application/*+avro
+          producer:
+            use-native-encoding: true
+
+
 

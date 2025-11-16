@@ -20,6 +20,7 @@
         <asyncapi.avro.imports>
             ${asyncapiPrefix}/avro/
         </asyncapi.avro.imports>
+        <zenwave.asyncapiGenerator.templates>SpringKafka</zenwave.asyncapiGenerator.templates>
 
         <asyncApiProducerApiPackage>${basePackage}.events</asyncApiProducerApiPackage>
         <asyncApiConsumerApiPackage>${basePackage}.events</asyncApiConsumerApiPackage>
@@ -60,7 +61,7 @@
                             <generatorName>AsyncAPIGenerator</generatorName>
                             <configOptions>
                                 <role>client</role>
-                                <templates>SpringKafka</templates>
+                                <templates>${zenwave.asyncapiGenerator.templates}</templates>
                                 <!-- required for json, here it uses avro package <modelPackage>${asyncApiModelPackage}</modelPackage>-->
                                 <producerApiPackage>${asyncApiProducerApiPackage}</producerApiPackage>
                                 <consumerApiPackage>${asyncApiConsumerApiPackage}</consumerApiPackage>
@@ -120,6 +121,16 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- spring-cloud-stream -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-stream-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream-schema</artifactId>
+            <version>${spring-cloud-stream-schema.version}</version>
         </dependency>
         <!-- kafka -->
         <dependency>

@@ -133,7 +133,7 @@ components:
           ce-id:
             type: string
             description: Unique identifier for the event
-            x-runtime-expression: $message.payload#{#this.customerId}
+            x-runtime-expression: $message.payload#{#this.customerId.toString()}
           ce-source:
             type: string
             description: URI identifying the context where event happened

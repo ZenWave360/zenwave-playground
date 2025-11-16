@@ -1,3 +1,4 @@
+server.port: 8082
 logging:
   level:
     io.zenwave360.example: DEBUG
@@ -9,6 +10,15 @@ springdoc.swagger-ui.urls:
 
 management:
   endpoints.web.exposure.include: "*"
+
+app:
+  kafka:
+    topics:
+      shopping-cart-channel:
+        topic: shopping-cart
+        groupId: shopping-cart-client-group
+        containerFactory: shoppingCartRetryableContainerFactory
+
 
 spring:
   security:
@@ -50,11 +60,9 @@ spring:
         schema.registry.url: ${SCHEMA_REGISTRY_URL}
     listener:
       ack-mode: manual
-
-app:
-  kafka:
-    topics:
-      shopping-cart-channel:
-        topic: shopping-cart
-        groupId: shopping-cart-client-group
-        containerFactory: shoppingCartRetryableContainerFactory
+  cloud:
+    stream:
+      kafka.binder.enable-observation: true
+      bindings:
+        shopping-cart-channel-in-0:
+          destination: shopping-cart

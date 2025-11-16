@@ -1,4 +1,4 @@
-package io.example.asyncapi.client;
+package io.example.asyncapi.shoppingcart.client;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
