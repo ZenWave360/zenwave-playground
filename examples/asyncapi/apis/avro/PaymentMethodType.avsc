@@ -1,6 +1,0 @@
-{
-  "type" : "enum",
-  "name" : "PaymentMethodType",
-  "namespace" : "io.example.api.dtos",
-  "symbols" : [ "VISA", "MASTERCARD" ]
-}
