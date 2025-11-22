@@ -73,14 +73,17 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         log.debug("Request updateItemQuantity: {} {}", customerId, input);
 
         var shoppingCart = shoppingCartRepository
-                .findByCustomerId(customerId)
-                .map(existingShoppingCart -> {
-                    return shoppingCartServiceMapper.update(existingShoppingCart, input);
-                })
-                .map(shoppingCartRepository::save)
-                .orElseThrow();
+                .findByCustomerId(customerId).orElseThrow();
+        var item = shoppingCart.getItems().stream()
+                .filter(i -> i.getName().equals(input.getName())).findFirst();
+        if (item.isEmpty()) {
+            return addItem(customerId, input);
+        }
+        var previousItem = new Item().setName(item.get().getName()).setQuantity(item.get().getQuantity());
+        shoppingCartServiceMapper.update(shoppingCart, input);
+        shoppingCartRepository.save(shoppingCart);
         // emit events
-        var shoppingCartItemUpdated = eventsMapper.asShoppingCartItemUpdated(shoppingCart, input);
+        var shoppingCartItemUpdated = eventsMapper.asShoppingCartItemUpdated(shoppingCart, input, previousItem);
         eventsProducer.onShoppingCartItemUpdated(shoppingCartItemUpdated);
         return shoppingCart;
     }

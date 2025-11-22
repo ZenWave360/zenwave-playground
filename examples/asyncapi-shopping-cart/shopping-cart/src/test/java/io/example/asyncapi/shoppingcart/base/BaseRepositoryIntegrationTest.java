@@ -1,4 +1,4 @@
-package io.example.asyncapi.shoppingcart;
+package io.example.asyncapi.shoppingcart.base;
 
 import io.example.asyncapi.shoppingcart.config.DockerComposeInitializer;
 import org.springframework.boot.test.context.SpringBootTest;

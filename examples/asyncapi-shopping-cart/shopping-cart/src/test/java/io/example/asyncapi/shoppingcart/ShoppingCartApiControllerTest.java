@@ -30,46 +30,45 @@ public class ShoppingCartApiControllerTest {
 
     @Test
     public void loadShoppingCartTest() {
-        Long customerId = null;
+        Long customerId = 1L;
         var response = controller.loadShoppingCart(customerId);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
 
     @Test
     public void checkoutShoppingCartTest() {
-        Long customerId = null;
+        Long customerId = 1L;
         var response = controller.checkoutShoppingCart(customerId);
         Assertions.assertEquals(204, response.getStatusCode().value());
     }
 
     @Test
     public void addItemTest() {
-        Long customerId = null;
-        ItemDTO reqBody = null;
+        Long customerId = 1L;
+        ItemDTO reqBody = new ItemDTO().name("item").quantity(3);
         var response = controller.addItem(customerId, reqBody);
         Assertions.assertEquals(201, response.getStatusCode().value());
     }
 
     @Test
     public void removeItemTest() {
-        Long customerId = null;
-        String name = null;
+        Long customerId = 1L;
+        String name = "itemToRemove";
         var response = controller.removeItem(customerId, name);
         Assertions.assertEquals(204, response.getStatusCode().value());
     }
 
     @Test
     public void updateItemQuantityTest() {
-        Long customerId = null;
-        String name = null;
-        ItemDTO reqBody = null;
+        Long customerId = 1L;
+        String name = "itemToUpdate";
+        ItemDTO reqBody = new ItemDTO().name("itemToUpdate").quantity(3);
         var response = controller.updateItemQuantity(customerId, name, reqBody);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
 
     @Test
     public void listShoppingCartsTest() {
-
         var response = controller.listShoppingCarts();
         Assertions.assertEquals(200, response.getStatusCode().value());
     }

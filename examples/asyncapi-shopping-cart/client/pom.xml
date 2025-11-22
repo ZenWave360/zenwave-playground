@@ -26,6 +26,20 @@
         <asyncApiConsumerApiPackage>${basePackage}.events</asyncApiConsumerApiPackage>
 	</properties>
 
+    <profiles>
+        <profile>
+            <id>asyncapi-http-files</id>
+            <properties>
+                <asyncapiPrefix>https://raw.githubusercontent.com/ZenWave360/zenwave-playground/refs/heads/main/examples/asyncapi-shopping-cart/apis</asyncapiPrefix>
+                <asyncapi.inputSpec>${asyncapiPrefix}/asyncapi.yml</asyncapi.inputSpec>
+                <asyncapi.avro.imports>
+                    ${asyncapiPrefix}/avro/Item.avsc,
+                    ${asyncapiPrefix}/avro/ShoppingCart.avsc,
+                </asyncapi.avro.imports>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>

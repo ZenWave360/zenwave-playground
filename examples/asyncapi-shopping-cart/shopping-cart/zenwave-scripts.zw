@@ -36,5 +36,8 @@ config {
         OpenAPIControllersPlugin {
             openapiFile "src/main/resources/public/apis/openapi.yml"
         }
+        SpringWebTestClientPlugin {
+            openapiFile "src/main/resources/public/apis/openapi.yml"
+        }
     }
 }

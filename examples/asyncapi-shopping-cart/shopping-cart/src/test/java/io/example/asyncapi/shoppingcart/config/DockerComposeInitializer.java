@@ -37,8 +37,9 @@ public class DockerComposeInitializer implements ApplicationContextInitializer<C
 
     private static final String DOCKER_COMPOSE_FILE = "./docker-compose.yml";
     private static final List<Service> SERVICES = List.of(
-            new Service("postgresql", 5432, "DATASOURCE_URL", "jdbc:postgresql://%s:%s/DATABASENAME"),
-            new Service("kafka", 9092, "KAFKA_BOOTSTRAP_SERVERS", "%s:%s"));
+            new Service("postgresql", 5432, "DATASOURCE_URL", "jdbc:postgresql://%s:%s/app"),
+            new Service("kafka", 9092, "KAFKA_BOOTSTRAP_SERVERS", "%s:%s"),
+            new Service("schema-registry", 8081, "SCHEMA_REGISTRY_URL", "http://%s:%s"));
 
     static String HOST = DockerClientFactory.instance().dockerHostIpAddress();
     static ComposeContainer container = new ComposeContainer(new File(DOCKER_COMPOSE_FILE)).withEnv("HOST", HOST);

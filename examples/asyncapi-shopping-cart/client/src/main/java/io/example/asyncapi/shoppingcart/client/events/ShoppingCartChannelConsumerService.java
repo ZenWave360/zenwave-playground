@@ -1,6 +1,5 @@
 package io.example.asyncapi.shoppingcart.client.events;
 
-import io.example.asyncapi.shoppingcart.client.events.IShoppingCartChannelConsumerService;
 import io.example.asyncapi.shoppingcart.events.avro.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +13,6 @@ public class ShoppingCartChannelConsumerService implements IShoppingCartChannelC
     @Override public void onShoppingCartCreated(ShoppingCartCreated payload,
             ShoppingCartCreatedHeaders headers) {
         log.info("onShoppingCartCreated: {}", payload);
-        throw new RuntimeException("Testing RetryableTopic");
     }
 
     @Override public void onShoppingCartItemAdded(ShoppingCartItemAdded payload,

@@ -1,6 +1,6 @@
 asyncapi: 3.0.0
 info:
-  title: "AsyncAPI Shopping Cart Example (Provider)"
+  title: "AsyncAPI Shopping Cart Example"
   version: 0.0.1
   tags:
     - name: "Default"
@@ -31,7 +31,7 @@ operations:
     channel:
       $ref: '#/channels/ShoppingCartChannel'
     messages:
-      - $ref: '#/components/messages/ShoppingCartCreatedMessage'
+      - $ref: '#/channels/ShoppingCartChannel/messages/ShoppingCartCreatedMessage'
   onShoppingCartItemAdded:
     action: send
     tags:
@@ -39,7 +39,7 @@ operations:
     channel:
       $ref: '#/channels/ShoppingCartChannel'
     messages:
-      - $ref: '#/components/messages/ShoppingCartItemAddedMessage'
+      - $ref: '#/channels/ShoppingCartChannel/messages/ShoppingCartItemAddedMessage'
   onShoppingCartItemRemoved:
     action: send
     tags:
@@ -47,7 +47,7 @@ operations:
     channel:
       $ref: '#/channels/ShoppingCartChannel'
     messages:
-      - $ref: '#/components/messages/ShoppingCartItemRemovedMessage'
+      - $ref: '#/channels/ShoppingCartChannel/messages/ShoppingCartItemRemovedMessage'
   onShoppingCartItemUpdated:
     action: send
     tags:
@@ -55,7 +55,7 @@ operations:
     channel:
       $ref: '#/channels/ShoppingCartChannel'
     messages:
-      - $ref: '#/components/messages/ShoppingCartItemUpdatedMessage'
+      - $ref: '#/channels/ShoppingCartChannel/messages/ShoppingCartItemUpdatedMessage'
   onShoppingCartCheckedOut:
     action: send
     tags:
@@ -63,7 +63,7 @@ operations:
     channel:
       $ref: '#/channels/ShoppingCartChannel'
     messages:
-      - $ref: '#/components/messages/ShoppingCartCheckedOutMessage'
+      - $ref: '#/channels/ShoppingCartChannel/messages/ShoppingCartCheckedOutMessage'
 
 
 components:
@@ -77,7 +77,7 @@ components:
       payload:
         schemaFormat: application/vnd.apache.avro+json;version=1.9.0
         schema:
-          $ref: "avro/ShoppingCartCreated.avsc"
+          $ref: "./avro/ShoppingCartCreated.avsc"
     ShoppingCartItemAddedMessage:
       name: ShoppingCartItemAddedMessage
       title: ""
@@ -87,7 +87,7 @@ components:
       payload:
         schemaFormat: application/vnd.apache.avro+json;version=1.9.0
         schema:
-          $ref: "avro/ShoppingCartItemAdded.avsc"
+          $ref: "./avro/ShoppingCartItemAdded.avsc"
     ShoppingCartItemRemovedMessage:
       name: ShoppingCartItemRemovedMessage
       title: ""
@@ -97,7 +97,7 @@ components:
       payload:
         schemaFormat: application/vnd.apache.avro+json;version=1.9.0
         schema:
-          $ref: "avro/ShoppingCartItemRemoved.avsc"
+          $ref: "./avro/ShoppingCartItemRemoved.avsc"
     ShoppingCartItemUpdatedMessage:
       name: ShoppingCartItemUpdatedMessage
       title: ""
@@ -107,7 +107,7 @@ components:
       payload:
         schemaFormat: application/vnd.apache.avro+json;version=1.9.0
         schema:
-          $ref: "avro/ShoppingCartItemUpdated.avsc"
+          $ref: "./avro/ShoppingCartItemUpdated.avsc"
     ShoppingCartCheckedOutMessage:
       name: ShoppingCartCheckedOutMessage
       title: ""
@@ -117,7 +117,7 @@ components:
       payload:
         schemaFormat: application/vnd.apache.avro+json;version=1.9.0
         schema:
-          $ref: "avro/ShoppingCartCheckedOut.avsc"
+          $ref: "./avro/ShoppingCartCheckedOut.avsc"
 
   messageTraits:
     CommonHeaders:

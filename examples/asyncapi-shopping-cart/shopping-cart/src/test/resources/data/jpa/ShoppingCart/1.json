@@ -1,0 +1,15 @@
+{
+  "id": 1,
+  "version": 0,
+  "customerId": 1,
+  "items": [
+    {
+      "name": "itemToUpdate",
+      "quantity": 2
+    },
+    {
+      "name": "itemToRemove",
+      "quantity": 2
+    }
+  ]
+}

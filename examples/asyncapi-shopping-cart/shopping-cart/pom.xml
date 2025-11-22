@@ -29,6 +29,20 @@
 		<asyncApiConsumerApiPackage>${basePackage}.commands</asyncApiConsumerApiPackage>
 	</properties>
 
+    <profiles>
+        <profile>
+            <id>asyncapi-http-files</id>
+            <properties>
+                <asyncapiPrefix>https://raw.githubusercontent.com/ZenWave360/zenwave-playground/refs/heads/main/examples/asyncapi-shopping-cart/apis</asyncapiPrefix>
+                <asyncapi.inputSpec>${asyncapiPrefix}/asyncapi.yml</asyncapi.inputSpec>
+                <asyncapi.avro.imports>
+                    ${asyncapiPrefix}/avro/Item.avsc,
+                    ${asyncapiPrefix}/avro/ShoppingCart.avsc,
+                </asyncapi.avro.imports>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
@@ -52,12 +66,9 @@
                     <skip>false</skip>
                     <addCompileSourceRoot>true</addCompileSourceRoot>
                     <addTestCompileSourceRoot>true</addTestCompileSourceRoot>
-                    <!-- <authentication>-->
-                    <!--    <authentication>-->
-                    <!--        <key>API_KEY</key>-->
-                    <!--        <value>XXX</value>-->
-                    <!--    </authentication>-->
-                    <!-- </authentication>-->
+                    <!-- <authentication> -->
+                    <!--     <authentication><key>API_KEY</key><value>XXX</value></authentication> -->
+                    <!-- </authentication> -->
                 </configuration>
                 <executions>
                     <execution>
@@ -71,7 +82,7 @@
                             <configOptions>
                                 <role>provider</role>
                                 <templates>${zenwave.asyncapiGenerator.templates}</templates>
-                                <!-- <modelPackage>${asyncApiModelPackage}</modelPackage> required for json-schema, here it uses avro package -->
+                                <!-- <modelPackage>${asyncApiModelPackage}</modelPackage> required for json-schema, here it'll use the avro package -->
                                 <producerApiPackage>${asyncApiProducerApiPackage}</producerApiPackage>
                                 <consumerApiPackage>${asyncApiConsumerApiPackage}</consumerApiPackage>
                                 <avroCompilerProperties.imports>${asyncapi.avro.imports}</avroCompilerProperties.imports>
@@ -213,6 +224,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>

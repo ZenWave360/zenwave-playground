@@ -30,16 +30,20 @@ public class TestDataLoader {
     }
 
     public List<String> loadCollectionTestDataAsJson(Class collectionClass) {
-        var annotation = (Table) collectionClass.getAnnotation(Table.class);
-        var table = annotation.name();
-        return readDirectoryFilesAsString("src/test/resources/data/jpa/" + table);
+        return readDirectoryFilesAsString("src/test/resources/data/jpa/" + collectionClass.getSimpleName());
     }
 
     protected List<String> listFolders(String directory) {
+        if (!new File(directory).exists()) {
+            return List.of();
+        }
         return Stream.of(new File(directory).listFiles()).map(File::getName).collect(Collectors.toList());
     }
 
     protected List<String> readDirectoryFilesAsString(String directory) {
+        if (!new File(directory).exists()) {
+            return List.of();
+        }
         return Stream.of(new File(directory).listFiles())
                 .map(f -> {
                     try {

@@ -24,8 +24,9 @@ public interface EventsMapper {
 
     @Mapping(target = "customerId", source = "shoppingCart.customerId")
     @Mapping(target = "item", source = "item")
+    @Mapping(target = "previousItem", source = "previousItem")
     @Mapping(target = "shoppingCart", source = "shoppingCart")
-    ShoppingCartItemUpdated asShoppingCartItemUpdated(ShoppingCart shoppingCart, Item item);
+    ShoppingCartItemUpdated asShoppingCartItemUpdated(ShoppingCart shoppingCart, Item item, Item previousItem);
 
     @Mapping(target = "customerId", source = "shoppingCart.customerId")
     @Mapping(target = "item", source = "item")

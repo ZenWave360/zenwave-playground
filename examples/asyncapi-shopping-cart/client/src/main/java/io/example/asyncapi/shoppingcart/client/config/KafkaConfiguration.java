@@ -1,6 +1,5 @@
 package io.example.asyncapi.shoppingcart.client.config;
 
-import io.example.asyncapi.shoppingcart.client.events.ShoppingCartDltHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -64,7 +63,7 @@ public class KafkaConfiguration {
                 .setTopicSuffixingStrategy(TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE) // Adds attempt number
                 .includeTopic("shopping-cart") // Apply to shopping-cart topic
                 .doNotRetryOnDltFailure() // Don't retry if DLT processing fails
-                .dltHandlerMethod("shoppingCartDltHandler", "handleDlt")
+//                .dltHandlerMethod("shoppingCartDltHandler", "handleDlt")
                 .create(kafkaTemplate); // Use custom template
     }
 }
