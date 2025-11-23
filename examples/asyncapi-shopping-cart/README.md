@@ -131,6 +131,30 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 }
 ```
 
+You can also use InMemory implementation of the events producer for unit testing purposes:
+
+```java
+class ShoppingCartServiceTest {
+
+    ServicesInMemoryConfig context = new ServicesInMemoryConfig();
+    ShoppingCartServiceImpl shoppingCartService = context.shoppingCartService();
+
+    @BeforeEach void setUp() {
+        context.reloadTestData();
+    }
+
+    @Test void createShoppingCartTest() {
+        Long customerId = 0L;  // non existing shopping cart
+        var shoppingCart = shoppingCartService.loadShoppingCart(customerId);
+
+        Assertions.assertNotNull(shoppingCart);
+        var capturedMessages = context.getEventsProducerInMemoryContext().shoppingCartEventsProducer()
+                .getOnShoppingCartCreatedCapturedMessages();
+        Assertions.assertEquals(1, capturedMessages.size());
+    }
+}
+```
+
 ### Shopping Cart Client Application
 
 This is a very simple Spring Boot application that consumes events from the Kafka topic.

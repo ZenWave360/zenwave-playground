@@ -33,18 +33,18 @@ class ShoppingCartServiceTest {
 
         Assertions.assertNotNull(shoppingCart);
         var capturedMessages = context.getEventsProducerInMemoryContext().shoppingCartEventsProducer()
-                .getCapturedMessages("on-shopping-cart-created-out-0");
+                .getOnShoppingCartCreatedCapturedMessages();
         Assertions.assertEquals(0, capturedMessages.size());
     }
 
     @Test
     void createShoppingCartTest() {
-        Long customerId = 0L;  // not existing
+        Long customerId = 0L;  // non existing shopping cart
         var shoppingCart = shoppingCartService.loadShoppingCart(customerId);
 
         Assertions.assertNotNull(shoppingCart);
         var capturedMessages = context.getEventsProducerInMemoryContext().shoppingCartEventsProducer()
-                .getCapturedMessages("on-shopping-cart-created-out-0");
+                .getOnShoppingCartCreatedCapturedMessages();
         Assertions.assertEquals(1, capturedMessages.size());
     }
 
