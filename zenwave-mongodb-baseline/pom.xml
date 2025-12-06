@@ -21,15 +21,17 @@
 		<basePackage>io.zenwave360.example</basePackage>
 		<openApiApiPackage>${basePackage}.adapters.web</openApiApiPackage>
 		<openApiModelPackage>${basePackage}.adapters.web.model</openApiModelPackage>
-		<asyncApiModelPackage>${basePackage}.core.outbound.events.dtos</asyncApiModelPackage>
-		<asyncApiProducerApiPackage>${basePackage}.core.outbound.events</asyncApiProducerApiPackage>
-		<asyncApiConsumerApiPackage>${basePackage}.adapters.commands</asyncApiConsumerApiPackage>
 
-		<spring-boot.version>${project.parent.version}</spring-boot.version>
-		<spring-cloud.version>2025.0.0</spring-cloud.version>
-		<spring-cloud-stream-schema.version>2.2.1.RELEASE</spring-cloud-stream-schema.version>
+        <asyncapi.inputSpec>${project.basedir}/src/main/resources/public/apis/asyncapi.yml</asyncapi.inputSpec>
+        <asyncApiModelPackage>${basePackage}.events.dtos</asyncApiModelPackage>
+        <asyncApiProducerApiPackage>${basePackage}.events</asyncApiProducerApiPackage>
+        <asyncApiConsumerApiPackage>${basePackage}.commands</asyncApiConsumerApiPackage>
 
-		<zenwave.version>2.0.2</zenwave.version>
+        <spring-boot.version>${project.parent.version}</spring-boot.version>
+        <spring-cloud.version>2025.1.0</spring-cloud.version>
+        <spring-cloud-stream-schema.version>2.2.1.RELEASE</spring-cloud-stream-schema.version>
+
+        <zenwave.version>2.2.0</zenwave.version>
 
 		<jakarta.validation-api.version>3.1.1</jakarta.validation-api.version>
 		<mapstruct.version>1.6.3</mapstruct.version>
@@ -248,32 +250,6 @@
 							</configOptions>
 						</configuration>
 					</execution>
-					<!-- Ejemplo de como generar un cliente OpenAPI usando spring-http-interface
-						 ver tambien: HttpInterfacesWebClientConfig.java
-					<execution>
-						<id>openapi-generator-client-customers</id>
-						<goals><goal>generate</goal></goals>
-						<phase>generate-sources</phase>
-						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/public/apis/clients/customer-openapi.yml</inputSpec>
-							<generatorName>spring</generatorName>
-							<library>spring-http-interface</library>
-							<apiPackage>${basePackage}.customers.client</apiPackage>
-							<modelPackage>${basePackage}.customers.client.model</modelPackage>
-							<modelNameSuffix>DTO</modelNameSuffix>
-							<addCompileSourceRoot>true</addCompileSourceRoot>
-							<typeMappings>
-								<typeMapping>Double=java.math.BigDecimal</typeMapping>
-							</typeMappings>
-							<configOptions>
-								<useJakartaEe>true</useJakartaEe>
-								<documentationProvider>none</documentationProvider>
-								<openApiNullable>false</openApiNullable>
-								<useOptional>true</useOptional>
-								<useTags>true</useTags>
-							</configOptions>
-						</configuration>
-					</execution> -->
 				</executions>
 			</plugin>
 		</plugins>
@@ -284,71 +260,56 @@
 			<id>asyncapi-code-generation</id>
 			<activation>
 				<file>
-					<exists>${project.basedir}/src/main/resources/public/apis/asyncapi.yml</exists>
+					<exists>${asyncapi.inputSpec}</exists>
 				</file>
 			</activation>
 			<build>
 				<plugins>
-					<plugin>
-						<groupId>io.zenwave360.sdk</groupId>
-						<artifactId>zenwave-sdk-maven-plugin</artifactId>
-						<version>${zenwave.version}</version>
-						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/public/apis/asyncapi.yml</inputSpec>
-							<skip>false</skip>
-							<addCompileSourceRoot>true</addCompileSourceRoot>
-							<addTestCompileSourceRoot>true</addTestCompileSourceRoot>
-						</configuration>
-						<executions>
-							<!-- DTOs -->
-							<execution>
-								<id>generate-asyncapi-dtos</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>generate</goal>
-								</goals>
-								<configuration>
-									<generatorName>jsonschema2pojo</generatorName>
-									<configOptions>
-										<modelPackage>${asyncApiModelPackage}</modelPackage>
-										<jsonschema2pojo.isUseJakartaValidation>true</jsonschema2pojo.isUseJakartaValidation>
-										<jsonschema2pojo.useLongIntegers>true</jsonschema2pojo.useLongIntegers>
-										<jsonschema2pojo.includeAdditionalProperties>true</jsonschema2pojo.includeAdditionalProperties>
-									</configOptions>
-								</configuration>
-							</execution>
-							<!-- Generate PROVIDER -->
-							<execution>
-								<id>generate-asyncapi</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>generate</goal>
-								</goals>
-								<configuration>
-									<generatorName>spring-cloud-streams3</generatorName>
-									<configOptions>
-										<role>provider</role>
-										<style>imperative</style>
-										<modelPackage>${asyncApiModelPackage}</modelPackage>
-										<producerApiPackage>${asyncApiProducerApiPackage}</producerApiPackage>
-										<consumerApiPackage>${asyncApiConsumerApiPackage}</consumerApiPackage>
-									</configOptions>
-								</configuration>
-							</execution>
-						</executions>
-						<dependencies>
-							<dependency>
-								<groupId>io.zenwave360.sdk.plugins</groupId>
-								<artifactId>asyncapi-spring-cloud-streams3</artifactId>
-								<version>${zenwave.version}</version>
-							</dependency>
-							<dependency>
-								<groupId>io.zenwave360.sdk.plugins</groupId>
-								<artifactId>asyncapi-jsonschema2pojo</artifactId>
-								<version>${zenwave.version}</version>
-							</dependency>
-						</dependencies>
-					</plugin>
+                    <plugin>
+                        <groupId>io.zenwave360.sdk</groupId>
+                        <artifactId>zenwave-sdk-maven-plugin</artifactId>
+                        <version>${zenwave.version}</version>
+                        <configuration>
+                            <inputSpec>${asyncapi.inputSpec}</inputSpec>
+                            <skip>false</skip>
+                            <addCompileSourceRoot>true</addCompileSourceRoot>
+                            <addTestCompileSourceRoot>true</addTestCompileSourceRoot>
+                            <!-- <authentication> -->
+                            <!--     <authentication><key>API_KEY</key><value>XXX</value></authentication> -->
+                            <!-- </authentication> -->
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>generate-asyncapi</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <generatorName>AsyncAPIGenerator</generatorName>
+                                    <configOptions>
+                                        <role>provider</role>
+                                        <templates>SpringCloudStream</templates>
+                                        <modelPackage>${asyncApiModelPackage}</modelPackage>
+                                        <producerApiPackage>${asyncApiProducerApiPackage}</producerApiPackage>
+                                        <consumerApiPackage>${asyncApiConsumerApiPackage}</consumerApiPackage>
+                                        <!-- <avroCompilerProperties.imports>${asyncapi.avro.imports}</avroCompilerProperties.imports> -->
+                                        <jsonschema2pojo.isUseJakartaValidation>true</jsonschema2pojo.isUseJakartaValidation>
+                                        <jsonschema2pojo.useLongIntegers>true</jsonschema2pojo.useLongIntegers>
+                                        <jsonschema2pojo.includeAdditionalProperties>true</jsonschema2pojo.includeAdditionalProperties>
+
+                                    </configOptions>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>io.zenwave360.sdk.plugins</groupId>
+                                <artifactId>asyncapi-generator</artifactId>
+                                <version>${zenwave.version}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
 				</plugins>
 			</build>
 		</profile>

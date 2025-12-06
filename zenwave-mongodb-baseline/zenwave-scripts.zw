@@ -40,11 +40,13 @@ config {
             asyncapiVersion v3
             idType string
             targetFile "src/main/resources/public/apis/asyncapi.yml"
-            // includeKafkaCommonHeaders true
+            includeCloudEventsHeaders true
+            includeKafkaCommonHeaders true
         }
 
         BackendApplicationDefaultPlugin {
-            useLombok true
+            useLombok false
+            useJSpecify true
             includeEmitEventsImplementation true
             // --force // overwite all files
         }

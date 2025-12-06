@@ -1,4 +1,4 @@
-package io.zenwave360.example.adapters.web;
+package io.zenwave360.example.web;
 
 import com.intuit.karate.Results;
 import com.intuit.karate.Runner;
