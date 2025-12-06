@@ -42,11 +42,13 @@ config {
             idType integer
             idTypeFormat int64
             targetFile "src/main/resources/public/apis/asyncapi.yml"
-            // includeKafkaCommonHeaders true
+            includeCloudEventsHeaders true
+            includeKafkaCommonHeaders true
         }
         /** Generates a Backend Application from the ZDL model. (Headless Core) */
         BackendApplicationDefaultPlugin {
-            useLombok true
+            useLombok false
+            useJSpecify true
             includeEmitEventsImplementation true
             // --force // overwite all files
         }
