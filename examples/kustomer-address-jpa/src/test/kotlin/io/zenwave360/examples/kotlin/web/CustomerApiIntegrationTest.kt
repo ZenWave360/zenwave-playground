@@ -25,47 +25,47 @@ open class CustomerApiIntegrationTest : BaseWebTestClientTest() {
         */
         @Test
         fun testCreateCustomer_201() {
-        val requestBody = """
-            {
-              "id" : 63,
-              "version" : 10,
-              "name" : "name-zmbfib58c16uzmn4q2dmg",
-              "email" : "jesse.barrows@yahoo.com",
-              "addresses" : [ {
-                "street" : "street-msjedgjpv400vu89dqs",
-                "city" : "Melodeeburgh"
-              } ],
-              "paymentMethods" : [ {
-                "id" : 24,
-                "version" : 34,
-                "type" : "VISA",
-                "cardNumber" : "cardNumber-a9u687hxv4"
-              } ]
-            }
-        """
+            val requestBody = """
+                {
+                  "email": "jane.doe@example.com",
+                  "name": "Jane Doe",
+                  "addresses": [
+                    {
+                      "city": "Othertown",
+                      "street": "456 Elm St"
+                    }
+                  ],
+                  "paymentMethods": [
+                    {
+                      "type": "VISA",
+                      "cardNumber": "6543210987654321"
+                    }
+                  ]
+                }
+            """
 
-        webTestClient.method(POST).uri("/api/customers")
-        .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(requestBody)
-        .exchange()
-        .expectStatus().isEqualTo(201)
-            .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .expectBody()
-            .jsonPath("$.id").isNotEmpty()
-            .jsonPath("$.version").isNotEmpty()
-            .jsonPath("$.name").isNotEmpty()
-            .jsonPath("$.email").isNotEmpty()
-            .jsonPath("$.addresses").isNotEmpty()
+            webTestClient.method(POST).uri("/api/customers")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isEqualTo(201)
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .jsonPath("$.id").isNotEmpty()
+                .jsonPath("$.version").isNotEmpty()
+                .jsonPath("$.name").isNotEmpty()
+                .jsonPath("$.email").isNotEmpty()
+                .jsonPath("$.addresses").isNotEmpty()
                 .jsonPath("$.addresses").isArray()
-                    .jsonPath("$.addresses[0].street").isNotEmpty()
-                    .jsonPath("$.addresses[0].city").isNotEmpty()
-            .jsonPath("$.paymentMethods").isNotEmpty()
+                .jsonPath("$.addresses[0].street").isNotEmpty()
+                .jsonPath("$.addresses[0].city").isNotEmpty()
+                .jsonPath("$.paymentMethods").isNotEmpty()
                 .jsonPath("$.paymentMethods").isArray()
-                    .jsonPath("$.paymentMethods[0].id").isNotEmpty()
-                    .jsonPath("$.paymentMethods[0].version").isNotEmpty()
-                    .jsonPath("$.paymentMethods[0].type").isNotEmpty()
-                    .jsonPath("$.paymentMethods[0].cardNumber").isNotEmpty()
+                .jsonPath("$.paymentMethods[0].id").isNotEmpty()
+                .jsonPath("$.paymentMethods[0].version").isNotEmpty()
+                .jsonPath("$.paymentMethods[0].type").isNotEmpty()
+                .jsonPath("$.paymentMethods[0].cardNumber").isNotEmpty()
         }
 
         /**
@@ -73,28 +73,28 @@ open class CustomerApiIntegrationTest : BaseWebTestClientTest() {
         */
         @Test
         fun testGetCustomer_200() {
-        val customerId = ""
+            val customerId = "1"
 
-        webTestClient.method(GET).uri("/api/customers/{customerId}", customerId)
-        .accept(MediaType.APPLICATION_JSON)
-        .exchange()
-        .expectStatus().isEqualTo(200)
-            .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .expectBody()
-            .jsonPath("$.id").isNotEmpty()
-            .jsonPath("$.version").isNotEmpty()
-            .jsonPath("$.name").isNotEmpty()
-            .jsonPath("$.email").isNotEmpty()
-            .jsonPath("$.addresses").isNotEmpty()
+            webTestClient.method(GET).uri("/api/customers/{customerId}", customerId)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isEqualTo(200)
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .jsonPath("$.id").isNotEmpty()
+                .jsonPath("$.version").isNotEmpty()
+                .jsonPath("$.name").isNotEmpty()
+                .jsonPath("$.email").isNotEmpty()
+                .jsonPath("$.addresses").isNotEmpty()
                 .jsonPath("$.addresses").isArray()
-                    .jsonPath("$.addresses[0].street").isNotEmpty()
-                    .jsonPath("$.addresses[0].city").isNotEmpty()
-            .jsonPath("$.paymentMethods").isNotEmpty()
+                .jsonPath("$.addresses[0].street").isNotEmpty()
+                .jsonPath("$.addresses[0].city").isNotEmpty()
+                .jsonPath("$.paymentMethods").isNotEmpty()
                 .jsonPath("$.paymentMethods").isArray()
-                    .jsonPath("$.paymentMethods[0].id").isNotEmpty()
-                    .jsonPath("$.paymentMethods[0].version").isNotEmpty()
-                    .jsonPath("$.paymentMethods[0].type").isNotEmpty()
-                    .jsonPath("$.paymentMethods[0].cardNumber").isNotEmpty()
+                .jsonPath("$.paymentMethods[0].id").isNotEmpty()
+                .jsonPath("$.paymentMethods[0].version").isNotEmpty()
+                .jsonPath("$.paymentMethods[0].type").isNotEmpty()
+                .jsonPath("$.paymentMethods[0].cardNumber").isNotEmpty()
         }
 
         /**
@@ -102,48 +102,50 @@ open class CustomerApiIntegrationTest : BaseWebTestClientTest() {
         */
         @Test
         fun testUpdateCustomer_200() {
-        val requestBody = """
-            {
-              "id" : 68,
-              "version" : 89,
-              "name" : "name-91rbx8",
-              "email" : "miki.baumbach@hotmail.com",
-              "addresses" : [ {
-                "street" : "street-6aw8fon78i",
-                "city" : "New Erikaland"
-              } ],
-              "paymentMethods" : [ {
-                "id" : 15,
-                "version" : 53,
-                "type" : "MASTERCARD",
-                "cardNumber" : "cardNumber-nxo9a9bt29u3ik7"
-              } ]
-            }
-        """
-        val customerId = ""
+            val customerId = "1"
+            val requestBody = """
+                {
+                  "id": 1,
+                  "version": 1,
+                  "email": "john.doe@example.com",
+                  "name": "John Doe",
+                  "addresses": [
+                    {
+                      "city": "Anytown",
+                      "street": "123 Main St"
+                    }
+                  ],
+                  "paymentMethods": [
+                    {
+                      "type": "VISA",
+                      "cardNumber": "1234567890123456"
+                    }
+                  ]
+                }
+            """
 
-        webTestClient.method(PUT).uri("/api/customers/{customerId}", customerId)
-        .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(requestBody)
-        .exchange()
-        .expectStatus().isEqualTo(200)
-            .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .expectBody()
-            .jsonPath("$.id").isNotEmpty()
-            .jsonPath("$.version").isNotEmpty()
-            .jsonPath("$.name").isNotEmpty()
-            .jsonPath("$.email").isNotEmpty()
-            .jsonPath("$.addresses").isNotEmpty()
+            webTestClient.method(PUT).uri("/api/customers/{customerId}", customerId)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isEqualTo(200)
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .jsonPath("$.id").isNotEmpty()
+                .jsonPath("$.version").isNotEmpty()
+                .jsonPath("$.name").isNotEmpty()
+                .jsonPath("$.email").isNotEmpty()
+                .jsonPath("$.addresses").isNotEmpty()
                 .jsonPath("$.addresses").isArray()
-                    .jsonPath("$.addresses[0].street").isNotEmpty()
-                    .jsonPath("$.addresses[0].city").isNotEmpty()
-            .jsonPath("$.paymentMethods").isNotEmpty()
+                .jsonPath("$.addresses[0].street").isNotEmpty()
+                .jsonPath("$.addresses[0].city").isNotEmpty()
+                .jsonPath("$.paymentMethods").isNotEmpty()
                 .jsonPath("$.paymentMethods").isArray()
-                    .jsonPath("$.paymentMethods[0].id").isNotEmpty()
-                    .jsonPath("$.paymentMethods[0].version").isNotEmpty()
-                    .jsonPath("$.paymentMethods[0].type").isNotEmpty()
-                    .jsonPath("$.paymentMethods[0].cardNumber").isNotEmpty()
+                .jsonPath("$.paymentMethods[0].id").isNotEmpty()
+                .jsonPath("$.paymentMethods[0].version").isNotEmpty()
+                .jsonPath("$.paymentMethods[0].type").isNotEmpty()
+                .jsonPath("$.paymentMethods[0].cardNumber").isNotEmpty()
         }
 
         /**
@@ -151,12 +153,12 @@ open class CustomerApiIntegrationTest : BaseWebTestClientTest() {
         */
         @Test
         fun testDeleteCustomer_204() {
-        val customerId = ""
+            val customerId = "1"
 
-        webTestClient.method(DELETE).uri("/api/customers/{customerId}", customerId)
-        .accept(MediaType.APPLICATION_JSON)
-        .exchange()
-        .expectStatus().isEqualTo(204)
+            webTestClient.method(DELETE).uri("/api/customers/{customerId}", customerId)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isEqualTo(204)
         }
 
         /**
@@ -164,39 +166,43 @@ open class CustomerApiIntegrationTest : BaseWebTestClientTest() {
         */
         @Test
         fun testSearchCustomers_200() {
-        val requestBody = """
-            {
-              "name" : "name-ynsjnot32jxop55ze1pm7",
-              "email" : "rigoberto.walker@yahoo.com",
-              "city" : "Port Takishafurt",
-              "state" : "state-alyno2tdpxbb1hyflo89"
-            }
-        """
-        val page = ""
-        val limit = ""
-        val sort = ""
+            val requestBody = CustomerSearchCriteriaDTO(
+                name = "Jane Doe",
+                email = "jane.doe@example.com",
+                city = "Othertown",
+                state = "NY"
+            )
+            val page = "0"
+            val limit = "10"
+            val sort = "name:asc"
 
-        webTestClient.method(POST).uri({ it.path("/api/customers/search").queryParam("page", page).queryParam("limit", limit).queryParam("sort", sort).build(page, limit, sort) })
-        .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(requestBody)
-        .exchange()
-        .expectStatus().isEqualTo(200)
-            .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .expectBody()
-            .jsonPath("$.number").isNotEmpty()
-            .jsonPath("$.numberOfElements").isNotEmpty()
-            .jsonPath("$.size").isNotEmpty()
-            .jsonPath("$.totalElements").isNotEmpty()
-            .jsonPath("$.totalPages").isNotEmpty()
-            .jsonPath("$.content").isNotEmpty()
+            webTestClient.method(POST).uri { uriBuilder ->
+                uriBuilder.path("/api/customers/search")
+                    .queryParam("page", page)
+                    .queryParam("limit", limit)
+                    .queryParam("sort", sort)
+                    .build()
+            }
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requestBody)
+                .exchange()
+                .expectStatus().isEqualTo(200)
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .jsonPath("$.totalPages").isNotEmpty()
+                .jsonPath("$.number").isNotEmpty()
+                .jsonPath("$.numberOfElements").isNotEmpty()
+                .jsonPath("$.size").isNotEmpty()
+                .jsonPath("$.content").isNotEmpty()
                 .jsonPath("$.content").isArray()
-                    .jsonPath("$.content[0].id").isNotEmpty()
-                    .jsonPath("$.content[0].version").isNotEmpty()
-                    .jsonPath("$.content[0].name").isNotEmpty()
-                    .jsonPath("$.content[0].email").isNotEmpty()
-                    .jsonPath("$.content[0].addresses").isNotEmpty()
-                    .jsonPath("$.content[0].paymentMethods").isNotEmpty()
+                .jsonPath("$.content[0].id").isNotEmpty()
+                .jsonPath("$.content[0].version").isNotEmpty()
+                .jsonPath("$.content[0].name").isNotEmpty()
+                .jsonPath("$.content[0].email").isNotEmpty()
+                .jsonPath("$.content[0].addresses").isNotEmpty()
+                .jsonPath("$.content[0].paymentMethods").isNotEmpty()
+                .jsonPath("$.totalElements").isNotEmpty()
         }
 
 }

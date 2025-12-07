@@ -33,29 +33,39 @@ class CustomerApiControllerTest {
 
     @Test
     fun createCustomerTest() {
-        val reqBody: CustomerDTO = CustomerDTO(name = "", email = "")
+        val reqBody = CustomerDTO(
+            name = "John Doe",
+            email = "john.doe@example.com",
+            addresses = mutableListOf(AddressDTO("Anytown", "123 Main St")),
+            paymentMethods = mutableListOf(PaymentMethodDTO(PaymentMethodTypeDTO.VISA, "1234567890123456"))
+        )
         val response = controller.createCustomer(reqBody)
         Assertions.assertEquals(201, response.statusCode.value())
     }
 
     @Test
     fun getCustomerTest() {
-        val customerId: Long = 0
+        val customerId: Long = 1L
         val response = controller.getCustomer(customerId)
         Assertions.assertEquals(200, response.statusCode.value())
     }
 
     @Test
     fun updateCustomerTest() {
-        val customerId: Long = 0
-val reqBody: CustomerDTO = CustomerDTO(name = "", email = "")
+        val customerId: Long = 1L
+        val reqBody = CustomerDTO(
+            name = "John Doe",
+            email = "john.doe@example.com",
+            addresses = mutableListOf(AddressDTO("Anytown", "123 Main St")),
+            paymentMethods = mutableListOf(PaymentMethodDTO(PaymentMethodTypeDTO.VISA, "1234567890123456"))
+        )
         val response = controller.updateCustomer(customerId, reqBody)
         Assertions.assertEquals(200, response.statusCode.value())
     }
 
     @Test
     fun deleteCustomerTest() {
-        val customerId: Long = 0
+        val customerId: Long = 1L
         val response = controller.deleteCustomer(customerId)
         Assertions.assertEquals(204, response.statusCode.value())
     }
@@ -63,9 +73,9 @@ val reqBody: CustomerDTO = CustomerDTO(name = "", email = "")
     @Test
     fun searchCustomersTest() {
         val page: Int = 0
-val limit: Int = 0
-val sort: List<String> = mutableListOf()
-val reqBody: CustomerSearchCriteriaDTO = CustomerSearchCriteriaDTO()
+        val limit: Int = 10
+        val sort: List<String> = mutableListOf("name")
+        val reqBody = CustomerSearchCriteriaDTO()
         val response = controller.searchCustomers(page, limit, sort, reqBody)
         Assertions.assertEquals(200, response.statusCode.value())
     }

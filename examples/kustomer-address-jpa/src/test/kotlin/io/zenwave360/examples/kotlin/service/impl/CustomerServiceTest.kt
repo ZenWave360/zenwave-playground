@@ -30,7 +30,7 @@ import org.mockito.Mockito.*
 /**
  * Acceptance Test for CustomerService.
  */
-class CustomerServiceTest {
+class  CustomerServiceTest {
 
     private val log: Logger = LoggerFactory.getLogger(javaClass)
 
@@ -48,11 +48,13 @@ class CustomerServiceTest {
 
     @Test
     fun createCustomerTest() {
-        val input: Customer = Customer() // TODO
-        // TODO fill input data
-        // input.name = ""
-        // input.email = ""
-        // input.addresses = List.of(Address())
+        val input = Customer()
+        input.name = "name"
+        input.email = "me@email.com"
+        input.addresses = mutableListOf(Address().apply {
+            street = "street"
+            city = "city"
+        })
         val customer = customerService.createCustomer(input)
         assertNotNull(customer.id)
         assertTrue(customerRepository.containsEntity(customer))
@@ -68,12 +70,14 @@ class CustomerServiceTest {
     @Test
     fun updateCustomerTest() {
         val id: Long = 1L
-        val input: Customer = Customer() // TODO
-        // TODO fill input data
-        // input.name = ""
-        // input.email = ""
-        // input.addresses = List.of(Address())
-        // assertTrue(customerRepository.containsKey(id))
+        val input = Customer()
+        input.name = "name"
+        input.email = "me@email.com"
+        input.addresses = mutableListOf(Address().apply {
+            street = "street"
+            city = "city"
+        })
+        assertTrue(customerRepository.containsKey(id))
         val customer = customerService.updateCustomer(id, input)
         assertTrue(customer.isPresent)
         assertTrue(customerRepository.containsEntity(customer.get()))
@@ -82,13 +86,17 @@ class CustomerServiceTest {
     @Test
     fun deleteCustomerTest() {
         val id: Long = 1L
-        // assertTrue(customerRepository.containsKey(id))
+        assertTrue(customerRepository.containsKey(id))
         customerService.deleteCustomer(id)
-        // assertFalse(customerRepository.containsKey(id))
+        assertFalse(customerRepository.containsKey(id))
 }
 
     @Test
-    fun searchCustomersTest() {// TODO: implement this test
+    fun searchCustomersTest() {
+        val searchCriteria = CustomerSearchCriteria()
+        val results = customerService.searchCustomers(searchCriteria, PageRequest.of(0, 10))
+        assertNotNull(results)
+        assertFalse(results.isEmpty)
 }
 
 }

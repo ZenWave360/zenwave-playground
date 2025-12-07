@@ -417,79 +417,64 @@
 					</execution>
 				</executions>
 			</plugin>
+            <plugin>
+                <groupId>io.zenwave360.sdk</groupId>
+                <artifactId>zenwave-sdk-maven-plugin</artifactId>
+                <version>${zenwave.version}</version>
+                <configuration>
+                    <inputSpec>${asyncapi.inputSpec}</inputSpec>
+                    <skip>false</skip>
+                    <addCompileSourceRoot>true</addCompileSourceRoot>
+                    <addTestCompileSourceRoot>true</addTestCompileSourceRoot>
+                    <!-- <authentication>-->
+                    <!--     <authentication><key>API_KEY</key><value>XXX</value></authentication> -->
+                    <!-- </authentication>-->
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>generate-asyncapi</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <generatorName>AsyncAPIGenerator</generatorName>
+                            <configOptions>
+                                <role>provider</role>
+                                <transactionalOutbox>modulith</transactionalOutbox>
+                                <includeApplicationEventListener>true</includeApplicationEventListener>
+                                <!-- <modelPackage>${asyncApiModelPackage}</modelPackage> required for json-schema, here it uses avro package -->
+                                <producerApiPackage>${asyncApiProducerApiPackage}</producerApiPackage>
+                                <consumerApiPackage>${asyncApiConsumerApiPackage}</consumerApiPackage>
+                                <avroCompilerProperties.imports>${asyncapi.avro.imports}</avroCompilerProperties.imports>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.zenwave360.sdk.plugins</groupId>
+                        <artifactId>asyncapi-generator</artifactId>
+                        <version>${zenwave.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.avro</groupId>
+                        <artifactId>avro-compiler</artifactId>
+                        <version>${avro.version}</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>com.fasterxml.jackson.core</groupId>
+                                <artifactId>jackson-core</artifactId>
+                            </exclusion>
+                            <exclusion>
+                                <groupId>com.fasterxml.jackson.core</groupId>
+                                <artifactId>jackson-databind</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                </dependencies>
+            </plugin>
 		</plugins>
 	</build>
-
-	<profiles>
-		<profile>
-			<id>asyncapi-code-generation</id>
-			<activation>
-				<file>
-					<exists>${asyncapi.inputSpec}</exists>
-				</file>
-			</activation>
-			<build>
-				<plugins>
-                    <plugin>
-                        <groupId>io.zenwave360.sdk</groupId>
-                        <artifactId>zenwave-sdk-maven-plugin</artifactId>
-                        <version>${zenwave.version}</version>
-                        <configuration>
-                            <inputSpec>${asyncapi.inputSpec}</inputSpec>
-                            <skip>false</skip>
-                            <addCompileSourceRoot>true</addCompileSourceRoot>
-                            <addTestCompileSourceRoot>true</addTestCompileSourceRoot>
-                            <!-- <authentication>-->
-                            <!--     <authentication><key>API_KEY</key><value>XXX</value></authentication> -->
-                            <!-- </authentication>-->
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>generate-asyncapi</id>
-                                <phase>generate-sources</phase>
-                                <goals>
-                                    <goal>generate</goal>
-                                </goals>
-                                <configuration>
-                                    <generatorName>AsyncAPIGenerator</generatorName>
-                                    <configOptions>
-                                        <role>provider</role>
-                                        <transactionalOutbox>modulith</transactionalOutbox>
-                                        <includeApplicationEventListener>true</includeApplicationEventListener>
-                                        <!-- <modelPackage>${asyncApiModelPackage}</modelPackage> required for json-schema, here it uses avro package -->
-                                        <producerApiPackage>${asyncApiProducerApiPackage}</producerApiPackage>
-                                        <consumerApiPackage>${asyncApiConsumerApiPackage}</consumerApiPackage>
-                                        <avroCompilerProperties.imports>${asyncapi.avro.imports}</avroCompilerProperties.imports>
-                                    </configOptions>
-                                </configuration>
-                            </execution>
-                        </executions>
-                        <dependencies>
-                            <dependency>
-                                <groupId>io.zenwave360.sdk.plugins</groupId>
-                                <artifactId>asyncapi-generator</artifactId>
-                                <version>${zenwave.version}</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>org.apache.avro</groupId>
-                                <artifactId>avro-compiler</artifactId>
-                                <version>${avro.version}</version>
-                                <exclusions>
-                                    <exclusion>
-                                        <groupId>com.fasterxml.jackson.core</groupId>
-                                        <artifactId>jackson-core</artifactId>
-                                    </exclusion>
-                                    <exclusion>
-                                        <groupId>com.fasterxml.jackson.core</groupId>
-                                        <artifactId>jackson-databind</artifactId>
-                                    </exclusion>
-                                </exclusions>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 
 </project>

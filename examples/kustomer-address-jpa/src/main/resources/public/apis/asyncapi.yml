@@ -1,6 +1,6 @@
 asyncapi: 3.0.0
 info:
-  title: "Project Name"
+  title: "ZenWave Customer JPA Example"
   version: 0.0.1
   tags:
     - name: "Default"
@@ -12,11 +12,19 @@ channels:
   CustomersChannel:
     address: "customers"
     messages:
+      CustomerDeletedEventMessage:
+        $ref: '#/components/messages/CustomerDeletedEventMessage'
       CustomerEventMessage:
         $ref: '#/components/messages/CustomerEventMessage'
 
 operations:
   onCustomerEvent:
+    action: send
+    tags:
+      - name: Customer
+    channel:
+      $ref: '#/channels/CustomersChannel'
+  onCustomerDeletedEvent:
     action: send
     tags:
       - name: Customer
@@ -33,82 +41,28 @@ components:
       traits:
         - $ref: '#/components/messageTraits/CommonHeaders'
       payload:
-        $ref: "#/components/schemas/CustomerEvent"
+        schemaFormat: application/vnd.apache.avro+json;version=1.9.0
+        schema:
+          $ref: "./avro/CustomerEvent.avsc"
+    CustomerDeletedEventMessage:
+      name: CustomerDeletedEventMessage
+      title: ""
+      summary: ""
+      traits:
+        - $ref: '#/components/messageTraits/CommonHeaders'
+      payload:
+        schemaFormat: application/vnd.apache.avro+json;version=1.9.0
+        schema:
+          $ref: "./avro/CustomerDeletedEvent.avsc"
 
   messageTraits:
     CommonHeaders:
       headers:
         type: object
         properties:
-          common_header:
-            type: string
-            description: Example header field. Customize headers according to your messaging requirements.
+          kafka_messageKey:
+            type: "integer"
+            description: This header value will be populated automatically at runtime
+            x-runtime-expression: $message.payload#/id
 
-  schemas:
-    CustomerEvent:
-      type: "object"
-      x-business-entity: "CustomerEvent"
-      required:
-      - "name"
-      - "email"
-      properties:
-        name:
-          type: "string"
-          maxLength: 254
-          description: "Customer name"
-        email:
-          type: "string"
-          maxLength: 254
-          pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}"
-          description: ""
-        addresses:
-          type: "array"
-          items:
-            $ref: "#/components/schemas/Address"
-            minLength: 1
-            maxLength: 5
-        id:
-          type: "integer"
-          format: "int64"
-        version:
-          type: "integer"
-          format: "int32"
-        paymentMethods:
-          type: "array"
-          items:
-            $ref: "#/components/schemas/PaymentMethod"
-    PaymentMethodType:
-      type: "string"
-      x-business-entity: "PaymentMethodType"
-      enum:
-      - "VISA"
-      - "MASTERCARD"
-    Address:
-      type: "object"
-      x-business-entity: "Address"
-      required:
-      - "street"
-      - "city"
-      properties:
-        street:
-          type: "string"
-          maxLength: 254
-        city:
-          type: "string"
-          maxLength: 254
-    PaymentMethod:
-      type: "object"
-      x-business-entity: "PaymentMethod"
-      required:
-      - "type"
-      - "cardNumber"
-      properties:
-        id:
-          type: "integer"
-          format: "int64"
-          readOnly: true
-        type:
-          $ref: "#/components/schemas/PaymentMethodType"
-        cardNumber:
-          type: "string"
 
