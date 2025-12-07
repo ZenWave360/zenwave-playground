@@ -50,7 +50,7 @@ And generated using this [set of plugins (zenwave-scripts.zw)](zenwave-scripts.z
 
 ## Requirements
 
-* JDK 21+
+* JDK 25+
 * Maven 3.8.+
 * Docker Compose: in case you don't have Docker-Compose installed in your machine, install [Rancher Desktop](https://rancherdesktop.io/) and configure `dockerd` as engine (instead of `containerd`), this will include `docker` and `docker-compose` commands in your PATH.
 * Your favorite IDE

@@ -2,9 +2,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.0</version> <!-- lookup parent from repository -->
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.0.0</version>
+        <relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
 	<groupId>io.zenwave360.example</groupId>
@@ -21,31 +22,40 @@
 	</repositories>
 
 	<properties>
-		<java.version>21</java.version>
+		<java.version>25</java.version>
 
 		<basePackage>io.zenwave360.example</basePackage>
 		<openApiApiPackage>${basePackage}.adapters.web</openApiApiPackage>
 		<openApiModelPackage>${basePackage}.adapters.web.model</openApiModelPackage>
-		<asyncApiModelPackage>${basePackage}.core.outbound.events.dtos</asyncApiModelPackage>
-		<asyncApiProducerApiPackage>${basePackage}.core.outbound.events</asyncApiProducerApiPackage>
-		<asyncApiConsumerApiPackage>${basePackage}.adapters.commands</asyncApiConsumerApiPackage>
 
-		<spring-boot.version>${project.parent.version}</spring-boot.version>
-		<spring-cloud.version>2025.0.0</spring-cloud.version>
-		<spring-cloud-stream-schema.version>2.2.1.RELEASE</spring-cloud-stream-schema.version>
-		<spring-modulith.version>1.3.0</spring-modulith.version>
+        <asyncapi.inputSpec>${project.basedir}/src/main/resources/public/apis/asyncapi.yml</asyncapi.inputSpec>
+        <asyncApiModelPackage>${basePackage}.events.dtos</asyncApiModelPackage>
+        <asyncApiProducerApiPackage>${basePackage}.core.outbound.events</asyncApiProducerApiPackage>
+        <asyncApiConsumerApiPackage>${basePackage}.adapters.commands</asyncApiConsumerApiPackage>
+        <asyncapi.avro.imports>${project.basedir}/src/main/resources/public/apis/avro/</asyncapi.avro.imports>
 
-		<zenwave.version>2.0.2</zenwave.version>
+        <spring-boot.version>${project.parent.version}</spring-boot.version>
+        <spring-cloud.version>2025.1.0</spring-cloud.version>
+        <spring-cloud-stream-schema.version>2.2.1.RELEASE</spring-cloud-stream-schema.version>
+        <spring-modulith.version>2.0.0</spring-modulith.version>
+        <avro.version>1.11.1</avro.version>
+        <zenwave-modulith-events-scs.version>1.1.0</zenwave-modulith-events-scs.version>
 
-		<jakarta.validation-api.version>3.1.0</jakarta.validation-api.version>
-		<mapstruct.version>1.5.5.Final</mapstruct.version>
-		<lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
-		<karate.version>1.4.1</karate.version>
-		<archunit-junit5.version>1.3.0</archunit-junit5.version>
-		<springdoc-openapi-starter-webmvc-ui.version>2.5.0</springdoc-openapi-starter-webmvc-ui.version>
-		<spring-javaformat-maven-plugin.version>0.0.43</spring-javaformat-maven-plugin.version>
-		<wiremock.version>3.9.1</wiremock.version>
-	</properties>
+        <zenwave.version>2.2.0</zenwave.version>
+        <openapi-generator-maven-plugin.version>7.17.0</openapi-generator-maven-plugin.version>
+
+        <jakarta.validation-api.version>3.1.1</jakarta.validation-api.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+        <karate.version>1.4.1</karate.version>
+        <testcontainers.version>1.20.4</testcontainers.version>
+        <archunit-junit5.version>1.4.1</archunit-junit5.version>
+        <springdoc-openapi-starter-webmvc-ui.version>2.8.3</springdoc-openapi-starter-webmvc-ui.version>
+        <spotless-maven-plugin.version>2.44.3</spotless-maven-plugin.version>
+        <palantir-java-format.version>2.55.0</palantir-java-format.version>
+        <spring-javaformat-maven-plugin.version>0.0.43</spring-javaformat-maven-plugin.version>
+        <wiremock.version>3.9.1</wiremock.version>
+    </properties>
 
 	<dependencyManagement>
 		<dependencies>
@@ -67,52 +77,52 @@
 	</dependencyManagement>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-aop</artifactId>
-		</dependency>
-		<!-- jpa -->
-		<dependency>
-			<groupId>org.hibernate.orm</groupId>
-			<artifactId>hibernate-ant</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<!-- kafka -->
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-stream-kafka</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-stream-schema</artifactId>
-			<version>${spring-cloud-stream-schema.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aspectj</artifactId>
+        </dependency>
+        <!-- jpa -->
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-ant</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- kafka -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-stream-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream-schema</artifactId>
+            <version>${spring-cloud-stream-schema.version}</version>
+        </dependency>
 		<!-- avro -->
 		<dependency>
 			<groupId>org.apache.avro</groupId>
 			<artifactId>avro</artifactId>
-			<version>1.11.1</version>
+			<version>${avro.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
@@ -135,8 +145,12 @@
 		<dependency>
 			<groupId>io.zenwave360.sdk</groupId>
 			<artifactId>spring-modulith-events-scs</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${zenwave-modulith-events-scs.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-jackson2</artifactId>
+        </dependency>
 		<!-- utils -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -174,22 +188,47 @@
 			<version>${springdoc-openapi-starter-webmvc-ui.version}</version>
 		</dependency>
 
-		<!-- test -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webflux</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.intuit.karate</groupId>
-			<artifactId>karate-core</artifactId>
-			<version>${karate.version}</version>
-		</dependency>
+        <!-- test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webflux</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.intuit.karate</groupId>
+            <artifactId>karate-core</artifactId>
+            <version>${karate.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5-api</artifactId>
+            <version>${archunit-junit5.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- Adding the engine dependency to the surefire-plugin unfortunately does not work in the current version. -->
+        <!-- https://www.archunit.org/userguide/html/000_Index.html#_junit_5 -->
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5-engine</artifactId>
+            <version>${archunit-junit5.version}</version>
+            <scope>test</scope>
+        </dependency>
 
 		<!-- wiremock with swagger-request-validator -->
 		<dependency>
@@ -204,30 +243,34 @@
 			<version>2.41.0</version>
 			<scope>test</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>org.testcontainers</groupId>
-			<artifactId>junit-jupiter</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.tngtech.archunit</groupId>
-			<artifactId>archunit-junit5-api</artifactId>
-			<version>${archunit-junit5.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- Adding the engine dependency to the surefire-plugin unfortunately does not work in the current version. -->
-		<!-- https://www.archunit.org/userguide/html/000_Index.html#_junit_5 -->
-		<dependency>
-			<groupId>com.tngtech.archunit</groupId>
-			<artifactId>archunit-junit5-engine</artifactId>
-			<version>${archunit-junit5.version}</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.14.0</version>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${lombok.version}</version>
+						</path>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok-mapstruct-binding</artifactId>
+							<version>${lombok-mapstruct-binding.version}</version>
+						</path>
+						<path>
+							<groupId>org.mapstruct</groupId>
+							<artifactId>mapstruct-processor</artifactId>
+							<version>${mapstruct.version}</version>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -248,7 +291,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.12</version>
+				<version>0.8.14</version>
 				<configuration>
 					<excludes>
 						<exclude>**/config/**</exclude>
@@ -326,37 +369,37 @@
 			<plugin>
 				<groupId>org.openapitools</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>7.10.0</version>
+				<version>${openapi-generator-maven-plugin.version}</version>
 				<executions>
 					<execution>
 						<goals>
 							<goal>generate</goal>
 						</goals>
 						<phase>generate-sources</phase>
-						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/public/apis/openapi.yml</inputSpec>
-							<skipIfSpecIsUnchanged>true</skipIfSpecIsUnchanged>
-							<generatorName>spring</generatorName>
-							<apiPackage>${openApiApiPackage}</apiPackage>
-							<modelPackage>${openApiModelPackage}</modelPackage>
-							<modelNameSuffix>DTO</modelNameSuffix>
-							<addCompileSourceRoot>true</addCompileSourceRoot>
-							<generateSupportingFiles>false</generateSupportingFiles>
-							<typeMappings>
-								<typeMapping>Double=java.math.BigDecimal</typeMapping>
-							</typeMappings>
-							<configOptions>
-								<useSpringBoot3>true</useSpringBoot3>
-								<documentationProvider>none</documentationProvider>
-								<openApiNullable>false</openApiNullable>
-								<useOptional>false</useOptional>
-								<useTags>true</useTags>
-								<interfaceOnly>true</interfaceOnly>
-								<skipDefaultInterface>true</skipDefaultInterface>
-								<delegatePattern>false</delegatePattern>
-								<sortParamsByRequiredFlag>false</sortParamsByRequiredFlag>
-							</configOptions>
-						</configuration>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/public/apis/openapi.yml</inputSpec>
+                            <skipIfSpecIsUnchanged>true</skipIfSpecIsUnchanged>
+                            <generatorName>spring</generatorName>
+                            <apiPackage>${openApiApiPackage}</apiPackage>
+                            <modelPackage>${openApiModelPackage}</modelPackage>
+                            <modelNameSuffix>DTO</modelNameSuffix>
+                            <addCompileSourceRoot>true</addCompileSourceRoot>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <typeMappings>
+                                <typeMapping>Double=java.math.BigDecimal</typeMapping>
+                            </typeMappings>
+                            <configOptions>
+                                <useSpringBoot3>true</useSpringBoot3>
+                                <documentationProvider>none</documentationProvider>
+                                <openApiNullable>false</openApiNullable>
+                                <useOptional>false</useOptional>
+                                <useTags>true</useTags>
+                                <interfaceOnly>true</interfaceOnly>
+                                <skipDefaultInterface>true</skipDefaultInterface>
+                                <delegatePattern>false</delegatePattern>
+                                <sortParamsByRequiredFlag>false</sortParamsByRequiredFlag>
+                            </configOptions>
+                        </configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -368,96 +411,69 @@
 			<id>asyncapi-code-generation</id>
 			<activation>
 				<file>
-					<exists>${project.basedir}/src/main/resources/public/apis/asyncapi.yml</exists>
+					<exists>${asyncapi.inputSpec}</exists>
 				</file>
 			</activation>
 			<build>
 				<plugins>
-					<plugin>
-						<groupId>io.zenwave360.sdk</groupId>
-						<artifactId>zenwave-sdk-maven-plugin</artifactId>
-						<version>${zenwave.version}</version>
-						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/public/apis/asyncapi.yml</inputSpec>
-							<skip>false</skip>
-							<addCompileSourceRoot>true</addCompileSourceRoot>
-							<addTestCompileSourceRoot>true</addTestCompileSourceRoot>
-						</configuration>
-						<executions>
-							<!-- DTOs -->
-<!--							<execution>-->
-<!--								<id>generate-asyncapi-dtos</id>-->
-<!--								<phase>generate-sources</phase>-->
-<!--								<goals>-->
-<!--									<goal>generate</goal>-->
-<!--								</goals>-->
-<!--								<configuration>-->
-<!--									<generatorName>jsonschema2pojo</generatorName>-->
-<!--									<configOptions>-->
-<!--										<modelPackage>${asyncApiModelPackage}</modelPackage>-->
-<!--										<jsonschema2pojo.isUseJakartaValidation>true</jsonschema2pojo.isUseJakartaValidation>-->
-<!--										<jsonschema2pojo.useLongIntegers>true</jsonschema2pojo.useLongIntegers>-->
-<!--										<jsonschema2pojo.includeAdditionalProperties>true</jsonschema2pojo.includeAdditionalProperties>-->
-<!--									</configOptions>-->
-<!--								</configuration>-->
-<!--							</execution>-->
-							<!-- Generate PROVIDER -->
-							<execution>
-								<id>generate-asyncapi</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>generate</goal>
-								</goals>
-								<configuration>
-									<generatorName>spring-cloud-streams3</generatorName>
-									<configOptions>
-										<role>provider</role>
-										<style>imperative</style>
-										<transactionalOutbox>modulith</transactionalOutbox>
-										<includeApplicationEventListener>true</includeApplicationEventListener>
-										<modelPackage>${asyncApiModelPackage}</modelPackage>
-										<producerApiPackage>${asyncApiProducerApiPackage}</producerApiPackage>
-										<consumerApiPackage>${asyncApiConsumerApiPackage}</consumerApiPackage>
-									</configOptions>
-								</configuration>
-							</execution>
-						</executions>
-						<dependencies>
-							<dependency>
-								<groupId>io.zenwave360.sdk.plugins</groupId>
-								<artifactId>asyncapi-spring-cloud-streams3</artifactId>
-								<version>${zenwave.version}</version>
-							</dependency>
-							<dependency>
-								<groupId>io.zenwave360.sdk.plugins</groupId>
-								<artifactId>asyncapi-jsonschema2pojo</artifactId>
-								<version>${zenwave.version}</version>
-							</dependency>
-						</dependencies>
-					</plugin>
-					<!-- Other plugins -->
-					<plugin>
-						<groupId>org.apache.avro</groupId>
-						<artifactId>avro-maven-plugin</artifactId>
-						<version>1.11.1</version>
-						<executions>
-							<execution>
-								<goals>
-									<goal>schema</goal>
-								</goals>
-								<phase>generate-sources</phase>
-							</execution>
-						</executions>
-						<configuration>
-							<sourceDirectory>${project.basedir}/src/main/resources/public/apis/avro</sourceDirectory>
-							<outputDirectory>${project.basedir}/target/generated-sources/avro</outputDirectory>
-							<imports>
-								<import>${project.basedir}/src/main/resources/public/apis/avro/PaymentMethodType.avsc</import>
-								<import>${project.basedir}/src/main/resources/public/apis/avro/PaymentMethod.avsc</import>
-								<import>${project.basedir}/src/main/resources/public/apis/avro/Address.avsc</import>
-							</imports>
-						</configuration>
-					</plugin>
+                    <plugin>
+                        <groupId>io.zenwave360.sdk</groupId>
+                        <artifactId>zenwave-sdk-maven-plugin</artifactId>
+                        <version>${zenwave.version}</version>
+                        <configuration>
+                            <inputSpec>${asyncapi.inputSpec}</inputSpec>
+                            <addCompileSourceRoot>true</addCompileSourceRoot>
+                            <addTestCompileSourceRoot>true</addTestCompileSourceRoot>
+                            <!-- <authentication>-->
+                            <!--    <authentication>-->
+                            <!--        <key>APIKEY</key><value>xxxxxx</value><type>HEADER</type><urlPattern>*</urlPattern> -->
+                            <!--    </authentication>-->
+                            <!-- </authentication>-->
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>generate-asyncapi</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <generatorName>AsyncAPIGenerator</generatorName>
+                                    <configOptions>
+                                        <role>provider</role>
+                                        <transactionalOutbox>modulith</transactionalOutbox>
+                                        <includeApplicationEventListener>true</includeApplicationEventListener>
+                                        <!-- <modelPackage>${asyncApiModelPackage}</modelPackage> required for json-schema, here it uses avro package -->
+                                        <producerApiPackage>${asyncApiProducerApiPackage}</producerApiPackage>
+                                        <consumerApiPackage>${asyncApiConsumerApiPackage}</consumerApiPackage>
+                                        <avroCompilerProperties.imports>${asyncapi.avro.imports}</avroCompilerProperties.imports>
+                                    </configOptions>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>io.zenwave360.sdk.plugins</groupId>
+                                <artifactId>asyncapi-generator</artifactId>
+                                <version>${zenwave.version}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.apache.avro</groupId>
+                                <artifactId>avro-compiler</artifactId>
+                                <version>${avro.version}</version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>com.fasterxml.jackson.core</groupId>
+                                        <artifactId>jackson-core</artifactId>
+                                    </exclusion>
+                                    <exclusion>
+                                        <groupId>com.fasterxml.jackson.core</groupId>
+                                        <artifactId>jackson-databind</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
 				</plugins>
 			</build>
 		</profile>
