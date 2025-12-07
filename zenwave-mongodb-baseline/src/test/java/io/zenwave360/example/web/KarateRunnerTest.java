@@ -1,10 +1,6 @@
 package io.zenwave360.example.web;
 
-import com.intuit.karate.Results;
-import com.intuit.karate.Runner;
-import com.intuit.karate.RuntimeHook;
-import com.intuit.karate.StringUtils;
-import com.intuit.karate.cli.IdeMain;
+import com.intuit.karate.*;
 import com.intuit.karate.core.ScenarioRuntime;
 import com.intuit.karate.http.HttpRequest;
 import com.intuit.karate.http.Response;
@@ -29,7 +25,7 @@ class KarateRunnerTest {
         String karateEnv = defaultString(System.getProperty("karate.env"), "local").toLowerCase();
         String launchCommand = defaultString(System.getProperty("KARATE_OPTIONS"), "-t ~@ignore " + classpath);
 
-        com.intuit.karate.Main options = IdeMain.parseIdeCommandLine(launchCommand);
+        Main options = Main.parseKarateOptions(launchCommand);
 
         Results results = Runner.path(Optional.ofNullable(options.getPaths()).orElse(Arrays.asList(classpath)))
             .hook(coverageRuntimeHook)
