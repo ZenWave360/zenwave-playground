@@ -2,8 +2,10 @@
 
 > Working in progress... 
 > - Migrated to spring-boot 4.
-> - All code is ready and compiling. Some tests still failing.
-> - It refuses to respond when started.
+> - All code is ready and compiling. 
+> - Some tests still failing bc of kotlin sensitivity in nullability in test data
+> - Application runs and all APIs are available. 
+> - Some glitches here and there... Surveys module is not fully implemented.
 
 See https://www.zenwave360.io/docs/examples/ddd-examples/modulith-klinical-tool-jpa/ for detailed steps about how this Modular Monolith was designed and implemented.
 

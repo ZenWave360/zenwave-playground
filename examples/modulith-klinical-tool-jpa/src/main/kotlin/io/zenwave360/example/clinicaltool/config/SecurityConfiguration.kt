@@ -40,42 +40,7 @@ open class SecurityConfiguration {
                     .requestMatchers("/.well-known/**").permitAll()
                     .anyRequest().authenticated()
             }
-            .exceptionHandling { exceptions ->
-                exceptions
-                    // this disables the default login form, use login-openapi.yml for login in Swagger UI
-                    .authenticationEntryPoint(HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-            }
-            .oneTimeTokenLogin(Customizer.withDefaults())
-            .formLogin { form ->
-                form
-                    .failureHandler { request, response, exception ->
-                        response.status = HttpStatus.UNAUTHORIZED.value()
-                    }
-                    .successHandler { request, response, authentication ->
-                        response.status = HttpStatus.OK.value()
-                    }
-            }
-        // @formatter:on
-        return http.build()
-    }
-
-    /**
-     * Protect the Swagger UI with basic authentication.
-     * @param http
-     * @return
-     * @throws Exception
-     */
-    @Bean
-    @Order(1)
-    @Throws(Exception::class)
-    open fun swaggerSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        // @formatter:off
-        http.securityMatcher("/swagger-ui/**", "/v3/api-docs/**", "/apis/**")
-            .authorizeHttpRequests { auth ->
-                auth.anyRequest().hasRole("ADMIN")
-            }
-            .csrf { it.disable() }
-            .httpBasic { httpBasic -> httpBasic.realmName("Swagger Realm") }
+            .httpBasic(Customizer.withDefaults())
         // @formatter:on
         return http.build()
     }
