@@ -21,5 +21,10 @@
     "insuranceCompanyId": "1234567890",
     "insuranceCardNumber": "1234567890"
   },
-  "documentIds": [1, 2, 3]
+  "documentIds": [1, 2, 3],
+  "medicalContacts": [],
+  "personalContacts": [],
+  "patientAddresses": [],
+  "hospitalAddresses": [],
+  "patientWearables": []
 }

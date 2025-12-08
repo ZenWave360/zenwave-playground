@@ -11,6 +11,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -136,7 +137,7 @@ public class InMemoryJpaRepository<T> implements JpaRepository<T, Long> {
         return null;
     }
 
-    public Optional<T> findById(Long id) {
+    public Optional<T> findById(@NotNull Long id) {
         return Optional.ofNullable(findByUniqueField("id", id));
     }
 

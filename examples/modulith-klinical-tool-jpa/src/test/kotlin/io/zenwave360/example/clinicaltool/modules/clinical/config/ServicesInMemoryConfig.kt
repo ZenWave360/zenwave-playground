@@ -1,5 +1,6 @@
 package io.zenwave360.example.clinicaltool.modules.clinical.config
 
+import io.zenwave360.example.clinicaltool.config.TestDataLoader
 import io.zenwave360.example.clinicaltool.modules.clinical.core.domain.*
 import io.zenwave360.example.clinicaltool.modules.clinical.core.domain.events.*
 import io.zenwave360.example.clinicaltool.modules.clinical.core.implementation.*

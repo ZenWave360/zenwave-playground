@@ -1,5 +1,6 @@
 package io.zenwave360.example.clinicaltool.modules.documents.config
 
+import io.zenwave360.example.clinicaltool.config.TestDataLoader
 import io.zenwave360.example.clinicaltool.modules.documents.*
 import io.zenwave360.example.clinicaltool.modules.documents.domain.*
 import org.springframework.context.annotation.Bean

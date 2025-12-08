@@ -42,13 +42,13 @@ class SurveysServiceTest {
 
     @Test
     fun updateSurveyAnswersTest() {
-        val surveyId = 0L
-        val patientId = 0L
+        val surveyId = 1L
+        val patientId = 1L
         val date = LocalDate.now()
         val input =  mapOf<String, Any?>()
         // TODO fill input data
-        // input.surveyId = 0L
-        // input.patientId = 0L
+        // input.surveyId = 1L
+        // input.patientId = 1L
         // input.date = LocalDate.now()
         // input.lang = ""
         // input.answers = List.of(Answer())
@@ -60,8 +60,8 @@ class SurveysServiceTest {
 
     @Test
     fun getSurveyAnswersTest() {
-        val surveyId = 0L
-        val patientId = 0L
+        val surveyId = 1L
+        val patientId = 1L
         val date = LocalDate.now()
         val surveyAnswers = surveysService.getSurveyAnswers(surveyId, patientId, date)
         assertNotNull(surveyAnswers)

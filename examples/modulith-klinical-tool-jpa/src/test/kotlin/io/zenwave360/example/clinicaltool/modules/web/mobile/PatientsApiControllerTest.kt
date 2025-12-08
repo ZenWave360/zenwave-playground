@@ -33,7 +33,7 @@ class PatientsApiControllerTest {
 
     @Test
     fun getPatientProfileByIdTest() {
-        val id: Long = 0L
+        val id: Long = 1L
         val response = controller.getPatientProfileById(id)
         Assertions.assertEquals(200, response.statusCode.value())
     }

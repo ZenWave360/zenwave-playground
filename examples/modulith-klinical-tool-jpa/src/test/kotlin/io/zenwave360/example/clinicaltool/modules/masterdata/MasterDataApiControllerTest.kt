@@ -49,30 +49,30 @@ val sort: List<String> = mutableListOf()
 
     @Test
     fun getMasterDataTest() {
-        val id: Long = 0L
+        val id: Long = 1L
         val response = controller.getMasterData(id)
         Assertions.assertEquals(200, response.statusCode.value())
     }
 
     @Test
     fun updateMasterDataTest() {
-        val id: Long = 0L
-val reqBody: MasterDataDTO = MasterDataDTO(type = MasterDataTypeDTO.GENDER, key = "aaa", value = "aaa")
+        val id: Long = 1L
+        val reqBody: MasterDataDTO = MasterDataDTO(type = MasterDataTypeDTO.GENDER, key = "aaa", value = "aaa")
         val response = controller.updateMasterData(id, reqBody)
         Assertions.assertEquals(200, response.statusCode.value())
     }
 
     @Test
     fun deleteMasterDataTest() {
-        val id: Long = 0L
+        val id: Long = 1L
         val response = controller.deleteMasterData(id)
         Assertions.assertEquals(204, response.statusCode.value())
     }
 
     @Test
     fun listMasterDataOfTypeTest() {
-        val type: String = ""
-val lang: String = ""
+        val type: String = "GENDER"
+        val lang: String = "en"
         val response = controller.listMasterDataOfType(type, lang)
         Assertions.assertEquals(200, response.statusCode.value())
     }

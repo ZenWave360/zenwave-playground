@@ -1,5 +1,10 @@
 # Clinical Tool - Modulith
 
+> Working in progress... 
+> - Migrated to spring-boot 4.
+> - All code is ready and compiling. Some tests still failing.
+> - It refuses to respond when started.
+
 See https://www.zenwave360.io/docs/examples/ddd-examples/modulith-klinical-tool-jpa/ for detailed steps about how this Modular Monolith was designed and implemented.
 
 This is a modular monolith clinical management system built with Spring Boot and ZenWave SDK. The application demonstrates Domain-Driven Design principles with multiple bounded contexts organized as modules.

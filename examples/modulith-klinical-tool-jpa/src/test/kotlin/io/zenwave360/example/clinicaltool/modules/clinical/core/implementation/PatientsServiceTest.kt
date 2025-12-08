@@ -37,17 +37,31 @@ class PatientsServiceTest {
 
     @Test
     fun createPatientTest() {
-        val input: Patient = Patient() // TODO
-        // TODO fill input data
-        // input.userId = 0L
-        // input.hospitalId = 0L
-        // input.profilePictureId = 0L
-        // input.phoneNumber = ""
-        // input.hisNumber = ""
-        // input.email = ""
-        // input.generalInfo = GeneralInfo()
-        // input.healthInsuranceInfo = HealthInsuranceInfo()
-        // input.documentIds = List.of(0L)
+        val input: Patient = Patient()
+        input.userId = 1L
+        input.hospitalId = 1L
+        input.profilePictureId = 1L
+        input.phoneNumber = "1234567890"
+        input.hisNumber = "HIS123456"
+        input.email = "patient@example.com"
+
+        val generalInfo = GeneralInfo()
+        generalInfo.name = "John"
+        generalInfo.surname = "Doe"
+        generalInfo.surname2 = "Smith"
+        generalInfo.identityDocumentType = IdentityDocumentType.DNI
+        generalInfo.identityDocumentNumber = "12345678A"
+        generalInfo.birthDate = LocalDate.of(1990, 1, 1)
+        generalInfo.gender = GenderType.MALE
+        generalInfo.lang = "en"
+        input.generalInfo = generalInfo
+
+        val healthInsuranceInfo = HealthInsuranceInfo()
+        healthInsuranceInfo.insuranceCompanyId = "INS123"
+        healthInsuranceInfo.insuranceCardNumber = "CARD123456"
+        input.healthInsuranceInfo = healthInsuranceInfo
+
+        input.documentIds = mutableListOf(1L, 2L, 3L)
         val patient = patientsService.createPatient(input)
         assertNotNull(patient.id)
         assertTrue(patientRepository.containsEntity(patient))
@@ -60,18 +74,31 @@ class PatientsServiceTest {
     @Test
     fun updatePatientTest() {
         val id: Long = 1L
-        val input: Patient = Patient() // TODO
-        // TODO fill input data
-        // input.userId = 0L
-        // input.hospitalId = 0L
-        // input.profilePictureId = 0L
-        // input.phoneNumber = ""
-        // input.hisNumber = ""
-        // input.email = ""
-        // input.generalInfo = GeneralInfo()
-        // input.healthInsuranceInfo = HealthInsuranceInfo()
-        // input.documentIds = List.of(0L)
-        // assertTrue(patientRepository.containsKey(id))
+        val input: Patient = Patient()
+        input.userId = 1L
+        input.hospitalId = 1L
+        input.profilePictureId = 1L
+        input.phoneNumber = "0987654321"
+        input.hisNumber = "HIS654321"
+        input.email = "updated.patient@example.com"
+
+        val generalInfo = GeneralInfo()
+        generalInfo.name = "Jane"
+        generalInfo.surname = "Doe"
+        generalInfo.surname2 = "Johnson"
+        generalInfo.identityDocumentType = IdentityDocumentType.PASSPORT
+        generalInfo.identityDocumentNumber = "P87654321"
+        generalInfo.birthDate = LocalDate.of(1985, 5, 15)
+        generalInfo.gender = GenderType.FEMALE
+        generalInfo.lang = "es"
+        input.generalInfo = generalInfo
+
+        val healthInsuranceInfo = HealthInsuranceInfo()
+        healthInsuranceInfo.insuranceCompanyId = "INS456"
+        healthInsuranceInfo.insuranceCardNumber = "CARD654321"
+        input.healthInsuranceInfo = healthInsuranceInfo
+
+        input.documentIds = mutableListOf(4L, 5L)
         val patient = patientsService.updatePatient(id, input)
         assertNotNull(patient)
         assertTrue(patientRepository.containsEntity(patient!!))

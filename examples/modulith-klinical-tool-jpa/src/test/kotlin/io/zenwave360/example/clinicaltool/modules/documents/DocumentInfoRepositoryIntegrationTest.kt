@@ -38,12 +38,12 @@ class DocumentInfoRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
         documentInfo.fileName = ""
         documentInfo.documentType = ""
         documentInfo.contentType = ""
-        documentInfo.tags = List.of("")
+        documentInfo.tags = mutableListOf("")
 
         // OneToOne documentData owner: true
         val documentDataId = 1L
         val documentData = DocumentData()
-        documentData.data = null
+        documentData.data = "test document content".toByteArray()
         documentInfo.documentData = documentData
 
         // Persist aggregate root
@@ -67,14 +67,14 @@ class DocumentInfoRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
         documentInfo.fileName = ""
         documentInfo.documentType = ""
         documentInfo.contentType = ""
-        documentInfo.tags = List.of("")
+        documentInfo.tags = mutableListOf("")
 
         val updated = documentInfoRepository.save(documentInfo)
         Assertions.assertEquals("", updated.uuid)
         Assertions.assertEquals("", updated.fileName)
         Assertions.assertEquals("", updated.documentType)
         Assertions.assertEquals("", updated.contentType)
-        Assertions.assertEquals(List.of(""), updated.tags)
+        Assertions.assertEquals(mutableListOf(""), updated.tags)
     }
 
     @Test

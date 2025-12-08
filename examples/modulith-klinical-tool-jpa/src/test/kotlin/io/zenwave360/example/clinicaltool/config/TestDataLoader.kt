@@ -1,10 +1,10 @@
-package io.zenwave360.example.clinicaltool.modules.surveys.config
+package io.zenwave360.example.clinicaltool.config
 
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import jakarta.persistence.Table
 import java.io.File
+import java.io.IOException
 import java.nio.file.Files
 
 class TestDataLoader(private val jpaManagedTypes: List<Class<*>>) {
@@ -17,20 +17,14 @@ class TestDataLoader(private val jpaManagedTypes: List<Class<*>>) {
     }
 
     fun loadCollectionTestDataAsJson(collectionClass: Class<*>): List<String> {
-        val annotation = collectionClass.getAnnotation(Table::class.java)
-        val table = annotation.name
-        return readDirectoryFilesAsString("src/test/resources/data/jpa/$table")
-    }
-
-    protected fun listFolders(directory: String): List<String> {
-        return File(directory).listFiles()?.map { it.name } ?: emptyList()
+        return readDirectoryFilesAsString("src/test/resources/data/jpa/${collectionClass.getSimpleName()}")
     }
 
     protected fun readDirectoryFilesAsString(directory: String): List<String> {
         return File(directory).listFiles()?.map { f ->
             try {
                 Files.readString(f.toPath())
-            } catch (e: java.io.IOException) {
+            } catch (e: IOException) {
                 throw RuntimeException(e)
             }
         } ?: emptyList()

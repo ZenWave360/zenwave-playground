@@ -1,10 +1,12 @@
 package io.zenwave360.example.clinicaltool.common.mappers
 
+import org.mapstruct.Mapper
+import org.springframework.core.io.ByteArrayResource
+import org.springframework.core.io.Resource
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
-import org.mapstruct.Mapper
 
 @Mapper
 interface BaseMapper {
@@ -23,5 +25,9 @@ interface BaseMapper {
 
     fun map(value: LocalDateTime?): OffsetDateTime? {
         return value?.let { OffsetDateTime.of(it, ZoneOffset.UTC) }
+    }
+
+    fun map(value: ByteArray): Resource {
+        return ByteArrayResource(value)
     }
 }

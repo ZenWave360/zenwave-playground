@@ -9,7 +9,7 @@
     {
       "questionId": 1,
       "value": "8",
-      "values": null,
+      "values": [],
       "otherValue": null
     },
     {
@@ -21,7 +21,7 @@
     {
       "questionId": 3,
       "value": "Very satisfied with the care received",
-      "values": null,
+      "values": [],
       "otherValue": null
     }
   ]

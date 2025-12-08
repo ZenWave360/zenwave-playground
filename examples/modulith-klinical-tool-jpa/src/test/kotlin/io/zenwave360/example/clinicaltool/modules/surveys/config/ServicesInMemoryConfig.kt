@@ -1,5 +1,6 @@
 package io.zenwave360.example.clinicaltool.modules.surveys.config
 
+import io.zenwave360.example.clinicaltool.config.TestDataLoader
 import io.zenwave360.example.clinicaltool.modules.surveys.domain.*
 import io.zenwave360.example.clinicaltool.modules.surveys.service.*
 import io.zenwave360.example.clinicaltool.modules.surveys.service.impl.*

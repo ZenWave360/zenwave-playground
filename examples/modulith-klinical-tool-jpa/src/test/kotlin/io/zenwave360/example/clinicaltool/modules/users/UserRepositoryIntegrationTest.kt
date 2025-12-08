@@ -40,7 +40,7 @@ class UserRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
         user.username = ""
         user.email = ""
         user.password = ""
-        user.roles = List.of("")
+        user.roles = mutableListOf("")
         user.enabled = false
         user.credentialsNonExpired = false
         user.accountNonExpired = false
@@ -67,7 +67,7 @@ class UserRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
         user.username = ""
         user.email = ""
         user.password = ""
-        user.roles = List.of("")
+        user.roles = mutableListOf("")
         user.enabled = false
         user.credentialsNonExpired = false
         user.accountNonExpired = false
@@ -79,7 +79,7 @@ class UserRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
         Assertions.assertEquals("", updated.username)
         Assertions.assertEquals("", updated.email)
         Assertions.assertEquals("", updated.password)
-        Assertions.assertEquals(List.of(""), updated.roles)
+        Assertions.assertEquals(mutableListOf(""), updated.roles)
         Assertions.assertEquals(false, updated.enabled)
         Assertions.assertEquals(false, updated.credentialsNonExpired)
         Assertions.assertEquals(false, updated.accountNonExpired)

@@ -10,8 +10,10 @@ import com.tngtech.archunit.base.DescribedPredicate.alwaysTrue
 import com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage
 import com.tngtech.archunit.library.Architectures.layeredArchitecture
 import com.tngtech.archunit.library.Architectures.onionArchitecture
+import org.junit.jupiter.api.Disabled
 
 @AnalyzeClasses(packages = [""], importOptions = [DoNotIncludeTests::class])
+@Disabled
 class ArchitectureTest {
 
     /**

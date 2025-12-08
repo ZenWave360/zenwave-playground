@@ -34,7 +34,7 @@ import org.springframework.web.context.request.NativeWebRequest
 /**
  * REST controller for PatientsApi.
  */
-@RestController
+@RestController("webappPatientsApiController")
 @RequestMapping("/api")
 open class PatientsApiController(
     private val patientsService: PatientsService

@@ -33,7 +33,7 @@ class TermsAndConditionsApiControllerTest {
 
     @Test
     fun listTermsAndConditionsTest() {
-        
+
         val response = controller.listTermsAndConditions()
         Assertions.assertEquals(200, response.statusCode.value())
     }
@@ -47,14 +47,14 @@ class TermsAndConditionsApiControllerTest {
 
     @Test
     fun getTermsAndConditionsTest() {
-        val id: Long = 0L
+        val id: Long = 1L
         val response = controller.getTermsAndConditions(id)
         Assertions.assertEquals(200, response.statusCode.value())
     }
 
     @Test
     fun updateTermsAndConditionsTest() {
-        val id: Long = 0L
+        val id: Long = 1L
 val reqBody: TermsAndConditionsDTO = TermsAndConditionsDTO(content = "aaa", lang = "aaa", contentVersion = "aaa", startDate = LocalDate.now())
         val response = controller.updateTermsAndConditions(id, reqBody)
         Assertions.assertEquals(200, response.statusCode.value())

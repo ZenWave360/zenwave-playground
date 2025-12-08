@@ -34,8 +34,8 @@ class AcceptedTermsAndConditionsRepositoryIntegrationTest : BaseRepositoryIntegr
     @Test
     fun saveTest() {
         val acceptedTermsAndConditions = AcceptedTermsAndConditions()
-        acceptedTermsAndConditions.userId = 0L
-        acceptedTermsAndConditions.termsAndConditionsId = 0L
+        acceptedTermsAndConditions.userId = 1L
+        acceptedTermsAndConditions.termsAndConditionsId = 1L
         acceptedTermsAndConditions.acceptedDate = Instant.now()
 
         // Persist aggregate root
@@ -54,8 +54,8 @@ class AcceptedTermsAndConditionsRepositoryIntegrationTest : BaseRepositoryIntegr
         val acceptedTermsAndConditions =
             acceptedTermsAndConditionsRepository.findByIdOrNull(id)
                 ?: throw NoSuchElementException(" not found with id: $id")
-        acceptedTermsAndConditions.userId = 0L
-        acceptedTermsAndConditions.termsAndConditionsId = 0L
+        acceptedTermsAndConditions.userId = 1L
+        acceptedTermsAndConditions.termsAndConditionsId = 1L
         acceptedTermsAndConditions.acceptedDate = Instant.now()
 
         val updated = acceptedTermsAndConditionsRepository.save(acceptedTermsAndConditions)

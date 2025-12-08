@@ -34,7 +34,7 @@ class SurveysApiControllerTest {
     @Test
     fun getSurveyAndQuestionsForPatientTest() {
         val name: String = ""
-val patientId: Long = 0L
+val patientId: Long = 1L
 val lang: String = ""
         val response = controller.getSurveyAndQuestionsForPatient(name, patientId, lang)
         Assertions.assertEquals(200, response.statusCode.value())
@@ -42,8 +42,8 @@ val lang: String = ""
 
     @Test
     fun answerSurveyTest() {
-        val surveyId: Long = 0L
-val patientId: Long = 0L
+        val surveyId: Long = 1L
+val patientId: Long = 1L
 val date: LocalDate = java.time.LocalDate.now()
 val reqBody: SurveyAnswersDTO = SurveyAnswersDTO(surveyId = 1L, patientId = 1L, date = LocalDate.now(), lang = "aaa")
         val response = controller.answerSurvey(surveyId, patientId, date, reqBody)
@@ -52,8 +52,8 @@ val reqBody: SurveyAnswersDTO = SurveyAnswersDTO(surveyId = 1L, patientId = 1L, 
 
     @Test
     fun updateSurveyAnswersTest() {
-        val surveyId: Long = 0L
-val patientId: Long = 0L
+        val surveyId: Long = 1L
+val patientId: Long = 1L
 val date: LocalDate = java.time.LocalDate.now()
 val input: Map<String, Any?> = mutableMapOf()
         val response = controller.updateSurveyAnswers(surveyId, patientId, date, input)
@@ -62,8 +62,8 @@ val input: Map<String, Any?> = mutableMapOf()
 
     @Test
     fun getSurveyAnswersTest() {
-        val surveyId: Long = 0L
-val patientId: Long = 0L
+        val surveyId: Long = 1L
+val patientId: Long = 1L
 val date: LocalDate = java.time.LocalDate.now()
         val response = controller.getSurveyAnswers(surveyId, patientId, date)
         Assertions.assertEquals(200, response.statusCode.value())

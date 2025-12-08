@@ -32,8 +32,7 @@ class DockerComposeInitializer : ApplicationContextInitializer<ConfigurableAppli
         private const val DOCKER_COMPOSE_FILE = "./docker-compose.yml"
         private val SERVICES =
             listOf(
-                Service("postgresql", 5432, "DATASOURCE_URL", "jdbc:postgresql://%s:%s/DATABASENAME"),
-                Service("kafka", 9092, "KAFKA_BOOTSTRAP_SERVERS", "%s:%s"),
+                Service("postgresql", 5432, "DATASOURCE_URL", "jdbc:postgresql://%s:%s/app")
             )
 
         val HOST: String = DockerClientFactory.instance().dockerHostIpAddress()

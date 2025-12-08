@@ -51,7 +51,7 @@ class SurveysBackofficeServiceTest {
         val input: Survey = Survey() // TODO
         // TODO fill input data
         // input.name = ""
-        // input.hospitalId = 0L
+        // input.hospitalId = 1L
         // input.title = ""
         // input.lang = ""
         // input.sections = List.of(SurveySection())
@@ -66,7 +66,7 @@ class SurveysBackofficeServiceTest {
         val input: Survey = Survey() // TODO
         // TODO fill input data
         // input.name = ""
-        // input.hospitalId = 0L
+        // input.hospitalId = 1L
         // input.title = ""
         // input.lang = ""
         // input.sections = List.of(SurveySection())

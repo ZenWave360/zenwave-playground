@@ -36,18 +36,22 @@ class UserServiceTest {
 
     @Test
     fun createUserTest() {
-        val input: User = User() // TODO
-        // TODO fill input data
-        // input.name = ""
-        // input.username = ""
-        // input.email = ""
-        // input.password = ""
-        // input.roles = List.of("")
-        // input.enabled = false
-        // input.credentialsNonExpired = false
-        // input.accountNonExpired = false
-        // input.accountNonLocked = false
-        // input.additionalProperties = java.util.HashMap()
+        val input: User = User()
+        input.name = "John Doe"
+        input.username = "johndoe"
+        input.email = "john.doe@example.com"
+        input.password = "password123"
+        input.roles = mutableListOf("USER", "ADMIN")
+        input.enabled = true
+        input.credentialsNonExpired = true
+        input.accountNonExpired = true
+        input.accountNonLocked = true
+
+        input.additionalProperties = mutableMapOf(
+            "theme" to "dark" as Object,
+            "notifications" to true as Object
+        )
+
         val user = userService.createUser(input)
         assertNotNull(user.id)
         assertTrue(userRepository.containsEntity(user))
@@ -55,20 +59,23 @@ class UserServiceTest {
 
     @Test
     fun updateUserTest() {
-        val username = ""
-        val input: User = User() // TODO
-        // TODO fill input data
-        // input.name = ""
-        // input.username = ""
-        // input.email = ""
-        // input.password = ""
-        // input.roles = List.of("")
-        // input.enabled = false
-        // input.credentialsNonExpired = false
-        // input.accountNonExpired = false
-        // input.accountNonLocked = false
-        // input.additionalProperties = java.util.HashMap()
-        // assertTrue(userRepository.containsKey(id))
+        val username = "admin"
+        val input: User = User()
+        input.name = "Admin User"
+        input.username = "admin"
+        input.email = "user@email.com"
+        input.password = "\$2a\$10\$I86fM/OvHg8ounuxGq2oBufCecu3NFO4vT1SWIvd4hnM72lrzdXBG"
+        input.roles = mutableListOf("USER", "ADMIN")
+        input.enabled = true
+        input.credentialsNonExpired = true
+        input.accountNonExpired = true
+        input.accountNonLocked = true
+
+        input.additionalProperties = mutableMapOf(
+            "theme" to "dark" as Object,
+            "notifications" to true as Object
+        )
+
         val user = userService.updateUser(username, input)
         assertNotNull(user)
         assertTrue(userRepository.containsEntity(user!!))
@@ -84,10 +91,8 @@ class UserServiceTest {
 
     @Test
     fun deleteUserTest() {
-        val username = ""
-        // assertTrue(userRepository.containsKey(id))
+        val username = "johndoe"
         userService.deleteUser(username)
-        // assertFalse(userRepository.containsKey(id))
     }
 
     @Test

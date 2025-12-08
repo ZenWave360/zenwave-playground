@@ -33,7 +33,7 @@ class SurveysBackofficeApiControllerTest {
 
     @Test
     fun listSurveysTest() {
-        
+
         val response = controller.listSurveys()
         Assertions.assertEquals(200, response.statusCode.value())
     }
@@ -47,14 +47,14 @@ class SurveysBackofficeApiControllerTest {
 
     @Test
     fun getSurveyTest() {
-        val id: Long = 0L
+        val id: Long = 1L
         val response = controller.getSurvey(id)
         Assertions.assertEquals(200, response.statusCode.value())
     }
 
     @Test
     fun updateSurveyTest() {
-        val id: Long = 0L
+        val id: Long = 1L
 val reqBody: SurveyDTO = SurveyDTO(name = "aaa", hospitalId = 1L, title = "aaa", lang = "aaa")
         val response = controller.updateSurvey(id, reqBody)
         Assertions.assertEquals(200, response.statusCode.value())
@@ -62,14 +62,14 @@ val reqBody: SurveyDTO = SurveyDTO(name = "aaa", hospitalId = 1L, title = "aaa",
 
     @Test
     fun deleteSurveyTest() {
-        val id: Long = 0L
+        val id: Long = 1L
         val response = controller.deleteSurvey(id)
         Assertions.assertEquals(204, response.statusCode.value())
     }
 
     @Test
     fun listQuestionsTest() {
-        
+
         val response = controller.listQuestions()
         Assertions.assertEquals(200, response.statusCode.value())
     }
@@ -83,14 +83,14 @@ val reqBody: SurveyDTO = SurveyDTO(name = "aaa", hospitalId = 1L, title = "aaa",
 
     @Test
     fun getQuestionTest() {
-        val id: Long = 0L
+        val id: Long = 1L
         val response = controller.getQuestion(id)
         Assertions.assertEquals(200, response.statusCode.value())
     }
 
     @Test
     fun updateQuestionTest() {
-        val id: Long = 0L
+        val id: Long = 1L
 val reqBody: QuestionDTO = QuestionDTO(name = "aaa", questionType = QuestionTypeDTO.YES_NO)
         val response = controller.updateQuestion(id, reqBody)
         Assertions.assertEquals(200, response.statusCode.value())
@@ -98,7 +98,7 @@ val reqBody: QuestionDTO = QuestionDTO(name = "aaa", questionType = QuestionType
 
     @Test
     fun deleteQuestionTest() {
-        val id: Long = 0L
+        val id: Long = 1L
         val response = controller.deleteQuestion(id)
         Assertions.assertEquals(204, response.statusCode.value())
     }

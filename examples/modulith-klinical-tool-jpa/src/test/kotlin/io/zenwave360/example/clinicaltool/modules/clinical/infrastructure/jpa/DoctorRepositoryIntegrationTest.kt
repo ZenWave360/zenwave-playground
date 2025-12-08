@@ -35,9 +35,9 @@ class DoctorRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
     @Test
     fun saveTest() {
         val doctor = Doctor()
-        doctor.userId = 0L
-        doctor.profilePictureId = 0L
-        doctor.hospitalId = 0L
+        doctor.userId = 1L
+        doctor.profilePictureId = 1L
+        doctor.hospitalId = 1L
         doctor.name = ""
         doctor.surname = ""
         doctor.surname2 = ""
@@ -61,9 +61,9 @@ class DoctorRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
     fun updateTest() {
         val id = 1L
         val doctor = doctorRepository.findByIdOrNull(id) ?: throw NoSuchElementException(" not found with id: $id")
-        doctor.userId = 0L
-        doctor.profilePictureId = 0L
-        doctor.hospitalId = 0L
+        doctor.userId = 1L
+        doctor.profilePictureId = 1L
+        doctor.hospitalId = 1L
         doctor.name = ""
         doctor.surname = ""
         doctor.surname2 = ""

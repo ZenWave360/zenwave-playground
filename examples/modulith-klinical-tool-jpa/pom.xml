@@ -98,11 +98,6 @@
 		</dependency>
 		<!-- utils -->
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
 			<groupId>jakarta.validation</groupId>
 			<artifactId>jakarta.validation-api</artifactId>
 			<version>${jakarta.validation-api.version}</version>
@@ -130,6 +125,12 @@
         <dependency>
             <groupId>org.springframework.modulith</groupId>
             <artifactId>spring-modulith-starter-core</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.modulith</groupId>
+                    <artifactId>spring-modulith-apt</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.modulith</groupId>
@@ -208,6 +209,20 @@
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <version>${kotlin.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <jvmTarget>${java.version}</jvmTarget>
+                    <compilerPlugins>
+                        <plugin>spring</plugin>
+                        <plugin>jpa</plugin>
+                    </compilerPlugins>
+                    <sourceDirs>
+                        <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
+                        <sourceDir>${project.build.directory}/generated-sources/openapi/src/main/kotlin</sourceDir>
+                        <sourceDir>${project.build.directory}/generated-sources/zenwave/src/main/java</sourceDir>
+                        <sourceDir>${project.build.directory}/generated-sources/avro</sourceDir>
+                    </sourceDirs>
+                </configuration>
                 <executions>
                     <execution>
                         <id>compile</id>
@@ -215,11 +230,20 @@
                         <goals>
                             <goal>compile</goal>
                         </goals>
+                    </execution>
+                    <execution>
+                        <id>default-kapt</id>
+                        <goals>
+                            <goal>kapt</goal>
+                        </goals>
                         <configuration>
-                            <sourceDirs>
-                                <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
-                                <sourceDir>${project.build.directory}/generated-sources/openapi/src/main/kotlin</sourceDir>
-                            </sourceDirs>
+                            <annotationProcessorPaths>
+                                <annotationProcessorPath>
+                                    <groupId>org.mapstruct</groupId>
+                                    <artifactId>mapstruct-processor</artifactId>
+                                    <version>${mapstruct.version}</version>
+                                </annotationProcessorPath>
+                            </annotationProcessorPaths>
                         </configuration>
                     </execution>
                     <execution>
@@ -231,17 +255,11 @@
                         <configuration>
                             <sourceDirs>
                                 <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
+                                <sourceDir>${project.build.directory}/generated-sources/zenwave/src/test/java</sourceDir>
                             </sourceDirs>
                         </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <jvmTarget>${java.version}</jvmTarget>
-                    <compilerPlugins>
-                        <plugin>spring</plugin>
-                        <plugin>jpa</plugin>
-                    </compilerPlugins>
-                </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>org.jetbrains.kotlin</groupId>
@@ -258,29 +276,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
 			</plugin>
-            <plugin>
-                <groupId>com.diffplug.spotless</groupId>
-                <artifactId>spotless-maven-plugin</artifactId>
-                <version>${spotless-maven-plugin.version}</version>
-                <configuration>
-                    <java>
-                        <palantirJavaFormat>
-                            <version>${palantir-java-format.version}</version>
-                            <style>PALANTIR</style>
-                            <formatJavadoc>false</formatJavadoc>
-                        </palantirJavaFormat>
-                    </java>
-                </configuration>
-            </plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
@@ -327,7 +323,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>3.5.2</version>
+                <version>3.5.2</version>
 				<executions>
 					<execution>
 						<id>default</id>

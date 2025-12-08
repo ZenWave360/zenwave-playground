@@ -33,31 +33,36 @@ class DocumentApiControllerTest {
 
     @Test
     fun listDocumentInfoTest() {
-        val documentIds: List<Long> = mutableListOf()
+        val documentIds: List<Long> = mutableListOf(1L)
         val response = controller.listDocumentInfo(documentIds)
         Assertions.assertEquals(200, response.statusCode.value())
     }
 
     @Test
     fun downloadDocumentTest() {
-        val id: Long = 0L
-val preview: Boolean = false
+        val id: Long = 1L
+        val preview: Boolean = false
         val response = controller.downloadDocument(id, preview)
         Assertions.assertEquals(200, response.statusCode.value())
     }
 
     @Test
     fun deleteDocumentInfoTest() {
-        val id: Long = 0L
+        val id: Long = 1L
         val response = controller.deleteDocumentInfo(id)
         Assertions.assertEquals(204, response.statusCode.value())
     }
 
     @Test
     fun uploadDocumentTest() {
-        val uuid: String = ""
-        val tags: List<String> = mutableListOf("tag1")
-        val file: org.springframework.web.multipart.MultipartFile = org.springframework.mock.web.MockMultipartFile("file", "test.txt", "text/plain", "test content".toByteArray())
+        val file: org.springframework.web.multipart.MultipartFile = org.springframework.mock.web.MockMultipartFile(
+            "file",
+            "test-document.pdf",
+            "application/pdf",
+            "test content".toByteArray()
+        )
+        val uuid: String = "550e8400-e29b-41d4-a716-446655440001"
+        val tags: List<String> = mutableListOf("test", "document")
         val response = controller.uploadDocument(uuid, tags, file)
         Assertions.assertEquals(201, response.statusCode.value())
     }

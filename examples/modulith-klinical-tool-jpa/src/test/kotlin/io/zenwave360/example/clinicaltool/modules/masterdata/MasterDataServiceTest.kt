@@ -32,12 +32,16 @@ class MasterDataServiceTest {
 
     @Test
     fun createMasterDataTest() {
-        val input: MasterData = MasterData() // TODO
-        // TODO fill input data
-        // input.type = MasterDataType.values()[0]
-        // input.key = ""
-        // input.value = ""
-        // input.translations = List.of(MasterDataTranslation())
+        val input: MasterData = MasterData()
+        input.type = MasterDataType.GENDER
+        input.key = "MALE"
+        input.value = "Male"
+
+        val translation = MasterDataTranslation()
+        translation.lang = "en"
+        translation.text = "Male"
+        input.translations = mutableListOf(translation)
+
         val masterData = masterDataService.createMasterData(input)
         assertNotNull(masterData.id)
         assertTrue(masterDataRepository.containsEntity(masterData))
@@ -53,13 +57,16 @@ class MasterDataServiceTest {
     @Test
     fun updateMasterDataTest() {
         val id: Long = 1L
-        val input: MasterData = MasterData() // TODO
-        // TODO fill input data
-        // input.type = MasterDataType.values()[0]
-        // input.key = ""
-        // input.value = ""
-        // input.translations = List.of(MasterDataTranslation())
-        // assertTrue(masterDataRepository.containsKey(id))
+        val input: MasterData = MasterData()
+        input.type = MasterDataType.COUNTRY
+        input.key = "US"
+        input.value = "United States"
+
+        val translation = MasterDataTranslation()
+        translation.lang = "en"
+        translation.text = "United States"
+        input.translations = mutableListOf(translation)
+
         val masterData = masterDataService.updateMasterData(id, input)
         assertNotNull(masterData)
         assertTrue(masterDataRepository.containsEntity(masterData!!))
