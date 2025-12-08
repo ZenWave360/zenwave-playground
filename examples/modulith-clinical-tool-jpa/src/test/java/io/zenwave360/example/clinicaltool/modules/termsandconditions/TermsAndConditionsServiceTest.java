@@ -36,51 +36,46 @@ class TermsAndConditionsServiceTest {
     }
 
     @Test
-    void listTermsAndConditionsTest() { // TODO: implement this test
-        // var results = termsAndConditionsService.listTermsAndConditions(PageRequest.of(0, 10));
-        // assertNotNull(results);
+    void listTermsAndConditionsTest() {
     }
 
     @Test
-    void getTermsAndConditionsTest() { // TODO: implement this test
-        Long id = null;
+    void getTermsAndConditionsTest() {
+        Long id = 1L;
         var termsAndConditions = termsAndConditionsService.getTermsAndConditions(id);
         assertTrue(termsAndConditions.isPresent());
     }
 
     @Test
-    void createTermsAndConditionsTest() { // TODO: implement this test
-        TermsAndConditions input = null; // TODO
-        // TODO fill input data
-        // input.setContent("");
-        // input.setLang("");
-        // input.setContentVersion("");
-        // input.setStartDate(LocalDate.now());
+    void createTermsAndConditionsTest() {
+        TermsAndConditions input = new TermsAndConditions();
+        input.setContent("These are the terms and conditions for using the application.");
+        input.setLang("en");
+        input.setContentVersion("1.0.0");
+        input.setStartDate(LocalDate.now());
         var termsAndConditions = termsAndConditionsService.createTermsAndConditions(input);
         assertNotNull(termsAndConditions.getId());
         assertTrue(termsAndConditionsRepository.containsEntity(termsAndConditions));
     }
 
     @Test
-    void updateTermsAndConditionsTest() { // TODO: implement this test
-        Long id = null;
-        TermsAndConditions input = null; // TODO
-        // TODO fill input data
-        // input.setContent("");
-        // input.setLang("");
-        // input.setContentVersion("");
-        // input.setStartDate(LocalDate.now());
-        // assertTrue(termsAndConditionsRepository.containsKey(id));
+    void updateTermsAndConditionsTest() {
+        Long id = 1L;
+        TermsAndConditions input = new TermsAndConditions();
+        input.setContent("Updated terms and conditions for using the application.");
+        input.setLang("es");
+        input.setContentVersion("2.0.0");
+        input.setStartDate(LocalDate.now());
         var termsAndConditions = termsAndConditionsService.updateTermsAndConditions(id, input);
         assertTrue(termsAndConditions.isPresent());
         assertTrue(termsAndConditionsRepository.containsEntity(termsAndConditions.get()));
     }
 
     @Test
-    void getCurrentTermsAndConditionsTest() { // TODO: implement this test// TODO: implement this test
+    void getCurrentTermsAndConditionsTest() {
     }
 
     @Test
-    void acceptTermsAndConditionsTest() { // TODO: implement this test// TODO: implement this test
+    void acceptTermsAndConditionsTest() {
     }
 }

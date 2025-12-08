@@ -35,7 +35,7 @@ config {
             title "Clinical Tool - Mobile API"
             zdlFiles "models/clinical.zdl"
             targetFile "src/main/resources/public/apis/mobile-openapi.yml"
-            operationIdsToInclude "getPatientProfileById"
+            operationIdsToInclude "getPatientProfileById,requestOptOut"
         }
 
         ZDLToOpenAPIPlugin {
@@ -165,26 +165,6 @@ config {
         }
 
         //-----------------------------
-
-        SpringWebTestClientPlugin {
-            zdlFiles "models/clinical.zdl,models/metrics.zdl"
-            openapiFile "src/main/resources/public/apis/webapp-openapi.yml"
-
-            layout.customWebModule "{{basePackage}}.modules.web.webapp"
-            layout.adaptersWebPackage "{{layout.customWebModule}}"
-            layout.openApiApiPackage "{{layout.customWebModule}}"
-            layout.openApiModelPackage "{{layout.customWebModule}}.dtos"
-        }
-
-        SpringWebTestClientPlugin {
-            zdlFiles "models/clinical.zdl,models/metrics.zdl"
-            openapiFile "src/main/resources/public/apis/mobile-openapi.yml"
-
-            layout.customWebModule "{{basePackage}}.modules.web.mobile"
-            layout.adaptersWebPackage "{{layout.customWebModule}}"
-            layout.openApiApiPackage "{{layout.customWebModule}}"
-            layout.openApiModelPackage "{{layout.customWebModule}}.dtos"
-        }
 
         SpringWebTestClientPlugin {
             zdlFiles "models/surveys.zdl"

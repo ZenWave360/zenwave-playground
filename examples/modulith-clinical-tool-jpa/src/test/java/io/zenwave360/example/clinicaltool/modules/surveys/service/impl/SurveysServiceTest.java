@@ -34,26 +34,19 @@ class SurveysServiceTest {
     }
 
     @Test
-    void getSurveyAndQuestionsForPatientTest() { // TODO: implement this test
+    void getSurveyAndQuestionsForPatientTest() {
     }
 
     @Test
-    void answerSurveyTest() { // TODO: implement this test
+    void answerSurveyTest() {
     }
 
     @Test
     void updateSurveyAnswersTest() {
-        var surveyId = 0L;
-        var patientId = 0L;
-        var date = LocalDate.now();
-        java.util.Map input = null; // TODO
-        // TODO fill input data
-        // input.setSurveyId(0L);
-        // input.setPatientId(0L);
-        // input.setDate(LocalDate.now());
-        // input.setLang("");
-        // input.setAnswers(List.of(new Answer()));
-        // assertTrue(surveyAnswersRepository.containsKey(id));
+        var surveyId = 1L;
+        var patientId = 1L;
+        var date = LocalDate.of(2025, 12, 12);
+        java.util.Map input = new java.util.HashMap();
         var surveyAnswers = surveysService.updateSurveyAnswers(surveyId, patientId, date, input);
         assertTrue(surveyAnswers.isPresent());
         assertTrue(surveyAnswersRepository.containsEntity(surveyAnswers.get()));
@@ -61,9 +54,9 @@ class SurveysServiceTest {
 
     @Test
     void getSurveyAnswersTest() {
-        var surveyId = 0L;
-        var patientId = 0L;
-        var date = LocalDate.now();
+        var surveyId = 1L;
+        var patientId = 1L;
+        var date = LocalDate.of(2025, 12, 12);
         var surveyAnswers = surveysService.getSurveyAnswers(surveyId, patientId, date);
         assertTrue(surveyAnswers.isPresent());
     }

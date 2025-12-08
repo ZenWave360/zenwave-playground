@@ -6,5 +6,4 @@ import java.math.*
 import java.time.*
 import java.util.*
 
-class QuestionRepositoryInMemory : InMemoryJpaRepository<Question, Long>(), QuestionRepository {
-}
+class QuestionRepositoryInMemory : InMemoryJpaRepository<Question, Long>(), QuestionRepository {}

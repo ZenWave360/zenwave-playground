@@ -7,23 +7,20 @@ import java.io.InputStreamReader
 import java.net.Socket
 import java.util.ArrayList
 import java.util.stream.Stream
-
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.test.util.TestPropertyValues
 import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.ConfigurableApplicationContext
 import org.testcontainers.DockerClientFactory
-import org.testcontainers.containers.DockerComposeContainer
+import org.testcontainers.containers.ComposeContainer
 import org.testcontainers.containers.wait.strategy.Wait
 
 class DockerComposeInitializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
 
     private val log: Logger = LoggerFactory.getLogger(javaClass)
 
-    /**
-     * Use this annotation to activate TestContainers in your test.
-     */
+    /** Use this annotation to activate TestContainers in your test. */
     @kotlin.annotation.Target(kotlin.annotation.AnnotationTarget.CLASS)
     @kotlin.annotation.Retention(kotlin.annotation.AnnotationRetention.RUNTIME)
     @org.springframework.test.context.ContextConfiguration(initializers = [DockerComposeInitializer::class])
@@ -33,18 +30,22 @@ class DockerComposeInitializer : ApplicationContextInitializer<ConfigurableAppli
 
     companion object {
         private const val DOCKER_COMPOSE_FILE = "./docker-compose.yml"
-        private val SERVICES = listOf(
-            Service("postgresql", 5432, "DATASOURCE_URL", "jdbc:postgresql://%s:%s/DATABASENAME"),
-            Service("kafka", 9092, "KAFKA_BOOTSTRAP_SERVERS", "%s:%s")
-        )
+        private val SERVICES =
+            listOf(
+                Service("postgresql", 5432, "DATASOURCE_URL", "jdbc:postgresql://%s:%s/app")
+            )
 
         val HOST: String = DockerClientFactory.instance().dockerHostIpAddress()
-        val container: DockerComposeContainer<*> = DockerComposeContainer(File(DOCKER_COMPOSE_FILE)).withEnv("HOST", HOST)
+        val container: ComposeContainer = ComposeContainer(File(DOCKER_COMPOSE_FILE)).withEnv("HOST", HOST)
 
         init {
             for (service in SERVICES) {
                 if ("schema-registry" == service.name) {
-                    container.withExposedService(service.name, service.port, Wait.forHttp("/subjects").forStatusCode(200))
+                    container.withExposedService(
+                        service.name,
+                        service.port,
+                        Wait.forHttp("/subjects").forStatusCode(200),
+                    )
                 } else {
                     container.withExposedService(service.name, service.port, Wait.forListeningPort())
                 }
@@ -58,7 +59,9 @@ class DockerComposeInitializer : ApplicationContextInitializer<ConfigurableAppli
         if (isDockerComposeRunningAllServices(SERVICES)) {
             log.info("Docker Compose Containers are running from local docker-compose. Skipping TestContainers...")
         } else {
-            log.info("Docker Compose Containers are not running from local docker-compose. Starting from TestContainers...")
+            log.info(
+                "Docker Compose Containers are not running from local docker-compose. Starting from TestContainers..."
+            )
             if (isContainerRunning) {
                 log.info("Docker Compose Containers are already running from TestContainers. Skipping...")
             } else {
@@ -71,7 +74,9 @@ class DockerComposeInitializer : ApplicationContextInitializer<ConfigurableAppli
                     log.info("DockerCompose exposed port for {}: {}", service.name, "$HOST:$port")
                     log.info("DockerCompose Service {} listening: {}", service.name, isPortOpen(HOST, port))
                     if (service.envValueTemplate != null) {
-                        TestPropertyValues.of("${service.envVar}=${String.format(service.envValueTemplate, HOST, port)}")
+                        TestPropertyValues.of(
+                                "${service.envVar}=${String.format(service.envValueTemplate, HOST, port)}"
+                            )
                             .applyTo(ctx.environment)
                     }
                 }
@@ -83,7 +88,8 @@ class DockerComposeInitializer : ApplicationContextInitializer<ConfigurableAppli
         val serviceNames = services.map { it.name }
         return Stream.of("docker-compose", "docker-compose.exe").anyMatch { cmd ->
             try {
-                getDockerComposeRunningServices(cmd, "-f", DOCKER_COMPOSE_FILE, "ps", "--services").containsAll(serviceNames)
+                getDockerComposeRunningServices(cmd, "-f", DOCKER_COMPOSE_FILE, "ps", "--services")
+                    .containsAll(serviceNames)
             } catch (e: IOException) {
                 false
             } catch (e: InterruptedException) {

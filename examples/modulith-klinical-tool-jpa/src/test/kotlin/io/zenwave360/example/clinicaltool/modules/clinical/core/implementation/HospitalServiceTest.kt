@@ -2,34 +2,21 @@ package io.zenwave360.example.clinicaltool.modules.clinical.core.implementation
 
 import io.zenwave360.example.clinicaltool.modules.clinical.config.*
 import io.zenwave360.example.clinicaltool.modules.clinical.core.domain.*
+import io.zenwave360.example.clinicaltool.modules.clinical.core.implementation.mappers.*
 import io.zenwave360.example.clinicaltool.modules.clinical.core.inbound.*
 import io.zenwave360.example.clinicaltool.modules.clinical.core.inbound.dtos.*
-import io.zenwave360.example.clinicaltool.modules.clinical.core.implementation.mappers.*
 import io.zenwave360.example.clinicaltool.modules.clinical.core.outbound.jpa.*
 import io.zenwave360.example.clinicaltool.modules.clinical.infrastructure.jpa.inmemory.*
-
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.mapstruct.factory.Mappers
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.Pageable
-import org.springframework.data.domain.PageRequest
-
-import java.util.Map
-import java.util.Optional
 import java.time.*
-import java.math.BigDecimal
-
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-/**
- * Acceptance Test for HospitalService.
- */
+/** Acceptance Test for HospitalService. */
 class HospitalServiceTest {
 
     private val log: Logger = LoggerFactory.getLogger(javaClass)
@@ -41,109 +28,100 @@ class HospitalServiceTest {
 
     val doctorRepository: DoctorRepositoryInMemory = context.doctorRepository()
 
-
     @BeforeEach
     fun setUp() {
         context.reloadTestData()
     }
 
-
     @Test
     fun getHospitalTest() {
         val id: Long = 1L
         val hospital = hospitalService.getHospital(id)
-        assertTrue(hospital.isPresent)// TODO: implement this test
-}
+        assertNotNull(hospital)
+    }
 
     @Test
     fun createHospitalTest() {
-        val input: Hospital = Hospital() // TODO
-        // TODO fill input data
-        // input.name = ""
-        // input.lang = ""
-        // input.timezone = ""
+        val input: Hospital = Hospital()
+        input.name = "Test Hospital"
+        input.lang = "en"
+        input.timezone = "UTC"
         val hospital = hospitalService.createHospital(input)
         assertNotNull(hospital.id)
-        assertTrue(hospitalRepository.containsEntity(hospital))// TODO: implement this test
-}
+        assertTrue(hospitalRepository.containsEntity(hospital))
+    }
 
     @Test
     fun updateHospitalTest() {
         val id: Long = 1L
-        val input: Hospital = Hospital() // TODO
-        // TODO fill input data
-        // input.name = ""
-        // input.lang = ""
-        // input.timezone = ""
-        // assertTrue(hospitalRepository.containsKey(id))
+        val input: Hospital = Hospital()
+        input.name = "Updated Hospital"
+        input.lang = "es"
+        input.timezone = "ECT"
         val hospital = hospitalService.updateHospital(id, input)
-        assertTrue(hospital.isPresent)
-        assertTrue(hospitalRepository.containsEntity(hospital.get()))// TODO: implement this test
-}
+        assertNotNull(hospital)
+        assertTrue(hospitalRepository.containsEntity(hospital!!))
+    }
 
     @Test
     fun listHospitalsTest() {
         // val results = hospitalService.listHospitals(PageRequest.of(0, 10))
         // assertNotNull(results)// TODO: implement this test
-}
+    }
 
     @Test
-    fun createDoctorTest() {// TODO: implement this test
-        val input: Doctor = Doctor() // TODO
-        // TODO fill input data
-        // input.userId = 0L
-        // input.profilePictureId = 0L
-        // input.hospitalId = 0L
-        // input.name = ""
-        // input.surname = ""
-        // input.surname2 = ""
-        // input.email = ""
-        // input.phoneNumber = ""
-        // input.lang = ""
+    fun createDoctorTest() {
+        val input: Doctor = Doctor()
+        input.userId = 1L
+        input.profilePictureId = 1L
+        input.hospitalId = 1L
+        input.name = "John"
+        input.surname = "Doe"
+        input.surname2 = "Smith"
+        input.email = "john.doe@example.com"
+        input.phoneNumber = "1234567890"
+        input.lang = "en"
         val doctor = hospitalService.createDoctor(input)
         assertNotNull(doctor.id)
         assertTrue(doctorRepository.containsEntity(doctor))
-}
+    }
 
     @Test
-    fun updateDoctorTest() {// TODO: implement this test
+    fun updateDoctorTest() {
         val id: Long = 1L
-        val input: Doctor = Doctor() // TODO
-        // TODO fill input data
-        // input.userId = 0L
-        // input.profilePictureId = 0L
-        // input.hospitalId = 0L
-        // input.name = ""
-        // input.surname = ""
-        // input.surname2 = ""
-        // input.email = ""
-        // input.phoneNumber = ""
-        // input.lang = ""
-        // assertTrue(doctorRepository.containsKey(id))
+        val input: Doctor = Doctor()
+        input.userId = 1L
+        input.profilePictureId = 1L
+        input.hospitalId = 1L
+        input.name = "Jane"
+        input.surname = "Doe"
+        input.surname2 = "Johnson"
+        input.email = "jane.doe@example.com"
+        input.phoneNumber = "0987654321"
+        input.lang = "es"
         val doctor = hospitalService.updateDoctor(id, input)
-        assertTrue(doctor.isPresent)
-        assertTrue(doctorRepository.containsEntity(doctor.get()))
-}
+        assertNotNull(doctor)
+        assertTrue(doctorRepository.containsEntity(doctor!!))
+    }
 
     @Test
-    fun getDoctorTest() {// TODO: implement this test
+    fun getDoctorTest() {
         val id: Long = 1L
         val doctor = hospitalService.getDoctor(id)
-        assertTrue(doctor.isPresent)
-}
+        assertNotNull(doctor)
+    }
 
     @Test
-    fun listDoctorsTest() {// TODO: implement this test
+    fun listDoctorsTest() { // TODO: implement this test
         // val results = hospitalService.listDoctors(PageRequest.of(0, 10))
         // assertNotNull(results)
-}
+    }
 
     @Test
-    fun listHospitalDoctorsTest() {// TODO: implement this test// TODO: implement this test
-}
+    fun listHospitalDoctorsTest() { // TODO: implement this test// TODO: implement this test
+    }
 
     @Test
-    fun listHospitalPatientsTest() {// TODO: implement this test// TODO: implement this test
-}
-
+    fun listHospitalPatientsTest() { // TODO: implement this test// TODO: implement this test
+    }
 }

@@ -1,15 +1,12 @@
 package io.zenwave360.example.clinicaltool.modules.surveys.config
 
+import io.zenwave360.example.clinicaltool.modules.surveys.repository.jpa.*
+import io.zenwave360.example.clinicaltool.modules.surveys.repository.jpa.inmemory.*
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Primary
 
-import io.zenwave360.example.clinicaltool.modules.surveys.repository.jpa.*
-import io.zenwave360.example.clinicaltool.modules.surveys.repository.jpa.inmemory.*
-
-
-//@Configuration
+// @Configuration
 open class RepositoriesInMemoryConfig {
-
 
     protected val surveyRepository = SurveyRepositoryInMemory()
 
@@ -18,6 +15,7 @@ open class RepositoriesInMemoryConfig {
     fun surveyRepository(): SurveyRepositoryInMemory {
         return surveyRepository
     }
+
     protected val questionRepository = QuestionRepositoryInMemory()
 
     @Bean
@@ -25,6 +23,7 @@ open class RepositoriesInMemoryConfig {
     fun questionRepository(): QuestionRepositoryInMemory {
         return questionRepository
     }
+
     protected val surveyAnswersRepository = SurveyAnswersRepositoryInMemory()
 
     @Bean
@@ -32,5 +31,4 @@ open class RepositoriesInMemoryConfig {
     fun surveyAnswersRepository(): SurveyAnswersRepositoryInMemory {
         return surveyAnswersRepository
     }
-
 }

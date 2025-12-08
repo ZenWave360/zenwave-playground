@@ -1,40 +1,29 @@
 package io.zenwave360.example.clinicaltool.modules.documents.domain
 
 import jakarta.persistence.*
-import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.*
+import java.io.Serializable
+import java.math.*
+import java.time.*
+import java.util.*
 import org.hibernate.annotations.Cache
 import org.hibernate.annotations.CacheConcurrencyStrategy
-import java.io.Serializable
 
-/**
- *
- */
+/**  */
 @Entity
 @Table(name = "document_data")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 data class DocumentData(
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-
-    var id: Long? = null,
-
-    @Version
-    var version: Int? = null,
-
-    @NotNull @Column(name = "data", nullable = false) @Lob
-    var data: ByteArray? = null,
-
-    @NotNull
-    @MapsId
-    @JoinColumn(name = "id") @OneToOne(fetch = FetchType.LAZY)
-
-    var document: DocumentInfo? = null
-
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE) var id: Long? = null,
+    @Version var version: Int? = null,
+    @NotNull @Column(name = "data", nullable = false) @Lob var data: ByteArray? = null,
 ) : Serializable {
 
     companion object {
         private const val serialVersionUID = 1L
     }
+
+    @NotNull @JoinColumn(unique = true) @OneToOne(fetch = FetchType.LAZY) var document: DocumentInfo? = null
 
     override fun toString(): String {
         return this::class.java.name + "#" + id
@@ -50,5 +39,4 @@ data class DocumentData(
     override fun hashCode(): Int {
         return javaClass.hashCode()
     }
-
 }

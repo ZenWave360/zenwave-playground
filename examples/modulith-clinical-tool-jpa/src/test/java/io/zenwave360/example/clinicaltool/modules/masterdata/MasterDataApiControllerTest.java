@@ -45,14 +45,14 @@ public class MasterDataApiControllerTest {
 
     @Test
     public void getMasterDataTest() {
-        Long id = null;
+        Long id = 1L;
         var response = controller.getMasterData(id);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
 
     @Test
     public void updateMasterDataTest() {
-        Long id = null;
+        Long id = 1L;
         MasterDataDTO reqBody = null;
         var response = controller.updateMasterData(id, reqBody);
         Assertions.assertEquals(200, response.getStatusCode().value());
@@ -60,15 +60,15 @@ public class MasterDataApiControllerTest {
 
     @Test
     public void deleteMasterDataTest() {
-        Long id = null;
+        Long id = 1L;
         var response = controller.deleteMasterData(id);
         Assertions.assertEquals(204, response.getStatusCode().value());
     }
 
     @Test
     public void listMasterDataOfTypeTest() {
-        String type = null;
-        String lang = null;
+        String type = "GENDER";
+        String lang = "en";
         var response = controller.listMasterDataOfType(type, lang);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }

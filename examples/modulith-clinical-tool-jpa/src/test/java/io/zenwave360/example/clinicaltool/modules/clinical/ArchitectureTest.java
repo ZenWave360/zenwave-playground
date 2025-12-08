@@ -32,7 +32,7 @@ class ArchitectureTest {
             .consideringOnlyDependenciesInAnyPackage("io.zenwave360.example.clinicaltool.modules.clinical..")
             .layer("Any")
             .definedBy("..")
-            .layer("Config")
+            .optionalLayer("Config")
             .definedBy("..config..")
             .layer("Core")
             .definedBy("..core..")

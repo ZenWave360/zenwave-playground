@@ -5,6 +5,7 @@ import io.zenwave360.example.clinicaltool.modules.termsandconditions.*
 import io.zenwave360.example.clinicaltool.modules.termsandconditions.dtos.*
 import io.zenwave360.example.clinicaltool.modules.termsandconditions.*
 import io.zenwave360.example.clinicaltool.modules.termsandconditions.dtos.*
+import io.zenwave360.example.clinicaltool.common.*
 import io.zenwave360.example.clinicaltool.modules.termsandconditions.mappers.*
 
 import java.net.URI
@@ -30,7 +31,6 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.web.context.request.NativeWebRequest
 
-
 /**
  * REST controller for TermsAndConditionsApi.
  */
@@ -46,10 +46,6 @@ open class TermsAndConditionsApiController(
     private lateinit var request: NativeWebRequest
 
     private val mapper = TermsAndConditionsDTOsMapper.INSTANCE
-
-    fun getRequest(): Optional<NativeWebRequest> {
-        return Optional.ofNullable(request)
-    }
 
 
 
@@ -71,8 +67,8 @@ open class TermsAndConditionsApiController(
     override fun getTermsAndConditions(id: Long): ResponseEntity<TermsAndConditionsDTO> {
         log.debug("REST request to getTermsAndConditions: {}", id)
         val termsAndConditions =  termsAndConditionsService.getTermsAndConditions(id)
-        return if (termsAndConditions.isPresent) {
-            val responseDTO = mapper.asTermsAndConditionsDTO(termsAndConditions.get())
+        return if (termsAndConditions != null) {
+            val responseDTO = mapper.asTermsAndConditionsDTO(termsAndConditions)
             ResponseEntity.status(200).body(responseDTO)
         } else {
             ResponseEntity.notFound().build()
@@ -83,8 +79,8 @@ open class TermsAndConditionsApiController(
         log.debug("REST request to updateTermsAndConditions: {}, {}", id, reqBody)
         val input = mapper.asTermsAndConditions(reqBody)
         val termsAndConditions =  termsAndConditionsService.updateTermsAndConditions(id, input)
-        return if (termsAndConditions.isPresent) {
-            val responseDTO = mapper.asTermsAndConditionsDTO(termsAndConditions.get())
+        return if (termsAndConditions != null) {
+            val responseDTO = mapper.asTermsAndConditionsDTO(termsAndConditions)
             ResponseEntity.status(200).body(responseDTO)
         } else {
             ResponseEntity.notFound().build()
@@ -94,8 +90,8 @@ open class TermsAndConditionsApiController(
     override fun getCurrentTermsAndConditions(lang: String): ResponseEntity<TermsAndConditionsDTO> {
         log.debug("REST request to getCurrentTermsAndConditions: {}", lang)
         val termsAndConditions =  termsAndConditionsService.getCurrentTermsAndConditions(lang)
-        return if (termsAndConditions.isPresent) {
-            val responseDTO = mapper.asTermsAndConditionsDTO(termsAndConditions.get())
+        return if (termsAndConditions != null) {
+            val responseDTO = mapper.asTermsAndConditionsDTO(termsAndConditions)
             ResponseEntity.status(200).body(responseDTO)
         } else {
             ResponseEntity.notFound().build()

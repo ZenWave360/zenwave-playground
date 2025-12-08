@@ -1,0 +1,22 @@
+{
+  "id": 1,
+  "version": 1,
+  "name": "overall-satisfaction",
+  "questionType": "RANGE",
+  "required": true,
+  "rangeStart": 1,
+  "rangeEnd": 10,
+  "translations": [
+    {
+      "lang": "en",
+      "text": "How would you rate your overall satisfaction with our service?"
+    },
+    {
+      "lang": "es",
+      "text": "¿Cómo calificaría su satisfacción general con nuestro servicio?"
+    }
+  ],
+  "options": [],
+  "includeOther": false
+}
+

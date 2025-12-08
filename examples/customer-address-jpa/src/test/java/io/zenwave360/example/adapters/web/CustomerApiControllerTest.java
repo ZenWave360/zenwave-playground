@@ -64,11 +64,11 @@ class CustomerApiControllerTest {
 
     @Test
     void searchCustomersTest() {
-        Optional<Integer> page = Optional.of(0);
-        Optional<Integer> limit = Optional.of(10);
-        Optional<List<String>> sort = Optional.of(List.of("name"));
+        Integer page = 0;
+        Integer limit = 10;
+        List<String> sort = List.of("name");
         CustomerSearchCriteriaDTO reqBody = new CustomerSearchCriteriaDTO();
-        var response = controller.searchCustomers(reqBody, page, limit, sort);
+        var response = controller.searchCustomers(page, limit, sort, reqBody);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
 

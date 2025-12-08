@@ -43,7 +43,7 @@ class DocumentInfoRepositoryIntegrationTest extends BaseRepositoryIntegrationTes
         // OneToOne documentData owner: true
         var documentDataId = 1L;
         var documentData = new DocumentData();
-        documentData.setData(null);
+        documentData.setData("test document content".getBytes());
         documentInfo.setDocumentData(documentData);
 
         // Persist aggregate root

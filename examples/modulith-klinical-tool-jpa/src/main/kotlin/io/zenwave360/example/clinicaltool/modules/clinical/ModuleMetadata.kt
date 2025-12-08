@@ -1,4 +1,4 @@
-package io.zenwave360.example.clinicaltool.modules.clinical;
+package io.zenwave360.example.clinicaltool.modules.clinical
 
 import org.springframework.modulith.ApplicationModule
 import org.springframework.modulith.PackageInfo

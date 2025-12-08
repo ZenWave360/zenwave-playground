@@ -1,7 +1,11 @@
 package io.zenwave360.example.clinicaltool.modules.clinical.config;
 
-import io.zenwave360.example.clinicaltool.modules.clinical.core.outbound.jpa.*;
-import io.zenwave360.example.clinicaltool.modules.clinical.infrastructure.jpa.inmemory.*;
+import io.zenwave360.example.clinicaltool.modules.clinical.core.outbound.jpa.DoctorRepository;
+import io.zenwave360.example.clinicaltool.modules.clinical.core.outbound.jpa.HospitalRepository;
+import io.zenwave360.example.clinicaltool.modules.clinical.core.outbound.jpa.PatientRepository;
+import io.zenwave360.example.clinicaltool.modules.clinical.infrastructure.jpa.inmemory.DoctorRepositoryInMemory;
+import io.zenwave360.example.clinicaltool.modules.clinical.infrastructure.jpa.inmemory.HospitalRepositoryInMemory;
+import io.zenwave360.example.clinicaltool.modules.clinical.infrastructure.jpa.inmemory.PatientRepositoryInMemory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 
@@ -32,12 +36,4 @@ public class RepositoriesInMemoryConfig {
         return (T) patientRepository;
     }
 
-    protected final ProvisionalPatientRepository provisionalPatientRepository =
-            new ProvisionalPatientRepositoryInMemory();
-
-    @Bean
-    @Primary
-    public <T extends ProvisionalPatientRepository> T provisionalPatientRepository() {
-        return (T) provisionalPatientRepository;
-    }
 }

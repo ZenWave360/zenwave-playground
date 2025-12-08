@@ -1,60 +1,41 @@
 package io.zenwave360.example.clinicaltool.modules.documents.domain
 
 import jakarta.persistence.*
-import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.*
+import java.io.Serializable
+import java.math.*
+import java.time.*
+import java.util.*
 import org.hibernate.annotations.Cache
 import org.hibernate.annotations.CacheConcurrencyStrategy
-import java.io.Serializable
 
-/**
- *
- */
+/**  */
 @Entity
 @Table(name = "document_info")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 data class DocumentInfo(
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-
-    var id: Long? = null,
-
-    @Version
-    var version: Int? = null,
-
-    @Column(name = "uuid")
-    var uuid: String? = null,
-
-    @NotNull @Column(name = "file_name", nullable = false)
-    var fileName: String? = null,
-
-    @NotNull @Column(name = "document_type", nullable = false)
-    var documentType: String? = null,
-
-    @NotNull @Column(name = "content_type", nullable = false)
-    var contentType: String? = null,
-
-    @Column(name = "tags")
-    var tags: MutableList<String> = mutableListOf(),
-
-    @NotNull
-
-
-    @OneToOne(mappedBy = "document", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
-    var documentData: DocumentData? = null
-
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE) var id: Long? = null,
+    @Version var version: Int? = null,
+    @Column(name = "uuid") var uuid: String? = null,
+    @NotNull @Column(name = "file_name", nullable = false) var fileName: String? = null,
+    @NotNull @Column(name = "document_type", nullable = false) var documentType: String? = null,
+    @NotNull @Column(name = "content_type", nullable = false) var contentType: String? = null,
+    @Column(name = "tags") var tags: MutableList<String> = mutableListOf(),
 ) : Serializable {
 
     companion object {
         private const val serialVersionUID = 1L
     }
 
-    // manage relationships
-    fun setDocumentData(documentData: DocumentData??): DocumentInfo {
-        this.documentData = documentData
-        documentData?.document = (this)
-        return this
-    }
+    @NotNull
+    @OneToOne(mappedBy = "document", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    var documentData: DocumentData? = null
+        set(value) {
+            field = value
+            value?.document = this
+        }
 
+    // manage relationships
 
     override fun toString(): String {
         return this::class.java.name + "#" + id
@@ -70,5 +51,4 @@ data class DocumentInfo(
     override fun hashCode(): Int {
         return javaClass.hashCode()
     }
-
 }

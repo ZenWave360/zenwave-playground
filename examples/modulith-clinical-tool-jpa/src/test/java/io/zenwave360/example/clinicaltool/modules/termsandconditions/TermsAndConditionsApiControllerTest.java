@@ -44,14 +44,14 @@ public class TermsAndConditionsApiControllerTest {
 
     @Test
     public void getTermsAndConditionsTest() {
-        Long id = null;
+        Long id = 1L;
         var response = controller.getTermsAndConditions(id);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
 
     @Test
     public void updateTermsAndConditionsTest() {
-        Long id = null;
+        Long id = 1L;
         TermsAndConditionsDTO reqBody = null;
         var response = controller.updateTermsAndConditions(id, reqBody);
         Assertions.assertEquals(200, response.getStatusCode().value());
@@ -59,14 +59,16 @@ public class TermsAndConditionsApiControllerTest {
 
     @Test
     public void getCurrentTermsAndConditionsTest() {
-        String lang = null;
+        String lang = "en";
         var response = controller.getCurrentTermsAndConditions(lang);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
 
     @Test
     public void acceptTermsAndConditionsTest() {
-        AcceptedTermsAndConditionsInputDTO reqBody = null;
+        AcceptedTermsAndConditionsInputDTO reqBody = new AcceptedTermsAndConditionsInputDTO();
+        reqBody.setUserId(1L);
+        reqBody.setTermsAndConditionsId(1L);
         var response = controller.acceptTermsAndConditions(reqBody);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }

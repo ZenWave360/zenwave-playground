@@ -1,0 +1,69 @@
+package io.zenwave360.example.clinicaltool.modules.surveys.service.impl
+
+import io.zenwave360.example.clinicaltool.modules.surveys.config.*
+import io.zenwave360.example.clinicaltool.modules.surveys.domain.*
+import io.zenwave360.example.clinicaltool.modules.surveys.repository.jpa.*
+import io.zenwave360.example.clinicaltool.modules.surveys.repository.jpa.inmemory.*
+import io.zenwave360.example.clinicaltool.modules.surveys.service.*
+import io.zenwave360.example.clinicaltool.modules.surveys.service.dtos.*
+import io.zenwave360.example.clinicaltool.modules.surveys.service.impl.mappers.*
+import java.time.*
+import java.util.Map
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.mockito.Mockito.*
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+/** Acceptance Test for SurveysService. */
+class SurveysServiceTest {
+
+    private val log: Logger = LoggerFactory.getLogger(javaClass)
+
+    val context = ServicesInMemoryConfig()
+    val surveysService: SurveysService = context.surveysService()
+
+    val surveyAnswersRepository: SurveyAnswersRepositoryInMemory = context.surveyAnswersRepository()
+
+    @BeforeEach
+    fun setUp() {
+        context.reloadTestData()
+    }
+
+    @Test
+    fun getSurveyAndQuestionsForPatientTest() { // TODO: implement this test
+    }
+
+    @Test
+    fun answerSurveyTest() { // TODO: implement this test
+    }
+
+    @Test
+    fun updateSurveyAnswersTest() {
+        val surveyId = 1L
+        val patientId = 1L
+        val date = LocalDate.now()
+        val input =  mapOf<String, Any?>()
+        // TODO fill input data
+        // input.surveyId = 1L
+        // input.patientId = 1L
+        // input.date = LocalDate.now()
+        // input.lang = ""
+        // input.answers = List.of(Answer())
+        // assertTrue(surveyAnswersRepository.containsKey(id))
+        val surveyAnswers = surveysService.updateSurveyAnswers(surveyId, patientId, date, input)
+        assertNotNull(surveyAnswers)
+        assertTrue(surveyAnswersRepository.containsEntity(surveyAnswers!!))
+    }
+
+    @Test
+    fun getSurveyAnswersTest() {
+        val surveyId = 1L
+        val patientId = 1L
+        val date = LocalDate.now()
+        val surveyAnswers = surveysService.getSurveyAnswers(surveyId, patientId, date)
+        assertNotNull(surveyAnswers)
+    }
+}

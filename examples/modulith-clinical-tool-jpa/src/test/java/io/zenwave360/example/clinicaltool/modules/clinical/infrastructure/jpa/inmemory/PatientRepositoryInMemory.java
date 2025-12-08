@@ -2,10 +2,13 @@ package io.zenwave360.example.clinicaltool.modules.clinical.infrastructure.jpa.i
 
 import io.zenwave360.example.clinicaltool.modules.clinical.core.domain.*;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.outbound.jpa.PatientRepository;
+import org.jspecify.annotations.NullMarked;
+
 import java.math.*;
 import java.time.*;
 import java.util.*;
 
+@NullMarked
 public class PatientRepositoryInMemory extends InMemoryJpaRepository<Patient> implements PatientRepository {
     @Override
     public java.util.Optional<Patient> findByPhoneNumberAndHisNumber(String phoneNumber, String hisNumber) {

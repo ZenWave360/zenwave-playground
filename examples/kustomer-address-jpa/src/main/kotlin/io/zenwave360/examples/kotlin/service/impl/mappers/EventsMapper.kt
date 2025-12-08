@@ -20,6 +20,8 @@ interface EventsMapper {
     fun asPaymentMethod(paymentMethod: PaymentMethod): io.zenwave360.examples.kotlin.events.dtos.PaymentMethod
     fun asCustomerEvent(customer: Customer): io.zenwave360.examples.kotlin.events.dtos.CustomerEvent
     fun asCustomerEvent(id: Long): io.zenwave360.examples.kotlin.events.dtos.CustomerEvent {
-        return io.zenwave360.examples.kotlin.events.dtos.CustomerEvent().withId(id)
+        val customerEvent = io.zenwave360.examples.kotlin.events.dtos.CustomerEvent()
+        customerEvent.setId(id)
+        return customerEvent
     }
 }

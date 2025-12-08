@@ -43,14 +43,14 @@ public class SurveysBackofficeApiControllerTest {
 
     @Test
     public void getSurveyTest() {
-        Long id = null;
+        Long id = 1L;
         var response = controller.getSurvey(id);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
 
     @Test
     public void updateSurveyTest() {
-        Long id = null;
+        Long id = 1L;
         SurveyDTO reqBody = null;
         var response = controller.updateSurvey(id, reqBody);
         Assertions.assertEquals(200, response.getStatusCode().value());
@@ -58,7 +58,7 @@ public class SurveysBackofficeApiControllerTest {
 
     @Test
     public void deleteSurveyTest() {
-        Long id = null;
+        Long id = 1L;
         var response = controller.deleteSurvey(id);
         Assertions.assertEquals(204, response.getStatusCode().value());
     }
@@ -79,14 +79,14 @@ public class SurveysBackofficeApiControllerTest {
 
     @Test
     public void getQuestionTest() {
-        Long id = null;
+        Long id = 1L;
         var response = controller.getQuestion(id);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
 
     @Test
     public void updateQuestionTest() {
-        Long id = null;
+        Long id = 1L;
         QuestionDTO reqBody = null;
         var response = controller.updateQuestion(id, reqBody);
         Assertions.assertEquals(200, response.getStatusCode().value());
@@ -94,7 +94,7 @@ public class SurveysBackofficeApiControllerTest {
 
     @Test
     public void deleteQuestionTest() {
-        Long id = null;
+        Long id = 1L;
         var response = controller.deleteQuestion(id);
         Assertions.assertEquals(204, response.getStatusCode().value());
     }

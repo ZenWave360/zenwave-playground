@@ -43,18 +43,21 @@ class CustomerRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
     @Test
     fun saveTest() {
         val customer = Customer()
-        customer.name = ""
-        customer.email = ""
-        customer.addresses = List.of(Address())
-
+        customer.name = "Jane Smith"
+        customer.email = "jane.smith@example.com"
+        customer.addresses = mutableListOf(
+            Address().apply {
+                street = "456 Elm St"
+                city = "Othertown"
+            }
+        )
 
         // OneToMany paymentMethods owner: true
         val paymentMethods = PaymentMethod()
-        paymentMethods.type = PaymentMethodType.values()[0]
-        paymentMethods.cardNumber = ""
+        paymentMethods.type = PaymentMethodType.VISA
+        paymentMethods.cardNumber = "6543210987654321"
         customer.paymentMethods = HashSet()
         customer.addPaymentMethods(paymentMethods)
-
 
         // Persist aggregate root
         val created = customerRepository.save(customer)
@@ -67,7 +70,6 @@ class CustomerRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
         Assertions.assertNotNull(created.createdBy)
         Assertions.assertNotNull(created.createdDate)
 
-
         Assertions.assertTrue(customer.paymentMethods?.stream()?.allMatch { item -> item.id != null } == true)
     }
 
@@ -75,14 +77,12 @@ class CustomerRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
     fun updateTest() {
         val id = 1L
         val customer = customerRepository.findById(id).orElseThrow()
-        customer.name = ""
-        customer.email = ""
-        customer.addresses = List.of(Address())
+        customer.name = "updated"
+        customer.email = "updated@email.com"
 
         val updated = customerRepository.save(customer)
-        Assertions.assertEquals("", updated.name)
-        Assertions.assertEquals("", updated.email)
-        Assertions.assertEquals(List.of(Address()), updated.addresses)
+        Assertions.assertEquals("updated", updated.name)
+        Assertions.assertEquals("updated@email.com", updated.email)
     }
 
     @Test

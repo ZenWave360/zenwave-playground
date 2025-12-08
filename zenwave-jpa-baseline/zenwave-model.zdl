@@ -14,6 +14,11 @@ config {
     // you can choose: DefaultProjectLayout, LayeredProjectLayout, SimpleDomainProjectLayout
     //                 CleanHexagonalProjectLayout, HexagonalProjectLayout, CleanArchitectureProjectLayout
     layout LayeredProjectLayout
+
+    // these should match what you have configured in your pom.xml for asyncapi-generator-maven-plugin
+    layout.asyncApiModelPackage "{{basePackage}}.events.dtos"
+    layout.asyncApiProducerApiPackage "{{basePackage}}.events"
+    layout.asyncApiConsumerApiPackage "{{basePackage}}.commands"
 }
 
 /**

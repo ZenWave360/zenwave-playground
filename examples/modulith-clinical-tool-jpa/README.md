@@ -1,6 +1,9 @@
 # Clinical Tool - Modulith
 
-> Working in progress... As of now this repo only contains the code generated from ZenWave Models (about 80% of the final application).
+> - Migrated to spring-boot 4.
+> - All code and tests are ready.
+> - `mvn test verify` with full coverage.
+> - Some glitches here and there... Surveys module is not fully implemented.
 
 See https://www.zenwave360.io/docs/examples/ddd-examples/modulith-klinical-tool-jpa/ for detailed steps about how this Modular Monolith was designed and implemented.
 

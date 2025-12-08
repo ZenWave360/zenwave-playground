@@ -1,5 +1,6 @@
 package io.zenwave360.example.clinicaltool.modules.users.config;
 
+import io.zenwave360.example.clinicaltool.common.TestDataLoader;
 import io.zenwave360.example.clinicaltool.modules.users.*;
 import io.zenwave360.example.clinicaltool.modules.users.domain.*;
 import java.util.List;

@@ -1,0 +1,6 @@
+{
+  "type" : "enum",
+  "name" : "PaymentMethodType",
+  "namespace" : "io.zenwave360.examples.kotlin.events.dtos",
+  "symbols" : [ "VISA", "MASTERCARD" ]
+}

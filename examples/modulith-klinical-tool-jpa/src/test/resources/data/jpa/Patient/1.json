@@ -1,0 +1,30 @@
+{
+  "id": 1,
+  "version": 1,
+  "userId": 1,
+  "hospitalId": 1,
+  "profilePictureId": 1,
+  "phoneNumber": "1234567890",
+  "hisNumber": "1234567890",
+  "email": "test@example.com",
+  "generalInfo": {
+    "name": "John",
+    "surname": "Doe",
+    "surname2": "Smith",
+    "identityDocumentType": "DNI",
+    "identityDocumentNumber": "1234567890",
+    "birthDate": "1990-01-01",
+    "gender": "MALE",
+    "lang": "en"
+  },
+  "healthInsuranceInfo": {
+    "insuranceCompanyId": "1234567890",
+    "insuranceCardNumber": "1234567890"
+  },
+  "documentIds": [1, 2, 3],
+  "medicalContacts": [],
+  "personalContacts": [],
+  "patientAddresses": [],
+  "hospitalAddresses": [],
+  "patientWearables": []
+}

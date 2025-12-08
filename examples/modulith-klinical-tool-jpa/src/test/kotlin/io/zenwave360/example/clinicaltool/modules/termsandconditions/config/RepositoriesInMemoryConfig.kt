@@ -1,15 +1,12 @@
 package io.zenwave360.example.clinicaltool.modules.termsandconditions.config
 
+import io.zenwave360.example.clinicaltool.modules.termsandconditions.*
+import io.zenwave360.example.clinicaltool.modules.termsandconditions.inmemory.*
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Primary
 
-import io.zenwave360.example.clinicaltool.modules.termsandconditions.*
-import io.zenwave360.example.clinicaltool.modules.termsandconditions.inmemory.*
-
-
-//@Configuration
+// @Configuration
 open class RepositoriesInMemoryConfig {
-
 
     protected val acceptedTermsAndConditionsRepository = AcceptedTermsAndConditionsRepositoryInMemory()
 
@@ -18,6 +15,7 @@ open class RepositoriesInMemoryConfig {
     fun acceptedTermsAndConditionsRepository(): AcceptedTermsAndConditionsRepositoryInMemory {
         return acceptedTermsAndConditionsRepository
     }
+
     protected val termsAndConditionsRepository = TermsAndConditionsRepositoryInMemory()
 
     @Bean
@@ -25,5 +23,4 @@ open class RepositoriesInMemoryConfig {
     fun termsAndConditionsRepository(): TermsAndConditionsRepositoryInMemory {
         return termsAndConditionsRepository
     }
-
 }

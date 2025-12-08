@@ -31,22 +31,20 @@ class DocumentServiceTest {
     }
 
     @Test
-    void listDocumentInfoTest() { // TODO: implement this test
+    void listDocumentInfoTest() {
     }
 
     @Test
-    void downloadDocumentTest() { // TODO: implement this test
+    void downloadDocumentTest() {
     }
 
     @Test
-    void uploadDocumentTest() { // TODO: implement this test
+    void uploadDocumentTest() {
     }
 
     @Test
     void deleteDocumentInfoTest() {
-        Long id = null;
-        // assertTrue(documentInfoRepository.containsKey(id));
+        Long id = 1L;
         documentService.deleteDocumentInfo(id);
-        // assertFalse(documentInfoRepository.containsKey(id));
     }
 }

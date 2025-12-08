@@ -34,7 +34,7 @@ class SurveysApiControllerTest {
     @Test
     fun getSurveyAndQuestionsForPatientTest() {
         val name: String = ""
-val patientId: Long = 0
+val patientId: Long = 1L
 val lang: String = ""
         val response = controller.getSurveyAndQuestionsForPatient(name, patientId, lang)
         Assertions.assertEquals(200, response.statusCode.value())
@@ -42,30 +42,29 @@ val lang: String = ""
 
     @Test
     fun answerSurveyTest() {
-        val surveyId: Long = 0
-val patientId: Long = 0
-val date: LocalDate = LocalDate.now()
-val reqBody: SurveyAnswersDTO = SurveyAnswersDTO(surveyId = "", patientId = "", date = "", lang = "")
+        val surveyId: Long = 1L
+val patientId: Long = 1L
+val date: LocalDate = java.time.LocalDate.now()
+val reqBody: SurveyAnswersDTO = SurveyAnswersDTO(surveyId = 1L, patientId = 1L, date = LocalDate.now(), lang = "aaa")
         val response = controller.answerSurvey(surveyId, patientId, date, reqBody)
         Assertions.assertEquals(201, response.statusCode.value())
     }
 
     @Test
     fun updateSurveyAnswersTest() {
-        val surveyId: Long = 0
-val patientId: Long = 0
-val date: LocalDate = LocalDate.now()
-val surveryId: Long = 0
-val input: Map = Map(surveyId = "", patientId = "", date = "", lang = "", surveyId = "", patientId = "", date = "", lang = "")
-        val response = controller.updateSurveyAnswers(surveyId, patientId, date, surveryId, input)
+        val surveyId: Long = 1L
+val patientId: Long = 1L
+val date: LocalDate = java.time.LocalDate.now()
+val input: Map<String, Any?> = mutableMapOf()
+        val response = controller.updateSurveyAnswers(surveyId, patientId, date, input)
         Assertions.assertEquals(200, response.statusCode.value())
     }
 
     @Test
     fun getSurveyAnswersTest() {
-        val surveyId: Long = 0
-val patientId: Long = 0
-val date: LocalDate = LocalDate.now()
+        val surveyId: Long = 1L
+val patientId: Long = 1L
+val date: LocalDate = java.time.LocalDate.now()
         val response = controller.getSurveyAnswers(surveyId, patientId, date)
         Assertions.assertEquals(200, response.statusCode.value())
     }

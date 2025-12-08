@@ -1,0 +1,13 @@
+package io.zenwave360.example.clinicaltool.modules.surveys.service.dtos
+
+import io.zenwave360.example.clinicaltool.modules.surveys.domain.*
+import jakarta.validation.constraints.*
+import java.io.Serializable
+import java.math.*
+import java.time.*
+
+/** OptionTranslationOutput. */
+data class OptionTranslationOutput(
+    @NotNull @Size(max = 254) val name: String? = null,
+    @NotNull val text: String? = null,
+) : Serializable {}

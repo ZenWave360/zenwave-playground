@@ -4,7 +4,8 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.0</version> <!-- lookup parent from repository -->
+        <version>4.0.0</version>
+        <relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
 	<groupId>io.zenwave360.example.clinicaltool</groupId>
@@ -15,46 +16,32 @@
 
 
 	<properties>
-		<java.version>21</java.version>
-		<kotlin.version>2.2.0</kotlin.version>
+		<java.version>24</java.version>
+		<kotlin.version>2.2.21</kotlin.version>
 
 		<basePackage>io.zenwave360.example.clinicaltool</basePackage>
-		<openApiApiPackage>${basePackage}.adapters.web</openApiApiPackage>
-		<openApiModelPackage>${basePackage}.adapters.web.dtos</openApiModelPackage>
-		<asyncApiModelPackage>${basePackage}.core.outbound.events.dtos</asyncApiModelPackage>
-		<asyncApiProducerApiPackage>${basePackage}.core.outbound.events</asyncApiProducerApiPackage>
-		<asyncApiConsumerApiPackage>${basePackage}.adapters.commands</asyncApiConsumerApiPackage>
+        <openApiApiPackage>${basePackage}.adapters.web</openApiApiPackage>
+        <openApiModelPackage>${basePackage}.adapters.web.dtos</openApiModelPackage>
 
-		<spring-boot.version>${project.parent.version}</spring-boot.version>
-		<spring-cloud.version>2025.0.0</spring-cloud.version>
-		<spring-cloud-stream-schema.version>2.2.1.RELEASE</spring-cloud-stream-schema.version>
-		<spring-modulith.version>1.4.1</spring-modulith.version>
+        <spring-boot.version>${project.parent.version}</spring-boot.version>
+        <spring-modulith.version>2.0.0</spring-modulith.version>
 
-		<zenwave.version>2.0.2</zenwave.version>
+        <openapi-generator-maven-plugin.version>7.17.0</openapi-generator-maven-plugin.version>
 
-		<jakarta.validation-api.version>3.1.1</jakarta.validation-api.version>
-		<mapstruct.version>1.6.3</mapstruct.version>
-		<lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
-		<karate.version>1.4.1</karate.version>
-		<archunit-junit5.version>1.4.0</archunit-junit5.version>
-		<springdoc-openapi-starter-webmvc-ui.version>2.8.3</springdoc-openapi-starter-webmvc-ui.version>
-		<infinispan-spring-boot-starter-embedded.version>14.0.29.Final</infinispan-spring-boot-starter-embedded.version>
-		<redisson.version>3.45.0</redisson.version>
-		<izertis-usermanagement-starter.version>0.8.0</izertis-usermanagement-starter.version>
-        <izertis-authserver-starter.version>0.1.0</izertis-authserver-starter.version>
+        <jakarta.validation-api.version>3.1.1</jakarta.validation-api.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+        <karate.version>1.4.1</karate.version>
+        <testcontainers.version>1.20.4</testcontainers.version>
+        <archunit-junit5.version>1.4.1</archunit-junit5.version>
+        <springdoc-openapi-starter-webmvc-ui.version>2.8.3</springdoc-openapi-starter-webmvc-ui.version>
         <spotless-maven-plugin.version>2.44.3</spotless-maven-plugin.version>
         <palantir-java-format.version>2.55.0</palantir-java-format.version>
+        <spring-javaformat-maven-plugin.version>0.0.43</spring-javaformat-maven-plugin.version>
     </properties>
 
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring-cloud.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
             <dependency>
                 <groupId>org.springframework.modulith</groupId>
                 <artifactId>spring-modulith-bom</artifactId>
@@ -66,6 +53,18 @@
 	</dependencyManagement>
 
 	<dependencies>
+        <!-- Add Kotlin dependencies -->
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-reflect</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -80,7 +79,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-aop</artifactId>
+			<artifactId>spring-boot-starter-aspectj</artifactId>
 		</dependency>
 		<!-- jpa -->
 		<dependency>
@@ -97,25 +96,7 @@
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		<!-- distributed logs -->
-		<dependency>
-			<groupId>io.micrometer</groupId>
-			<artifactId>micrometer-tracing</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>io.micrometer</groupId>
-			<artifactId>micrometer-tracing-bridge-otel</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>io.opentelemetry</groupId>
-			<artifactId>opentelemetry-exporter-zipkin</artifactId>
-		</dependency>
 		<!-- utils -->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
-		</dependency>
 		<dependency>
 			<groupId>jakarta.validation</groupId>
 			<artifactId>jakarta.validation-api</artifactId>
@@ -144,6 +125,12 @@
         <dependency>
             <groupId>org.springframework.modulith</groupId>
             <artifactId>spring-modulith-starter-core</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.modulith</groupId>
+                    <artifactId>spring-modulith-apt</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.modulith</groupId>
@@ -167,17 +154,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-        <!-- Spring Modulith Test -->
-        <dependency>
-            <groupId>org.springframework.modulith</groupId>
-            <artifactId>spring-modulith-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.modulith</groupId>
-            <artifactId>spring-modulith-docs</artifactId>
-            <scope>test</scope>
-        </dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webflux</artifactId>
@@ -191,6 +167,12 @@
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>junit-jupiter</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -207,17 +189,17 @@
 			<version>${archunit-junit5.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- Add Kotlin dependencies -->
-		<dependency>
-			<groupId>org.jetbrains.kotlin</groupId>
-			<artifactId>kotlin-stdlib</artifactId>
-			<version>${kotlin.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jetbrains.kotlin</groupId>
-			<artifactId>kotlin-reflect</artifactId>
-			<version>${kotlin.version}</version>
-		</dependency>
+        <!-- Spring Modulith Test -->
+        <dependency>
+            <groupId>org.springframework.modulith</groupId>
+            <artifactId>spring-modulith-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.modulith</groupId>
+            <artifactId>spring-modulith-docs</artifactId>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 
 	<build>
@@ -227,6 +209,20 @@
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <version>${kotlin.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <jvmTarget>${java.version}</jvmTarget>
+                    <compilerPlugins>
+                        <plugin>spring</plugin>
+                        <plugin>jpa</plugin>
+                    </compilerPlugins>
+                    <sourceDirs>
+                        <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
+                        <sourceDir>${project.build.directory}/generated-sources/openapi/src/main/kotlin</sourceDir>
+                        <sourceDir>${project.build.directory}/generated-sources/zenwave/src/main/java</sourceDir>
+                        <sourceDir>${project.build.directory}/generated-sources/avro</sourceDir>
+                    </sourceDirs>
+                </configuration>
                 <executions>
                     <execution>
                         <id>compile</id>
@@ -234,11 +230,20 @@
                         <goals>
                             <goal>compile</goal>
                         </goals>
+                    </execution>
+                    <execution>
+                        <id>default-kapt</id>
+                        <goals>
+                            <goal>kapt</goal>
+                        </goals>
                         <configuration>
-                            <sourceDirs>
-                                <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
-                                <sourceDir>${project.build.directory}/generated-sources/openapi/src/main/kotlin</sourceDir>
-                            </sourceDirs>
+                            <annotationProcessorPaths>
+                                <annotationProcessorPath>
+                                    <groupId>org.mapstruct</groupId>
+                                    <artifactId>mapstruct-processor</artifactId>
+                                    <version>${mapstruct.version}</version>
+                                </annotationProcessorPath>
+                            </annotationProcessorPaths>
                         </configuration>
                     </execution>
                     <execution>
@@ -250,17 +255,11 @@
                         <configuration>
                             <sourceDirs>
                                 <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
+                                <sourceDir>${project.build.directory}/generated-sources/zenwave/src/test/java</sourceDir>
                             </sourceDirs>
                         </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <jvmTarget>${java.version}</jvmTarget>
-                    <compilerPlugins>
-                        <plugin>spring</plugin>
-                        <plugin>jpa</plugin>
-                    </compilerPlugins>
-                </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>org.jetbrains.kotlin</groupId>
@@ -277,33 +276,11 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
 			</plugin>
-            <plugin>
-                <groupId>com.diffplug.spotless</groupId>
-                <artifactId>spotless-maven-plugin</artifactId>
-                <version>${spotless-maven-plugin.version}</version>
-                <configuration>
-                    <java>
-                        <palantirJavaFormat>
-                            <version>${palantir-java-format.version}</version>
-                            <style>PALANTIR</style>
-                            <formatJavadoc>false</formatJavadoc>
-                        </palantirJavaFormat>
-                    </java>
-                </configuration>
-            </plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.12</version>
+				<version>0.8.14</version>
 				<configuration>
 					<excludes>
 						<exclude>**/config/**</exclude>
@@ -346,7 +323,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>3.5.2</version>
+                <version>3.5.2</version>
 				<executions>
 					<execution>
 						<id>default</id>
@@ -382,7 +359,7 @@
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>7.12.0</version>
+                <version>${openapi-generator-maven-plugin.version}</version>
                 <configuration>
                     <skipIfSpecIsUnchanged>true</skipIfSpecIsUnchanged>
                     <generatorName>kotlin-spring</generatorName>
@@ -417,7 +394,7 @@
                             <apiPackage>${basePackage}.modules.web.webapp</apiPackage>
                             <modelPackage>${basePackage}.modules.web.webapp.dtos</modelPackage>
                             <schemaMappings>
-                                PatientPatch=io.zenwave360.example.clinicaltool.common.PatchMap
+                                PatientPatch=io.zenwave360.example.clinicaltool.common.web.PatchMap
                             </schemaMappings>
                         </configuration>
                     </execution>
@@ -456,7 +433,7 @@
                             <apiPackage>${basePackage}.modules.surveys.web</apiPackage>
                             <modelPackage>${basePackage}.modules.surveys.web.dtos</modelPackage>
                             <schemaMappings>
-                                SurveyAnswersPatch=io.zenwave360.example.clinicaltool.common.PatchMap
+                                SurveyAnswersPatch=io.zenwave360.example.clinicaltool.common.web.PatchMap
                             </schemaMappings>
                         </configuration>
                     </execution>

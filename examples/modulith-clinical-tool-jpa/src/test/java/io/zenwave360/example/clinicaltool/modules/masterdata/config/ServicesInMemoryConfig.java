@@ -1,5 +1,6 @@
 package io.zenwave360.example.clinicaltool.modules.masterdata.config;
 
+import io.zenwave360.example.clinicaltool.common.TestDataLoader;
 import io.zenwave360.example.clinicaltool.modules.masterdata.*;
 import io.zenwave360.example.clinicaltool.modules.masterdata.domain.*;
 import java.util.List;

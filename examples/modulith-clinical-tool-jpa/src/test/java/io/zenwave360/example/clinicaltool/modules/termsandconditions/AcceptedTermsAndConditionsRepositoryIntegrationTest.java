@@ -50,17 +50,18 @@ class AcceptedTermsAndConditionsRepositoryIntegrationTest extends BaseRepository
 
     @Test
     void updateTest() {
+        var now = Instant.now();
         var id = 1L;
         var acceptedTermsAndConditions =
                 acceptedTermsAndConditionsRepository.findById(id).orElseThrow();
         acceptedTermsAndConditions.setUserId(0L);
         acceptedTermsAndConditions.setTermsAndConditionsId(0L);
-        acceptedTermsAndConditions.setAcceptedDate(Instant.now());
+        acceptedTermsAndConditions.setAcceptedDate(now);
 
         acceptedTermsAndConditions = acceptedTermsAndConditionsRepository.save(acceptedTermsAndConditions);
         Assertions.assertEquals(0L, acceptedTermsAndConditions.getUserId());
         Assertions.assertEquals(0L, acceptedTermsAndConditions.getTermsAndConditionsId());
-        Assertions.assertEquals(Instant.now(), acceptedTermsAndConditions.getAcceptedDate());
+        Assertions.assertEquals(now, acceptedTermsAndConditions.getAcceptedDate());
     }
 
     @Test

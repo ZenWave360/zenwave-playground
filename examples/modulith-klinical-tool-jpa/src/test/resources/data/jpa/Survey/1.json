@@ -1,0 +1,43 @@
+{
+  "id": 1,
+  "version": 1,
+  "name": "patient-satisfaction-survey",
+  "hospitalId": 1,
+  "title": "Patient Satisfaction Survey",
+  "lang": "en",
+  "sections": [
+    {
+      "name": "general-experience",
+      "translations": [
+        {
+          "lang": "en",
+          "title": "General Experience",
+          "summary": "Questions about your overall experience"
+        },
+        {
+          "lang": "es",
+          "title": "Experiencia General",
+          "summary": "Preguntas sobre su experiencia general"
+        }
+      ],
+      "questionIds": [1, 2, 3]
+    },
+    {
+      "name": "staff-interaction",
+      "translations": [
+        {
+          "lang": "en",
+          "title": "Staff Interaction",
+          "summary": "Questions about your interaction with our staff"
+        },
+        {
+          "lang": "es",
+          "title": "Interacción con el Personal",
+          "summary": "Preguntas sobre su interacción con nuestro personal"
+        }
+      ],
+      "questionIds": [4, 5]
+    }
+  ]
+}
+

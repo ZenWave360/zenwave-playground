@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.0</version>
+		<version>4.0.0</version>
         <relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -16,29 +16,37 @@
 
 
 	<properties>
-		<java.version>21</java.version>
+		<java.version>25</java.version>
 
 		<basePackage>io.zenwave360.example</basePackage>
 		<openApiApiPackage>${basePackage}.adapters.web</openApiApiPackage>
 		<openApiModelPackage>${basePackage}.adapters.web.model</openApiModelPackage>
-		<asyncApiModelPackage>${basePackage}.core.outbound.events.dtos</asyncApiModelPackage>
-		<asyncApiProducerApiPackage>${basePackage}.core.outbound.events</asyncApiProducerApiPackage>
-		<asyncApiConsumerApiPackage>${basePackage}.adapters.commands</asyncApiConsumerApiPackage>
 
-		<spring-boot.version>${project.parent.version}</spring-boot.version>
-		<spring-cloud.version>2025.0.0</spring-cloud.version>
-		<spring-cloud-stream-schema.version>2.2.1.RELEASE</spring-cloud-stream-schema.version>
+        <asyncapi.inputSpec>${project.basedir}/src/main/resources/public/apis/asyncapi.yml</asyncapi.inputSpec>
+        <asyncApiModelPackage>${basePackage}.events.dtos</asyncApiModelPackage>
+        <asyncApiProducerApiPackage>${basePackage}.events</asyncApiProducerApiPackage>
+        <asyncApiConsumerApiPackage>${basePackage}.commands</asyncApiConsumerApiPackage>
 
-		<zenwave.version>2.0.2</zenwave.version>
+        <spring-boot.version>${project.parent.version}</spring-boot.version>
+        <spring-cloud.version>2025.1.0</spring-cloud.version>
+        <spring-cloud-stream-schema.version>2.2.1.RELEASE</spring-cloud-stream-schema.version>
+        <spring-modulith.version>2.0.0</spring-modulith.version>
+        <avro.version>1.11.1</avro.version>
+        <zenwave-modulith-events-scs.version>1.1.0</zenwave-modulith-events-scs.version>
+
+        <zenwave.version>2.2.0</zenwave.version>
+        <openapi-generator-maven-plugin.version>7.17.0</openapi-generator-maven-plugin.version>
 
 		<jakarta.validation-api.version>3.1.1</jakarta.validation-api.version>
 		<mapstruct.version>1.6.3</mapstruct.version>
 		<lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
-		<karate.version>1.4.1</karate.version>
-		<archunit-junit5.version>1.4.0</archunit-junit5.version>
+		<karate.version>1.5.2</karate.version>
+        <testcontainers.version>1.20.4</testcontainers.version>
+        <archunit-junit5.version>1.4.1</archunit-junit5.version>
 		<springdoc-openapi-starter-webmvc-ui.version>2.8.3</springdoc-openapi-starter-webmvc-ui.version>
 		<spotless-maven-plugin.version>2.44.3</spotless-maven-plugin.version>
 		<palantir-java-format.version>2.55.0</palantir-java-format.version>
+        <spring-javaformat-maven-plugin.version>0.0.43</spring-javaformat-maven-plugin.version>
 	</properties>
 
 	<dependencyManagement>
@@ -47,6 +55,13 @@
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
 				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.modulith</groupId>
+				<artifactId>spring-modulith-bom</artifactId>
+				<version>${spring-modulith.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -66,10 +81,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-aop</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aspectj</artifactId>
+        </dependency>
 		<!-- mongodb -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -134,12 +149,18 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.intuit.karate</groupId>
+			<groupId>io.karatelabs</groupId>
 			<artifactId>karate-core</artifactId>
 			<version>${karate.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
 			<scope>test</scope>
 		</dependency>
@@ -161,6 +182,30 @@
 
 	<build>
 		<plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.14.0</version>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+						</path>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok-mapstruct-binding</artifactId>
+							<version>${lombok-mapstruct-binding.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -174,6 +219,11 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>io.spring.javaformat</groupId>
+				<artifactId>spring-javaformat-maven-plugin</artifactId>
+				<version>${spring-javaformat-maven-plugin.version}</version>
+			</plugin>
+            <plugin>
 				<groupId>com.diffplug.spotless</groupId>
 				<artifactId>spotless-maven-plugin</artifactId>
 				<version>${spotless-maven-plugin.version}</version>
@@ -190,7 +240,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.12</version>
+				<version>0.8.14</version>
 				<configuration>
 					<excludes>
 						<exclude>**/config/**</exclude>
@@ -213,10 +263,62 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- Surefire Plugin for Unit Tests -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<includes>
+						<include>**/*Test.java</include>
+					</includes>
+					<excludes>
+						<exclude>**/*IT.java</exclude>
+						<exclude>**/*IntegrationTest.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<!-- Failsafe Plugin for Integration Tests -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>3.5.1</version>
+				<executions>
+					<execution>
+						<id>default</id>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>**/*IT.java</include>
+								<include>**/*IntegrationTest.java</include>
+							</includes>
+							<excludes>
+								<exclude>**/*KarateIntegrationTest.java</exclude>
+							</excludes>
+						</configuration>
+					</execution>
+					<execution>
+						<!-- Failsafe Plugin for API Integration Tests (not transactional) -->
+						<id>api-test</id>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>**/*KarateIntegrationTest.java</include>
+							</includes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.openapitools</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>7.12.0</version>
+				<version>${openapi-generator-maven-plugin.version}</version>
 				<executions>
 					<execution>
 						<goals>
@@ -248,32 +350,6 @@
 							</configOptions>
 						</configuration>
 					</execution>
-					<!-- Ejemplo de como generar un cliente OpenAPI usando spring-http-interface
-						 ver tambien: HttpInterfacesWebClientConfig.java
-					<execution>
-						<id>openapi-generator-client-customers</id>
-						<goals><goal>generate</goal></goals>
-						<phase>generate-sources</phase>
-						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/public/apis/clients/customer-openapi.yml</inputSpec>
-							<generatorName>spring</generatorName>
-							<library>spring-http-interface</library>
-							<apiPackage>${basePackage}.customers.client</apiPackage>
-							<modelPackage>${basePackage}.customers.client.model</modelPackage>
-							<modelNameSuffix>DTO</modelNameSuffix>
-							<addCompileSourceRoot>true</addCompileSourceRoot>
-							<typeMappings>
-								<typeMapping>Double=java.math.BigDecimal</typeMapping>
-							</typeMappings>
-							<configOptions>
-								<useJakartaEe>true</useJakartaEe>
-								<documentationProvider>none</documentationProvider>
-								<openApiNullable>false</openApiNullable>
-								<useOptional>true</useOptional>
-								<useTags>true</useTags>
-							</configOptions>
-						</configuration>
-					</execution> -->
 				</executions>
 			</plugin>
 		</plugins>
@@ -284,71 +360,56 @@
 			<id>asyncapi-code-generation</id>
 			<activation>
 				<file>
-					<exists>${project.basedir}/src/main/resources/public/apis/asyncapi.yml</exists>
+					<exists>${asyncapi.inputSpec}</exists>
 				</file>
 			</activation>
 			<build>
 				<plugins>
-					<plugin>
-						<groupId>io.zenwave360.sdk</groupId>
-						<artifactId>zenwave-sdk-maven-plugin</artifactId>
-						<version>${zenwave.version}</version>
-						<configuration>
-							<inputSpec>${project.basedir}/src/main/resources/public/apis/asyncapi.yml</inputSpec>
-							<skip>false</skip>
-							<addCompileSourceRoot>true</addCompileSourceRoot>
-							<addTestCompileSourceRoot>true</addTestCompileSourceRoot>
-						</configuration>
-						<executions>
-							<!-- DTOs -->
-							<execution>
-								<id>generate-asyncapi-dtos</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>generate</goal>
-								</goals>
-								<configuration>
-									<generatorName>jsonschema2pojo</generatorName>
-									<configOptions>
-										<modelPackage>${asyncApiModelPackage}</modelPackage>
-										<jsonschema2pojo.isUseJakartaValidation>true</jsonschema2pojo.isUseJakartaValidation>
-										<jsonschema2pojo.useLongIntegers>true</jsonschema2pojo.useLongIntegers>
-										<jsonschema2pojo.includeAdditionalProperties>true</jsonschema2pojo.includeAdditionalProperties>
-									</configOptions>
-								</configuration>
-							</execution>
-							<!-- Generate PROVIDER -->
-							<execution>
-								<id>generate-asyncapi</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>generate</goal>
-								</goals>
-								<configuration>
-									<generatorName>spring-cloud-streams3</generatorName>
-									<configOptions>
-										<role>provider</role>
-										<style>imperative</style>
-										<modelPackage>${asyncApiModelPackage}</modelPackage>
-										<producerApiPackage>${asyncApiProducerApiPackage}</producerApiPackage>
-										<consumerApiPackage>${asyncApiConsumerApiPackage}</consumerApiPackage>
-									</configOptions>
-								</configuration>
-							</execution>
-						</executions>
-						<dependencies>
-							<dependency>
-								<groupId>io.zenwave360.sdk.plugins</groupId>
-								<artifactId>asyncapi-spring-cloud-streams3</artifactId>
-								<version>${zenwave.version}</version>
-							</dependency>
-							<dependency>
-								<groupId>io.zenwave360.sdk.plugins</groupId>
-								<artifactId>asyncapi-jsonschema2pojo</artifactId>
-								<version>${zenwave.version}</version>
-							</dependency>
-						</dependencies>
-					</plugin>
+                    <plugin>
+                        <groupId>io.zenwave360.sdk</groupId>
+                        <artifactId>zenwave-sdk-maven-plugin</artifactId>
+                        <version>${zenwave.version}</version>
+                        <configuration>
+                            <inputSpec>${asyncapi.inputSpec}</inputSpec>
+                            <skip>false</skip>
+                            <addCompileSourceRoot>true</addCompileSourceRoot>
+                            <addTestCompileSourceRoot>true</addTestCompileSourceRoot>
+                            <!-- <authentication> -->
+                            <!--     <authentication><key>API_KEY</key><value>XXX</value></authentication> -->
+                            <!-- </authentication> -->
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>generate-asyncapi</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <generatorName>AsyncAPIGenerator</generatorName>
+                                    <configOptions>
+                                        <role>provider</role>
+                                        <templates>SpringCloudStream</templates>
+                                        <modelPackage>${asyncApiModelPackage}</modelPackage>
+                                        <producerApiPackage>${asyncApiProducerApiPackage}</producerApiPackage>
+                                        <consumerApiPackage>${asyncApiConsumerApiPackage}</consumerApiPackage>
+                                        <!-- <avroCompilerProperties.imports>${asyncapi.avro.imports}</avroCompilerProperties.imports> -->
+                                        <jsonschema2pojo.isUseJakartaValidation>true</jsonschema2pojo.isUseJakartaValidation>
+                                        <jsonschema2pojo.useLongIntegers>true</jsonschema2pojo.useLongIntegers>
+                                        <jsonschema2pojo.includeAdditionalProperties>true</jsonschema2pojo.includeAdditionalProperties>
+
+                                    </configOptions>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>io.zenwave360.sdk.plugins</groupId>
+                                <artifactId>asyncapi-generator</artifactId>
+                                <version>${zenwave.version}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
 				</plugins>
 			</build>
 		</profile>

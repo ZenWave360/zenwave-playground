@@ -1,6 +1,11 @@
 # Clinical Tool - Modulith
 
-> Working in progress... As of now this repo only contains the code generated from ZenWave Models (about 80% of the final application).
+> Working in progress... 
+> - Migrated to spring-boot 4.
+> - All code is ready and compiling. 
+> - Some tests still failing bc of kotlin sensitivity in nullability in test data
+> - Application runs and all APIs are available. 
+> - Some glitches here and there... Surveys module is not fully implemented.
 
 See https://www.zenwave360.io/docs/examples/ddd-examples/modulith-klinical-tool-jpa/ for detailed steps about how this Modular Monolith was designed and implemented.
 
@@ -49,7 +54,7 @@ The system is organized into the following modules:
 
 ## Requirements
 
-* JDK 21+
+* JDK 24 (25 is not compatible with Kotlin/Kapt 2.2.x)
 * Maven 3.8.+
 * Docker Compose: in case you don't have Docker-Compose installed in your machine, install [Rancher Desktop](https://rancherdesktop.io/) and configure `dockerd` as engine (instead of `containerd`), this will include `docker` and `docker-compose` commands in your PATH.
 * Your favorite IDE

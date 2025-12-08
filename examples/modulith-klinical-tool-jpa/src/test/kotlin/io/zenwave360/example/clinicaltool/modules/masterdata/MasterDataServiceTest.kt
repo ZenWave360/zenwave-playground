@@ -1,35 +1,21 @@
 package io.zenwave360.example.clinicaltool.modules.masterdata
 
+import io.zenwave360.example.clinicaltool.modules.masterdata.*
 import io.zenwave360.example.clinicaltool.modules.masterdata.config.*
 import io.zenwave360.example.clinicaltool.modules.masterdata.domain.*
-import io.zenwave360.example.clinicaltool.modules.masterdata.*
 import io.zenwave360.example.clinicaltool.modules.masterdata.dtos.*
-import io.zenwave360.example.clinicaltool.modules.masterdata.mappers.*
-import io.zenwave360.example.clinicaltool.modules.masterdata.*
 import io.zenwave360.example.clinicaltool.modules.masterdata.inmemory.*
-
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.mapstruct.factory.Mappers
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.Pageable
-import org.springframework.data.domain.PageRequest
-
-import java.util.Map
-import java.util.Optional
+import io.zenwave360.example.clinicaltool.modules.masterdata.mappers.*
 import java.time.*
-import java.math.BigDecimal
-
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-/**
- * Acceptance Test for MasterDataService.
- */
+/** Acceptance Test for MasterDataService. */
 class MasterDataServiceTest {
 
     private val log: Logger = LoggerFactory.getLogger(javaClass)
@@ -39,53 +25,58 @@ class MasterDataServiceTest {
 
     val masterDataRepository: MasterDataRepositoryInMemory = context.masterDataRepository()
 
-
     @BeforeEach
     fun setUp() {
         context.reloadTestData()
     }
 
-
     @Test
     fun createMasterDataTest() {
-        val input: MasterData = MasterData() // TODO
-        // TODO fill input data
-        // input.type = MasterDataType.values()[0]
-        // input.key = ""
-        // input.value = ""
-        // input.translations = List.of(MasterDataTranslation())
+        val input: MasterData = MasterData()
+        input.type = MasterDataType.GENDER
+        input.key = "MALE"
+        input.value = "Male"
+
+        val translation = MasterDataTranslation()
+        translation.lang = "en"
+        translation.text = "Male"
+        input.translations = mutableListOf(translation)
+
         val masterData = masterDataService.createMasterData(input)
         assertNotNull(masterData.id)
         assertTrue(masterDataRepository.containsEntity(masterData))
-}
+    }
 
     @Test
     fun getMasterDataTest() {
         val id: Long = 1L
         val masterData = masterDataService.getMasterData(id)
-        assertTrue(masterData.isPresent)
-}
+        assertNotNull(masterData)
+    }
 
     @Test
     fun updateMasterDataTest() {
         val id: Long = 1L
-        val input: MasterData = MasterData() // TODO
-        // TODO fill input data
-        // input.type = MasterDataType.values()[0]
-        // input.key = ""
-        // input.value = ""
-        // input.translations = List.of(MasterDataTranslation())
-        // assertTrue(masterDataRepository.containsKey(id))
+        val input: MasterData = MasterData()
+        input.type = MasterDataType.COUNTRY
+        input.key = "US"
+        input.value = "United States"
+
+        val translation = MasterDataTranslation()
+        translation.lang = "en"
+        translation.text = "United States"
+        input.translations = mutableListOf(translation)
+
         val masterData = masterDataService.updateMasterData(id, input)
-        assertTrue(masterData.isPresent)
-        assertTrue(masterDataRepository.containsEntity(masterData.get()))
-}
+        assertNotNull(masterData)
+        assertTrue(masterDataRepository.containsEntity(masterData!!))
+    }
 
     @Test
     fun listMasterDataTest() {
         // val results = masterDataService.listMasterData(PageRequest.of(0, 10))
         // assertNotNull(results)
-}
+    }
 
     @Test
     fun deleteMasterDataTest() {
@@ -93,10 +84,9 @@ class MasterDataServiceTest {
         // assertTrue(masterDataRepository.containsKey(id))
         masterDataService.deleteMasterData(id)
         // assertFalse(masterDataRepository.containsKey(id))
-}
+    }
 
     @Test
-    fun listMasterDataOfTypeTest() {// TODO: implement this test
-}
-
+    fun listMasterDataOfTypeTest() { // TODO: implement this test
+    }
 }

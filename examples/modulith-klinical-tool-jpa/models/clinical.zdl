@@ -1,7 +1,7 @@
 config {
     title "Clinical Tool Backend"
     layout.moduleBasePackage "io.zenwave360.example.clinicaltool.modules.clinical"
-    // you can choose: DefaultProjectLayout, CleanHexagonalProjectLayout, LayeredProjectLayout, SimpleDomainProjectLayout, HexagonalProjectLayout, CleanArchitectureProjectLayout
+    // you can choose different layouts, see docs at https://www.zenwave360.io/docs/
     layout CleanHexagonalProjectLayout
 }
 
@@ -65,15 +65,6 @@ relationship OneToMany {
     Patient{patientAddresses required } to PatientAddress{patient required}
     Patient{hospitalAddresses required } to HospitalAddress{patient required}
     Patient{patientWearables required } to PatientWearable{patient required}
-}
-
-@aggregate
-entity ProvisionalPatient {
-    @naturalId
-    phoneNumber String required maxlength(20)
-    @naturalId
-    hisNumber String required maxlength(100)
-    @json patient Patient
 }
 
 @skip
@@ -194,51 +185,27 @@ input DocumentSignatureRequestedInput {
 }
 
 @rest
-service PatientsService for (Patient, ProvisionalPatient) {
-    /**
-    * Loads a saved temporal patient or new one if not found.
-    */
+service PatientsService for (Patient) {
+
     @get("/patients/{hisNumber}/{phoneNumber}")
     loadPatient(@natural id) Patient
 
-//    @entityForId(Patient)
-//    loadTemporaryPatient(@natural id) ProvisionalPatient
-
-    /**
-    * Persist a temporal patient in the database.
-    */
-    @patch("/patients/{hisNumber}/{phoneNumber}")
-    partialPatientUpdate(@natural id, Patient) Patient
-
-    /**
-    * Persite a patient in the database and deletes any temporal data.
-    */
     @post("/patients")
     createPatient(Patient) Patient withEvents PatientCreated
 
-    /**
-    * Updates a patient in the database.
-    */
+    @patch("/patients/{hisNumber}/{phoneNumber}")
+    partialPatientUpdate(@natural id, Patient) Patient
+
     @put("/patients/{id}")
     updatePatient(id, Patient) Patient?
 
-    /**
-    * Load a patient by id
-    */
     @get("/patients/{id}")
     getPatient(id) Patient?
 
-    /**
-    * Load a patient profile by id to mobile app.
-    */
     @get("/patients/{id}/profile")
     @policies(isMobile)
     @entityForId(Patient)
     getPatientProfileById(id) PatientProfile
-
-    @post({ path: "/patients/{id}/opt-out", status: 200 })
-    @entityForId(Patient)
-    requestOptOut(id)
 
     @listener({model: "models/documents.zdl", event: DocumentSignatureRequested})
     associateDocumentWithPatient(DocumentSignatureRequestedInput)

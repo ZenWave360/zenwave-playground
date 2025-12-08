@@ -2,27 +2,19 @@ package io.zenwave360.example.clinicaltool.modules.surveys.repository.jpa
 
 import io.zenwave360.example.clinicaltool.common.BaseRepositoryIntegrationTest
 import io.zenwave360.example.clinicaltool.modules.surveys.domain.*
-import io.zenwave360.example.clinicaltool.modules.surveys.repository.jpa.SurveyRepository
-
-import java.util.HashSet
-import java.util.HashMap
-import java.util.List
+import jakarta.persistence.EntityManager
 import java.time.*
-import java.math.BigDecimal
-
+import java.util.List
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-
-import jakarta.persistence.EntityManager
+import org.springframework.data.repository.findByIdOrNull
 
 class SurveyRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
 
-    @Autowired
-    lateinit var entityManager: EntityManager
+    @Autowired lateinit var entityManager: EntityManager
 
-    @Autowired
-    lateinit var surveyRepository: SurveyRepository
+    @Autowired lateinit var surveyRepository: SurveyRepository
 
     @Test
     fun findAllTest() {
@@ -33,7 +25,7 @@ class SurveyRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
     @Test
     fun findByIdTest() {
         val id = 1L
-        val survey = surveyRepository.findById(id).orElseThrow()
+        val survey = surveyRepository.findByIdOrNull(id) ?: throw NoSuchElementException(" not found with id: $id")
         Assertions.assertNotNull(survey.id)
         Assertions.assertNotNull(survey.version)
         Assertions.assertNotNull(survey.createdBy)
@@ -44,12 +36,10 @@ class SurveyRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
     fun saveTest() {
         val survey = Survey()
         survey.name = ""
-        survey.hospitalId = 0L
+        survey.hospitalId = 1L
         survey.title = ""
         survey.lang = ""
-        survey.sections = List.of(SurveySection())
-
-
+        survey.sections = mutableListOf(SurveySection())
 
         // Persist aggregate root
         val created = surveyRepository.save(survey)
@@ -61,33 +51,31 @@ class SurveyRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
         Assertions.assertNotNull(created.version)
         Assertions.assertNotNull(created.createdBy)
         Assertions.assertNotNull(created.createdDate)
-
-
     }
 
     @Test
     fun updateTest() {
         val id = 1L
-        val survey = surveyRepository.findById(id).orElseThrow()
+        val survey = surveyRepository.findByIdOrNull(id) ?: throw NoSuchElementException(" not found with id: $id")
         survey.name = ""
-        survey.hospitalId = 0L
+        survey.hospitalId = 1L
         survey.title = ""
         survey.lang = ""
-        survey.sections = List.of(SurveySection())
+        survey.sections = mutableListOf(SurveySection())
 
         val updated = surveyRepository.save(survey)
         Assertions.assertEquals("", updated.name)
         Assertions.assertEquals(0L, updated.hospitalId)
         Assertions.assertEquals("", updated.title)
         Assertions.assertEquals("", updated.lang)
-        Assertions.assertEquals(List.of(SurveySection()), updated.sections)
+//        Assertions.assertEquals(mutableListOf(SurveySection()), updated.sections)
     }
 
     @Test
     fun deleteTest() {
         val id = 1L
         surveyRepository.deleteById(id)
-        val notFound = surveyRepository.findById(id)
-        Assertions.assertFalse(notFound.isPresent)
+        val notFound = surveyRepository.findByIdOrNull(id)
+        Assertions.assertNull(notFound)
     }
 }

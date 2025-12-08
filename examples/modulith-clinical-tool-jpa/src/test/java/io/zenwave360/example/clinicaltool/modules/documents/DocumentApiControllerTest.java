@@ -29,31 +29,36 @@ public class DocumentApiControllerTest {
 
     @Test
     public void listDocumentInfoTest() {
-        List<Long> documentIds = null;
+        List<Long> documentIds = List.of(1L);
         var response = controller.listDocumentInfo(documentIds);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
 
     @Test
     public void downloadDocumentTest() {
-        Long id = null;
-        Boolean preview = null;
+        Long id = 1L;
+        Boolean preview = false;
         var response = controller.downloadDocument(id, preview);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
 
     @Test
     public void deleteDocumentInfoTest() {
-        Long id = null;
+        Long id = 1L;
         var response = controller.deleteDocumentInfo(id);
         Assertions.assertEquals(204, response.getStatusCode().value());
     }
 
     @Test
     public void uploadDocumentTest() {
-        org.springframework.web.multipart.MultipartFile file = null;
-        String uuid = null;
-        List<String> tags = null;
+        org.springframework.mock.web.MockMultipartFile file = new org.springframework.mock.web.MockMultipartFile(
+            "file",
+            "test-document.pdf",
+            "application/pdf",
+            "test content".getBytes()
+        );
+        String uuid = "550e8400-e29b-41d4-a716-446655440001";
+        List<String> tags = List.of("test", "document");
         var response = controller.uploadDocument(uuid, tags, file);
         Assertions.assertEquals(201, response.getStatusCode().value());
     }

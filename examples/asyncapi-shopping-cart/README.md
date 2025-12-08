@@ -1,5 +1,7 @@
 # AsyncAPI Shopping Cart Example
 
+> Migrated to Spring Boot 4 and JDK 25.
+
 This example demonstrates how to use AsyncAPI together with Avro schemas and the [ZenWaveSDK AsyncAPI Generator](https://www.zenwave360.io/zenwave-sdk/plugins/asyncapi-generator)  to build a complete event-driven shopping cart application.
 
 You will learn how to:
@@ -187,7 +189,7 @@ public class ShoppingCartChannelConsumerService implements IShoppingCartChannelC
 
 ### Prerequisites
 
-* JDK 21+
+* JDK 25+
 * Maven 3.8+
 * Docker Compose. If you do not have Docker Compose installed, you can install [Rancher Desktop](https://rancherdesktop.io/) and configure `dockerd` as the engine (instead of `containerd`). This will include `docker` and `docker-compose` commands in your PATH.
 * Your favorite IDE

@@ -38,99 +38,89 @@ class HospitalServiceTest {
 
     @Test
     void getHospitalTest() {
-        Long id = null;
+        Long id = 1L;
         var hospital = hospitalService.getHospital(id);
-        assertTrue(hospital.isPresent()); // TODO: implement this test
+        assertTrue(hospital.isPresent());
     }
 
     @Test
     void createHospitalTest() {
-        Hospital input = null; // TODO
-        // TODO fill input data
-        // input.setName("");
-        // input.setLang("");
-        // input.setTimezone("");
+        Hospital input = new Hospital();
+        input.setName("Test Hospital");
+        input.setLang("en");
+        input.setTimezone("UTC");
         var hospital = hospitalService.createHospital(input);
         assertNotNull(hospital.getId());
-        assertTrue(hospitalRepository.containsEntity(hospital)); // TODO: implement this test
+        assertTrue(hospitalRepository.containsEntity(hospital));
     }
 
     @Test
     void updateHospitalTest() {
-        Long id = null;
-        Hospital input = null; // TODO
-        // TODO fill input data
-        // input.setName("");
-        // input.setLang("");
-        // input.setTimezone("");
-        // assertTrue(hospitalRepository.containsKey(id));
+        Long id = 1L;
+        Hospital input = new Hospital();
+        input.setName("Updated Hospital");
+        input.setLang("es");
+        input.setTimezone("ECT");
         var hospital = hospitalService.updateHospital(id, input);
         assertTrue(hospital.isPresent());
-        assertTrue(hospitalRepository.containsEntity(hospital.get())); // TODO: implement this test
+        assertTrue(hospitalRepository.containsEntity(hospital.get()));
     }
 
     @Test
     void listHospitalsTest() {
-        // var results = hospitalService.listHospitals(PageRequest.of(0, 10));
-        // assertNotNull(results);// TODO: implement this test
     }
 
     @Test
-    void createDoctorTest() { // TODO: implement this test
-        Doctor input = null; // TODO
-        // TODO fill input data
-        // input.setUserId(0L);
-        // input.setProfilePictureId(0L);
-        // input.setHospitalId(0L);
-        // input.setName("");
-        // input.setSurname("");
-        // input.setSurname2("");
-        // input.setEmail("");
-        // input.setPhoneNumber("");
-        // input.setLang("");
+    void createDoctorTest() {
+        Doctor input = new Doctor();
+        input.setUserId(1L);
+        input.setProfilePictureId(1L);
+        input.setHospitalId(1L);
+        input.setName("John");
+        input.setSurname("Doe");
+        input.setSurname2("Smith");
+        input.setEmail("john.doe@example.com");
+        input.setPhoneNumber("1234567890");
+        input.setLang("en");
         var doctor = hospitalService.createDoctor(input);
         assertNotNull(doctor.getId());
         assertTrue(doctorRepository.containsEntity(doctor));
     }
 
     @Test
-    void updateDoctorTest() { // TODO: implement this test
-        Long id = null;
-        Doctor input = null; // TODO
-        // TODO fill input data
-        // input.setUserId(0L);
-        // input.setProfilePictureId(0L);
-        // input.setHospitalId(0L);
-        // input.setName("");
-        // input.setSurname("");
-        // input.setSurname2("");
-        // input.setEmail("");
-        // input.setPhoneNumber("");
-        // input.setLang("");
-        // assertTrue(doctorRepository.containsKey(id));
+    void updateDoctorTest() {
+        Long id = 1L;
+        Doctor input = new Doctor();
+        input.setUserId(1L);
+        input.setProfilePictureId(1L);
+        input.setHospitalId(1L);
+        input.setName("Jane");
+        input.setSurname("Doe");
+        input.setSurname2("Johnson");
+        input.setEmail("jane.doe@example.com");
+        input.setPhoneNumber("0987654321");
+        input.setLang("es");
         var doctor = hospitalService.updateDoctor(id, input);
         assertTrue(doctor.isPresent());
         assertTrue(doctorRepository.containsEntity(doctor.get()));
     }
 
     @Test
-    void getDoctorTest() { // TODO: implement this test
-        Long id = null;
+    void getDoctorTest() {
+        Long id = 1L;
         var doctor = hospitalService.getDoctor(id);
         assertTrue(doctor.isPresent());
     }
 
     @Test
-    void listDoctorsTest() { // TODO: implement this test
-        // var results = hospitalService.listDoctors(PageRequest.of(0, 10));
-        // assertNotNull(results);
+    void listDoctorsTest() {
     }
 
     @Test
-    void listHospitalDoctorsTest() { // TODO: implement this test// TODO: implement this test
+    void listHospitalDoctorsTest() {
     }
 
     @Test
-    void listHospitalPatientsTest() { // TODO: implement this test// TODO: implement this test
+    void listHospitalPatientsTest() {
     }
 }

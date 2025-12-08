@@ -29,6 +29,7 @@ input Lang {
 }
 
 input AcceptedTermsAndConditionsInput {
+    userId Long required
     termsAndConditionsId Long required
 }
 
