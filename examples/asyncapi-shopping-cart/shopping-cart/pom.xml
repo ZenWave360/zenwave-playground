@@ -121,7 +121,7 @@
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>7.12.0</version>
+                <version>${openapi-generator-maven-plugin.version}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -173,7 +173,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-aop</artifactId>
+			<artifactId>spring-boot-starter-aspectj</artifactId>
 		</dependency>
 		<!-- jpa -->
 		<dependency>
