@@ -1,0 +1,15 @@
+{
+  "id": 1,
+  "version": 1,
+  "uuid": "550e8400-e29b-41d4-a716-446655440000",
+  "fileName": "patient-consent-form.pdf",
+  "documentType": "CONSENT_FORM",
+  "contentType": "application/pdf",
+  "tags": ["consent", "patient", "legal"],
+  "documentData": {
+    "id": 1,
+    "version": 1,
+    "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=="
+  }
+}
+

@@ -7,9 +7,11 @@ import java.time.*
 import java.util.*
 
 class SurveyAnswersRepositoryInMemory : InMemoryJpaRepository<SurveyAnswers, Long>(), SurveyAnswersRepository {
-    override fun findBySurveyIdAndPatientIdAndDate(surveyId: Long, patientId: Long, date: LocalDate): java.util.Optional<SurveyAnswers> {
-        return getEntities().values.stream().filter { e ->
-             isSameValue(surveyId, readField(e, "surveyId")) && isSameValue(patientId, readField(e, "patientId")) && isSameValue(date, readField(e, "date")) 
-        }.findFirst()
+    override fun findBySurveyIdAndPatientIdAndDate(surveyId: Long, patientId: Long, date: LocalDate): SurveyAnswers? {
+        return getEntities().values.firstOrNull { e ->
+            isSameValue(surveyId, readField(e, "surveyId")) &&
+                isSameValue(patientId, readField(e, "patientId")) &&
+                isSameValue(date, readField(e, "date"))
+        }
     }
 }

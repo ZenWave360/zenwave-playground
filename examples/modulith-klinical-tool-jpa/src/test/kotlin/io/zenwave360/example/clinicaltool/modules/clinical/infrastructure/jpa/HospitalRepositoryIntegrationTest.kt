@@ -3,26 +3,18 @@ package io.zenwave360.example.clinicaltool.modules.clinical.infrastructure.jpa
 import io.zenwave360.example.clinicaltool.common.BaseRepositoryIntegrationTest
 import io.zenwave360.example.clinicaltool.modules.clinical.core.domain.*
 import io.zenwave360.example.clinicaltool.modules.clinical.core.outbound.jpa.HospitalRepository
-
-import java.util.HashSet
-import java.util.HashMap
-import java.util.List
+import jakarta.persistence.EntityManager
 import java.time.*
-import java.math.BigDecimal
-
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-
-import jakarta.persistence.EntityManager
+import org.springframework.data.repository.findByIdOrNull
 
 class HospitalRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
 
-    @Autowired
-    lateinit var entityManager: EntityManager
+    @Autowired lateinit var entityManager: EntityManager
 
-    @Autowired
-    lateinit var hospitalRepository: HospitalRepository
+    @Autowired lateinit var hospitalRepository: HospitalRepository
 
     @Test
     fun findAllTest() {
@@ -33,7 +25,7 @@ class HospitalRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
     @Test
     fun findByIdTest() {
         val id = 1L
-        val hospital = hospitalRepository.findById(id).orElseThrow()
+        val hospital = hospitalRepository.findByIdOrNull(id) ?: throw NoSuchElementException(" not found with id: $id")
         Assertions.assertNotNull(hospital.id)
         Assertions.assertNotNull(hospital.version)
     }
@@ -45,8 +37,6 @@ class HospitalRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
         hospital.lang = ""
         hospital.timezone = ""
 
-
-
         // Persist aggregate root
         val created = hospitalRepository.save(hospital)
 
@@ -55,14 +45,12 @@ class HospitalRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
         entityManager.refresh(created)
         Assertions.assertNotNull(created.id)
         Assertions.assertNotNull(created.version)
-
-
     }
 
     @Test
     fun updateTest() {
         val id = 1L
-        val hospital = hospitalRepository.findById(id).orElseThrow()
+        val hospital = hospitalRepository.findByIdOrNull(id) ?: throw NoSuchElementException(" not found with id: $id")
         hospital.name = ""
         hospital.lang = ""
         hospital.timezone = ""
@@ -77,7 +65,7 @@ class HospitalRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
     fun deleteTest() {
         val id = 1L
         hospitalRepository.deleteById(id)
-        val notFound = hospitalRepository.findById(id)
-        Assertions.assertFalse(notFound.isPresent)
+        val notFound = hospitalRepository.findByIdOrNull(id)
+        Assertions.assertNull(notFound)
     }
 }

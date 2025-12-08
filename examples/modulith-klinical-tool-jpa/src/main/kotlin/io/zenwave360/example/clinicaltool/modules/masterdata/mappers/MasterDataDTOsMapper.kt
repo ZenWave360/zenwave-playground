@@ -25,6 +25,9 @@ interface MasterDataDTOsMapper {
 
     // response mappings
     
+    fun asMasterDataKeyValueDTO(entity: MasterDataKeyValue): MasterDataKeyValueDTO
+    
+    
     fun asMasterDataDTO(entity: MasterData): MasterDataDTO
     
     

@@ -3,26 +3,20 @@ package io.zenwave360.example.clinicaltool.modules.clinical.infrastructure.jpa
 import io.zenwave360.example.clinicaltool.common.BaseRepositoryIntegrationTest
 import io.zenwave360.example.clinicaltool.modules.clinical.core.domain.*
 import io.zenwave360.example.clinicaltool.modules.clinical.core.outbound.jpa.PatientRepository
-
-import java.util.HashSet
-import java.util.HashMap
-import java.util.List
+import jakarta.persistence.EntityManager
 import java.time.*
-import java.math.BigDecimal
-
+import java.util.HashSet
+import java.util.List
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-
-import jakarta.persistence.EntityManager
+import org.springframework.data.repository.findByIdOrNull
 
 class PatientRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
 
-    @Autowired
-    lateinit var entityManager: EntityManager
+    @Autowired lateinit var entityManager: EntityManager
 
-    @Autowired
-    lateinit var patientRepository: PatientRepository
+    @Autowired lateinit var patientRepository: PatientRepository
 
     @Test
     fun findAllTest() {
@@ -33,7 +27,7 @@ class PatientRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
     @Test
     fun findByIdTest() {
         val id = 1L
-        val patient = patientRepository.findById(id).orElseThrow()
+        val patient = patientRepository.findByIdOrNull(id) ?: throw NoSuchElementException(" not found with id: $id")
         Assertions.assertNotNull(patient.id)
         Assertions.assertNotNull(patient.version)
         Assertions.assertNotNull(patient.createdBy)
@@ -52,7 +46,6 @@ class PatientRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
         patient.generalInfo = GeneralInfo()
         patient.healthInsuranceInfo = HealthInsuranceInfo()
         patient.documentIds = List.of(0L)
-
 
         // OneToMany medicalContacts owner: true
         val medicalContacts = MedicalContact()
@@ -107,7 +100,6 @@ class PatientRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
         patient.patientWearables = HashSet()
         patient.addPatientWearables(patientWearables)
 
-
         // Persist aggregate root
         val created = patientRepository.save(patient)
 
@@ -119,7 +111,6 @@ class PatientRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
         Assertions.assertNotNull(created.createdBy)
         Assertions.assertNotNull(created.createdDate)
 
-
         Assertions.assertTrue(patient.medicalContacts?.stream()?.allMatch { item -> item.id != null } == true)
         Assertions.assertTrue(patient.personalContacts?.stream()?.allMatch { item -> item.id != null } == true)
         Assertions.assertTrue(patient.patientAddresses?.stream()?.allMatch { item -> item.id != null } == true)
@@ -130,7 +121,7 @@ class PatientRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
     @Test
     fun updateTest() {
         val id = 1L
-        val patient = patientRepository.findById(id).orElseThrow()
+        val patient = patientRepository.findByIdOrNull(id) ?: throw NoSuchElementException(" not found with id: $id")
         patient.userId = 0L
         patient.hospitalId = 0L
         patient.profilePictureId = 0L
@@ -157,7 +148,7 @@ class PatientRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
     fun deleteTest() {
         val id = 1L
         patientRepository.deleteById(id)
-        val notFound = patientRepository.findById(id)
-        Assertions.assertFalse(notFound.isPresent)
+        val notFound = patientRepository.findByIdOrNull(id)
+        Assertions.assertNull(notFound)
     }
 }

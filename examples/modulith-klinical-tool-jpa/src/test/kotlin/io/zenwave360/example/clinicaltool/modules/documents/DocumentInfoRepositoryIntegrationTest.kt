@@ -2,27 +2,19 @@ package io.zenwave360.example.clinicaltool.modules.documents
 
 import io.zenwave360.example.clinicaltool.common.BaseRepositoryIntegrationTest
 import io.zenwave360.example.clinicaltool.modules.documents.domain.*
-import io.zenwave360.example.clinicaltool.modules.documents.DocumentInfoRepository
-
-import java.util.HashSet
-import java.util.HashMap
-import java.util.List
+import jakarta.persistence.EntityManager
 import java.time.*
-import java.math.BigDecimal
-
+import java.util.List
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-
-import jakarta.persistence.EntityManager
+import org.springframework.data.repository.findByIdOrNull
 
 class DocumentInfoRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
 
-    @Autowired
-    lateinit var entityManager: EntityManager
+    @Autowired lateinit var entityManager: EntityManager
 
-    @Autowired
-    lateinit var documentInfoRepository: DocumentInfoRepository
+    @Autowired lateinit var documentInfoRepository: DocumentInfoRepository
 
     @Test
     fun findAllTest() {
@@ -33,7 +25,8 @@ class DocumentInfoRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
     @Test
     fun findByIdTest() {
         val id = 1L
-        val documentInfo = documentInfoRepository.findById(id).orElseThrow()
+        val documentInfo =
+            documentInfoRepository.findByIdOrNull(id) ?: throw NoSuchElementException(" not found with id: $id")
         Assertions.assertNotNull(documentInfo.id)
         Assertions.assertNotNull(documentInfo.version)
     }
@@ -47,13 +40,11 @@ class DocumentInfoRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
         documentInfo.contentType = ""
         documentInfo.tags = List.of("")
 
-
         // OneToOne documentData owner: true
         val documentDataId = 1L
         val documentData = DocumentData()
         documentData.data = null
         documentInfo.documentData = documentData
-
 
         // Persist aggregate root
         val created = documentInfoRepository.save(documentInfo)
@@ -64,14 +55,14 @@ class DocumentInfoRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
         Assertions.assertNotNull(created.id)
         Assertions.assertNotNull(created.version)
 
-
         Assertions.assertNotNull(documentInfo.documentData?.id != null)
     }
 
     @Test
     fun updateTest() {
         val id = 1L
-        val documentInfo = documentInfoRepository.findById(id).orElseThrow()
+        val documentInfo =
+            documentInfoRepository.findByIdOrNull(id) ?: throw NoSuchElementException(" not found with id: $id")
         documentInfo.uuid = ""
         documentInfo.fileName = ""
         documentInfo.documentType = ""
@@ -90,7 +81,7 @@ class DocumentInfoRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
     fun deleteTest() {
         val id = 1L
         documentInfoRepository.deleteById(id)
-        val notFound = documentInfoRepository.findById(id)
-        Assertions.assertFalse(notFound.isPresent)
+        val notFound = documentInfoRepository.findByIdOrNull(id)
+        Assertions.assertNull(notFound)
     }
 }

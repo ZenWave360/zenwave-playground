@@ -1,3 +1,4 @@
+@import("io.zenwave360.sdk.plugins.customizations:kotlin-backend-application:RELEASE")
 config {
     title "Clinical Tool Backend"
     basePackage "io.zenwave360.example.clinicaltool"
@@ -16,11 +17,7 @@ config {
     idTypeFormat int64
 
     // BackendApplicationDefaultPlugin
-    useLombok true
     useSpringModulith true
-
-    // Skip Controller Unit tests (using ServicesInMemoryConfig)
-    skipControllerTests true
 
     haltOnFailFormatting false
 
@@ -58,6 +55,7 @@ config {
         ZDLToOpenAPIPlugin {
             title "Documents API"
             zdlFile "models/documents.zdl"
+            openapiOverlayFiles "src/main/resources/public/apis/documents-openapi-overlay.yml"
             targetFile "src/main/resources/public/apis/documents-openapi.yml"
         }
 
@@ -181,28 +179,6 @@ config {
         }
 
         //-----------------------------
-
-        SpringWebTestClientPlugin {
-            zdlFiles "models/clinical.zdl,models/metrics.zdl"
-            openapiFile "src/main/resources/public/apis/webapp-openapi.yml"
-            templates "new io.zenwave360.sdk.plugins.kotlin.SpringWebTestClientKotlinTemplates()"
-
-            layout.customWebModule "{{basePackage}}.modules.web.webapp"
-            layout.adaptersWebPackage "{{layout.customWebModule}}"
-            layout.openApiApiPackage "{{layout.customWebModule}}"
-            layout.openApiModelPackage "{{layout.customWebModule}}.dtos"
-        }
-
-        SpringWebTestClientPlugin {
-            zdlFiles "models/clinical.zdl,models/metrics.zdl"
-            openapiFile "src/main/resources/public/apis/mobile-openapi.yml"
-            templates "new io.zenwave360.sdk.plugins.kotlin.SpringWebTestClientKotlinTemplates()"
-
-            layout.customWebModule "{{basePackage}}.modules.web.mobile"
-            layout.adaptersWebPackage "{{layout.customWebModule}}"
-            layout.openApiApiPackage "{{layout.customWebModule}}"
-            layout.openApiModelPackage "{{layout.customWebModule}}.dtos"
-        }
 
         SpringWebTestClientPlugin {
             zdlFiles "models/surveys.zdl"

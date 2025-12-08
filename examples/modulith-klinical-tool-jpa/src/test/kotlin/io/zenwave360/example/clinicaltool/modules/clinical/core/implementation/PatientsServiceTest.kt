@@ -2,34 +2,21 @@ package io.zenwave360.example.clinicaltool.modules.clinical.core.implementation
 
 import io.zenwave360.example.clinicaltool.modules.clinical.config.*
 import io.zenwave360.example.clinicaltool.modules.clinical.core.domain.*
+import io.zenwave360.example.clinicaltool.modules.clinical.core.implementation.mappers.*
 import io.zenwave360.example.clinicaltool.modules.clinical.core.inbound.*
 import io.zenwave360.example.clinicaltool.modules.clinical.core.inbound.dtos.*
-import io.zenwave360.example.clinicaltool.modules.clinical.core.implementation.mappers.*
 import io.zenwave360.example.clinicaltool.modules.clinical.core.outbound.jpa.*
 import io.zenwave360.example.clinicaltool.modules.clinical.infrastructure.jpa.inmemory.*
-
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.mapstruct.factory.Mappers
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.Pageable
-import org.springframework.data.domain.PageRequest
-
-import java.util.Map
-import java.util.Optional
 import java.time.*
-import java.math.BigDecimal
-
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-/**
- * Acceptance Test for PatientsService.
- */
+/** Acceptance Test for PatientsService. */
 class PatientsServiceTest {
 
     private val log: Logger = LoggerFactory.getLogger(javaClass)
@@ -39,22 +26,14 @@ class PatientsServiceTest {
 
     val patientRepository: PatientRepositoryInMemory = context.patientRepository()
 
-    val provisionalPatientRepository: ProvisionalPatientRepositoryInMemory = context.provisionalPatientRepository()
-
-
     @BeforeEach
     fun setUp() {
         context.reloadTestData()
     }
 
-
     @Test
-    fun loadPatientTest() {// TODO: implement this test// TODO: implement this test
-}
-
-    @Test
-    fun partialPatientUpdateTest() {// TODO: implement this test// TODO: implement this test
-}
+    fun loadPatientTest() { // TODO: implement this test
+    }
 
     @Test
     fun createPatientTest() {
@@ -71,8 +50,12 @@ class PatientsServiceTest {
         // input.documentIds = List.of(0L)
         val patient = patientsService.createPatient(input)
         assertNotNull(patient.id)
-        assertTrue(patientRepository.containsEntity(patient))// TODO: implement this test
-}
+        assertTrue(patientRepository.containsEntity(patient))
+    }
+
+    @Test
+    fun partialPatientUpdateTest() { // TODO: implement this test
+    }
 
     @Test
     fun updatePatientTest() {
@@ -90,27 +73,22 @@ class PatientsServiceTest {
         // input.documentIds = List.of(0L)
         // assertTrue(patientRepository.containsKey(id))
         val patient = patientsService.updatePatient(id, input)
-        assertTrue(patient.isPresent)
-        assertTrue(patientRepository.containsEntity(patient.get()))// TODO: implement this test
-}
+        assertNotNull(patient)
+        assertTrue(patientRepository.containsEntity(patient!!))
+    }
 
     @Test
     fun getPatientTest() {
         val id: Long = 1L
         val patient = patientsService.getPatient(id)
-        assertTrue(patient.isPresent)// TODO: implement this test
-}
+        assertNotNull(patient)
+    }
 
     @Test
-    fun getPatientProfileByIdTest() {// TODO: implement this test// TODO: implement this test
-}
+    fun getPatientProfileByIdTest() { // TODO: implement this test
+    }
 
     @Test
-    fun requestOptOutTest() {// TODO: implement this test// TODO: implement this test
-}
-
-    @Test
-    fun associateDocumentWithPatientTest() {// TODO: implement this test// TODO: implement this test
-}
-
+    fun associateDocumentWithPatientTest() { // TODO: implement this test
+    }
 }

@@ -1,0 +1,22 @@
+{
+  "id": 1,
+  "version": 0,
+  "name": "Admin User",
+  "username": "admin",
+  "email": "user@email.com",
+  "password": "$2a$10$I86fM/OvHg8ounuxGq2oBufCecu3NFO4vT1SWIvd4hnM72lrzdXBG",
+  "roles": ["USER", "ADMIN"],
+  "enabled": true,
+  "credentialsNonExpired": true,
+  "accountNonExpired": true,
+  "accountNonLocked": true,
+  "additionalProperties": {
+    "theme": "dark",
+    "notifications": true
+  },
+  "createdBy": "user",
+  "createdDate": "2024-08-02T13:36:47.389586",
+  "lastModifiedBy": "system",
+  "lastModifiedDate": "2024-08-02T13:36:47.389586"
+}
+

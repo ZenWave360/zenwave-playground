@@ -1,11 +1,17 @@
 package io.zenwave360.example.clinicaltool.modules.documents.mappers
 
-import io.zenwave360.example.clinicaltool.common.mappers.BaseMapper
-import io.zenwave360.example.clinicaltool.modules.documents.domain.DocumentInfo
-import io.zenwave360.example.clinicaltool.modules.documents.dtos.DocumentDataDTO
-import io.zenwave360.example.clinicaltool.modules.documents.dtos.DocumentInfoDTO
+import io.zenwave360.example.clinicaltool.common.mappers.*
+import io.zenwave360.example.clinicaltool.modules.documents.domain.*
+import io.zenwave360.example.clinicaltool.modules.documents.dtos.*
+import io.zenwave360.example.clinicaltool.modules.documents.dtos.*
+
 import org.mapstruct.Mapper
+import org.mapstruct.Mapping
 import org.mapstruct.factory.Mappers
+import java.math.*
+import java.time.*
+import java.util.*
+import org.springframework.data.domain.Page
 
 @Mapper(uses = [BaseMapper::class])
 interface DocumentDTOsMapper {
@@ -15,23 +21,13 @@ interface DocumentDTOsMapper {
     }
 
     // request mappings
-    fun asDocumentInfo(
-        file: org.springframework.web.multipart.MultipartFile?,
-        id: Long?,
-        version: Int?,
-        uuid: String?,
-        fileName: String,
-        documentType: String,
-        contentType: String,
-        tags: List<String>?,
-        documentData: DocumentDataDTO?
-    ): DocumentInfo
+    fun asDocumentInfo(file: org.springframework.web.multipart.MultipartFile): DocumentInfo
 
     // response mappings
-
+    
     fun asDocumentInfoDTOList(entityList: List<DocumentInfo>): List<DocumentInfoDTO>
-
+    
     fun asDocumentInfoDTO(entity: DocumentInfo): DocumentInfoDTO
-
+    
 
 }

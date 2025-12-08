@@ -1,5 +1,6 @@
 /** Inbound DTOs. */
 @file:JvmName("PackageInfo")
+
 package io.zenwave360.example.clinicaltool.modules.clinical.core.inbound.dtos
 
 @Target(AnnotationTarget.FILE)

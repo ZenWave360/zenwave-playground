@@ -2,27 +2,19 @@ package io.zenwave360.example.clinicaltool.modules.masterdata
 
 import io.zenwave360.example.clinicaltool.common.BaseRepositoryIntegrationTest
 import io.zenwave360.example.clinicaltool.modules.masterdata.domain.*
-import io.zenwave360.example.clinicaltool.modules.masterdata.MasterDataRepository
-
-import java.util.HashSet
-import java.util.HashMap
-import java.util.List
+import jakarta.persistence.EntityManager
 import java.time.*
-import java.math.BigDecimal
-
+import java.util.List
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-
-import jakarta.persistence.EntityManager
+import org.springframework.data.repository.findByIdOrNull
 
 class MasterDataRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
 
-    @Autowired
-    lateinit var entityManager: EntityManager
+    @Autowired lateinit var entityManager: EntityManager
 
-    @Autowired
-    lateinit var masterDataRepository: MasterDataRepository
+    @Autowired lateinit var masterDataRepository: MasterDataRepository
 
     @Test
     fun findAllTest() {
@@ -33,7 +25,8 @@ class MasterDataRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
     @Test
     fun findByIdTest() {
         val id = 1L
-        val masterData = masterDataRepository.findById(id).orElseThrow()
+        val masterData =
+            masterDataRepository.findByIdOrNull(id) ?: throw NoSuchElementException(" not found with id: $id")
         Assertions.assertNotNull(masterData.id)
         Assertions.assertNotNull(masterData.version)
     }
@@ -46,8 +39,6 @@ class MasterDataRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
         masterData.value = ""
         masterData.translations = List.of(MasterDataTranslation())
 
-
-
         // Persist aggregate root
         val created = masterDataRepository.save(masterData)
 
@@ -56,14 +47,13 @@ class MasterDataRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
         entityManager.refresh(created)
         Assertions.assertNotNull(created.id)
         Assertions.assertNotNull(created.version)
-
-
     }
 
     @Test
     fun updateTest() {
         val id = 1L
-        val masterData = masterDataRepository.findById(id).orElseThrow()
+        val masterData =
+            masterDataRepository.findByIdOrNull(id) ?: throw NoSuchElementException(" not found with id: $id")
         masterData.type = MasterDataType.values()[0]
         masterData.key = ""
         masterData.value = ""
@@ -80,7 +70,7 @@ class MasterDataRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
     fun deleteTest() {
         val id = 1L
         masterDataRepository.deleteById(id)
-        val notFound = masterDataRepository.findById(id)
-        Assertions.assertFalse(notFound.isPresent)
+        val notFound = masterDataRepository.findByIdOrNull(id)
+        Assertions.assertNull(notFound)
     }
 }

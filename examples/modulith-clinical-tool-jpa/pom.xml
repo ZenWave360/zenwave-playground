@@ -322,7 +322,7 @@
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>7.10.0</version>
+                <version>${openapi-generator-maven-plugin.version}</version>
                 <configuration>
                     <skipIfSpecIsUnchanged>true</skipIfSpecIsUnchanged>
                     <generatorName>spring</generatorName>

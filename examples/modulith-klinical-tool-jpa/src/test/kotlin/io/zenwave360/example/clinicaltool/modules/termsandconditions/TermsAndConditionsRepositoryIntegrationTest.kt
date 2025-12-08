@@ -2,27 +2,18 @@ package io.zenwave360.example.clinicaltool.modules.termsandconditions
 
 import io.zenwave360.example.clinicaltool.common.BaseRepositoryIntegrationTest
 import io.zenwave360.example.clinicaltool.modules.termsandconditions.domain.*
-import io.zenwave360.example.clinicaltool.modules.termsandconditions.TermsAndConditionsRepository
-
-import java.util.HashSet
-import java.util.HashMap
-import java.util.List
+import jakarta.persistence.EntityManager
 import java.time.*
-import java.math.BigDecimal
-
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-
-import jakarta.persistence.EntityManager
+import org.springframework.data.repository.findByIdOrNull
 
 class TermsAndConditionsRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
 
-    @Autowired
-    lateinit var entityManager: EntityManager
+    @Autowired lateinit var entityManager: EntityManager
 
-    @Autowired
-    lateinit var termsAndConditionsRepository: TermsAndConditionsRepository
+    @Autowired lateinit var termsAndConditionsRepository: TermsAndConditionsRepository
 
     @Test
     fun findAllTest() {
@@ -33,7 +24,8 @@ class TermsAndConditionsRepositoryIntegrationTest : BaseRepositoryIntegrationTes
     @Test
     fun findByIdTest() {
         val id = 1L
-        val termsAndConditions = termsAndConditionsRepository.findById(id).orElseThrow()
+        val termsAndConditions =
+            termsAndConditionsRepository.findByIdOrNull(id) ?: throw NoSuchElementException(" not found with id: $id")
         Assertions.assertNotNull(termsAndConditions.id)
         Assertions.assertNotNull(termsAndConditions.version)
     }
@@ -46,8 +38,6 @@ class TermsAndConditionsRepositoryIntegrationTest : BaseRepositoryIntegrationTes
         termsAndConditions.contentVersion = ""
         termsAndConditions.startDate = LocalDate.now()
 
-
-
         // Persist aggregate root
         val created = termsAndConditionsRepository.save(termsAndConditions)
 
@@ -56,14 +46,13 @@ class TermsAndConditionsRepositoryIntegrationTest : BaseRepositoryIntegrationTes
         entityManager.refresh(created)
         Assertions.assertNotNull(created.id)
         Assertions.assertNotNull(created.version)
-
-
     }
 
     @Test
     fun updateTest() {
         val id = 1L
-        val termsAndConditions = termsAndConditionsRepository.findById(id).orElseThrow()
+        val termsAndConditions =
+            termsAndConditionsRepository.findByIdOrNull(id) ?: throw NoSuchElementException(" not found with id: $id")
         termsAndConditions.content = ""
         termsAndConditions.lang = ""
         termsAndConditions.contentVersion = ""
@@ -80,7 +69,7 @@ class TermsAndConditionsRepositoryIntegrationTest : BaseRepositoryIntegrationTes
     fun deleteTest() {
         val id = 1L
         termsAndConditionsRepository.deleteById(id)
-        val notFound = termsAndConditionsRepository.findById(id)
-        Assertions.assertFalse(notFound.isPresent)
+        val notFound = termsAndConditionsRepository.findByIdOrNull(id)
+        Assertions.assertNull(notFound)
     }
 }

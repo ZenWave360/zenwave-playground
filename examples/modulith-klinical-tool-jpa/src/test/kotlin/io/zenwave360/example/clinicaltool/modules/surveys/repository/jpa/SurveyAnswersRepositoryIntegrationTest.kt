@@ -2,27 +2,19 @@ package io.zenwave360.example.clinicaltool.modules.surveys.repository.jpa
 
 import io.zenwave360.example.clinicaltool.common.BaseRepositoryIntegrationTest
 import io.zenwave360.example.clinicaltool.modules.surveys.domain.*
-import io.zenwave360.example.clinicaltool.modules.surveys.repository.jpa.SurveyAnswersRepository
-
-import java.util.HashSet
-import java.util.HashMap
-import java.util.List
+import jakarta.persistence.EntityManager
 import java.time.*
-import java.math.BigDecimal
-
+import java.util.List
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-
-import jakarta.persistence.EntityManager
+import org.springframework.data.repository.findByIdOrNull
 
 class SurveyAnswersRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
 
-    @Autowired
-    lateinit var entityManager: EntityManager
+    @Autowired lateinit var entityManager: EntityManager
 
-    @Autowired
-    lateinit var surveyAnswersRepository: SurveyAnswersRepository
+    @Autowired lateinit var surveyAnswersRepository: SurveyAnswersRepository
 
     @Test
     fun findAllTest() {
@@ -33,7 +25,8 @@ class SurveyAnswersRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
     @Test
     fun findByIdTest() {
         val id = 1L
-        val surveyAnswers = surveyAnswersRepository.findById(id).orElseThrow()
+        val surveyAnswers =
+            surveyAnswersRepository.findByIdOrNull(id) ?: throw NoSuchElementException(" not found with id: $id")
         Assertions.assertNotNull(surveyAnswers.id)
         Assertions.assertNotNull(surveyAnswers.version)
         Assertions.assertNotNull(surveyAnswers.createdBy)
@@ -49,8 +42,6 @@ class SurveyAnswersRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
         surveyAnswers.lang = ""
         surveyAnswers.answers = List.of(Answer())
 
-
-
         // Persist aggregate root
         val created = surveyAnswersRepository.save(surveyAnswers)
 
@@ -61,14 +52,13 @@ class SurveyAnswersRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
         Assertions.assertNotNull(created.version)
         Assertions.assertNotNull(created.createdBy)
         Assertions.assertNotNull(created.createdDate)
-
-
     }
 
     @Test
     fun updateTest() {
         val id = 1L
-        val surveyAnswers = surveyAnswersRepository.findById(id).orElseThrow()
+        val surveyAnswers =
+            surveyAnswersRepository.findByIdOrNull(id) ?: throw NoSuchElementException(" not found with id: $id")
         surveyAnswers.surveyId = 0L
         surveyAnswers.patientId = 0L
         surveyAnswers.date = LocalDate.now()
@@ -87,7 +77,7 @@ class SurveyAnswersRepositoryIntegrationTest : BaseRepositoryIntegrationTest() {
     fun deleteTest() {
         val id = 1L
         surveyAnswersRepository.deleteById(id)
-        val notFound = surveyAnswersRepository.findById(id)
-        Assertions.assertFalse(notFound.isPresent)
+        val notFound = surveyAnswersRepository.findByIdOrNull(id)
+        Assertions.assertNull(notFound)
     }
 }

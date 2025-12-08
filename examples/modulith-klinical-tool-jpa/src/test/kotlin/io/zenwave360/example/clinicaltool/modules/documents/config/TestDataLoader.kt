@@ -6,13 +6,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import jakarta.persistence.Table
 import java.io.File
 import java.nio.file.Files
-import java.util.stream.Collectors
 
 class TestDataLoader(private val jpaManagedTypes: List<Class<*>>) {
 
-    private val objectMapper = ObjectMapper().apply {
-        registerModule(JavaTimeModule())
-    }
+    private val objectMapper = ObjectMapper().apply { registerModule(JavaTimeModule()) }
 
     fun <T> loadCollectionTestDataAsObjects(collectionClass: Class<T>): List<T> {
         val jsonList = loadCollectionTestDataAsJson(collectionClass)

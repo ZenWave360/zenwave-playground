@@ -1,5 +1,13 @@
 package io.zenwave360.example.clinicaltool.modules.clinical.infrastructure.jpa.inmemory
 
+import java.util.ArrayList
+import java.util.HashMap
+import java.util.Optional
+import java.util.function.Function
+import java.util.stream.Collectors
+import java.util.stream.StreamSupport
+import org.apache.commons.lang3.ObjectUtils.firstNonNull
+import org.apache.commons.lang3.reflect.FieldUtils
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.data.domain.Example
 import org.springframework.data.domain.Page
@@ -8,21 +16,8 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.repository.query.FluentQuery
-import org.apache.commons.lang3.reflect.FieldUtils
 
-import java.util.ArrayList
-import java.util.HashMap
-import java.util.List
-import java.util.Map
-import java.util.Optional
-import java.util.UUID
-import java.util.function.Function
-import java.util.stream.Collectors
-import java.util.stream.StreamSupport
-
-import org.apache.commons.lang3.ObjectUtils.firstNonNull
-
-open class InMemoryJpaRepository<T, ID> : JpaRepository<T, ID> {
+open class InMemoryJpaRepository<T : Any, ID : Any> : JpaRepository<T, ID> {
 
     interface PrimaryKeyGenerator<ID> {
         fun next(): ID
@@ -32,9 +27,10 @@ open class InMemoryJpaRepository<T, ID> : JpaRepository<T, ID> {
 
     // private val primaryKeyGenerator: PrimaryKeyGenerator<ID> = PrimaryKeyGenerator { UUID.randomUUID().toString() }
     private var nextId: Long = 0
-    private val primaryKeyGenerator: PrimaryKeyGenerator<ID> = object : PrimaryKeyGenerator<ID> {
-        override fun next(): ID = nextId++ as ID
-    }
+    private val primaryKeyGenerator: PrimaryKeyGenerator<ID> =
+        object : PrimaryKeyGenerator<ID> {
+            override fun next(): ID = nextId++ as ID
+        }
 
     fun clear() {
         nextId = 0
@@ -79,7 +75,10 @@ open class InMemoryJpaRepository<T, ID> : JpaRepository<T, ID> {
         return when {
             foundEntities.isEmpty() -> null
             foundEntities.size == 1 -> foundEntities[0]
-            else -> throw IllegalArgumentException("Field $fieldName is not unique, found ${foundEntities.size} entities: $foundEntities")
+            else ->
+                throw IllegalArgumentException(
+                    "Field $fieldName is not unique, found ${foundEntities.size} entities: $foundEntities"
+                )
         }
     }
 
@@ -95,7 +94,7 @@ open class InMemoryJpaRepository<T, ID> : JpaRepository<T, ID> {
         }
     }
 
-    override fun getReferenceById(id: ID): T & Any {
+    override fun getReferenceById(id: ID): T {
         return findByUniqueField("id", id) ?: throw EmptyResultDataAccessException("Entity with id $id not found", 1)
     }
 
@@ -121,7 +120,9 @@ open class InMemoryJpaRepository<T, ID> : JpaRepository<T, ID> {
         if (entitiesToSave == null) {
             throw IllegalArgumentException("entitiesToSave must not be null")
         }
-        return StreamSupport.stream(entitiesToSave.spliterator(), false).map { e -> save(e) }.collect(Collectors.toList())
+        return StreamSupport.stream(entitiesToSave.spliterator(), false)
+            .map { e -> save(e) }
+            .collect(Collectors.toList())
     }
 
     override fun flush() {
@@ -241,7 +242,10 @@ open class InMemoryJpaRepository<T, ID> : JpaRepository<T, ID> {
         throw UnsupportedOperationException("Not yet implemented")
     }
 
-    override fun <S : T, R> findBy(example: Example<S>, queryFunction: Function<FluentQuery.FetchableFluentQuery<S>, R>): R {
+    override fun <S : T, R> findBy(
+        example: Example<S>,
+        queryFunction: Function<FluentQuery.FetchableFluentQuery<S>, R>,
+    ): R {
         throw UnsupportedOperationException("Not yet implemented")
     }
 }

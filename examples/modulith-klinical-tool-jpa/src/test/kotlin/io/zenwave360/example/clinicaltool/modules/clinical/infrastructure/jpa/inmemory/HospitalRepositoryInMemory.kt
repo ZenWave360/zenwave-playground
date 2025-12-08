@@ -6,5 +6,4 @@ import java.math.*
 import java.time.*
 import java.util.*
 
-class HospitalRepositoryInMemory : InMemoryJpaRepository<Hospital, Long>(), HospitalRepository {
-}
+class HospitalRepositoryInMemory : InMemoryJpaRepository<Hospital, Long>(), HospitalRepository {}

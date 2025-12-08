@@ -5,6 +5,7 @@ import io.zenwave360.example.clinicaltool.modules.masterdata.*
 import io.zenwave360.example.clinicaltool.modules.masterdata.dtos.*
 import io.zenwave360.example.clinicaltool.modules.masterdata.*
 import io.zenwave360.example.clinicaltool.modules.masterdata.dtos.*
+import io.zenwave360.example.clinicaltool.common.*
 import io.zenwave360.example.clinicaltool.modules.masterdata.mappers.*
 
 import java.net.URI
@@ -30,7 +31,6 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.web.context.request.NativeWebRequest
 
-
 /**
  * REST controller for MasterDataApi.
  */
@@ -46,10 +46,6 @@ open class MasterDataApiController(
     private lateinit var request: NativeWebRequest
 
     private val mapper = MasterDataDTOsMapper.INSTANCE
-
-    fun getRequest(): Optional<NativeWebRequest> {
-        return Optional.ofNullable(request)
-    }
 
 
 
@@ -71,8 +67,8 @@ open class MasterDataApiController(
     override fun getMasterData(id: Long): ResponseEntity<MasterDataDTO> {
         log.debug("REST request to getMasterData: {}", id)
         val masterData =  masterDataService.getMasterData(id)
-        return if (masterData.isPresent) {
-            val responseDTO = mapper.asMasterDataDTO(masterData.get())
+        return if (masterData != null) {
+            val responseDTO = mapper.asMasterDataDTO(masterData)
             ResponseEntity.status(200).body(responseDTO)
         } else {
             ResponseEntity.notFound().build()
@@ -83,8 +79,8 @@ open class MasterDataApiController(
         log.debug("REST request to updateMasterData: {}, {}", id, reqBody)
         val input = mapper.asMasterData(reqBody)
         val masterData =  masterDataService.updateMasterData(id, input)
-        return if (masterData.isPresent) {
-            val responseDTO = mapper.asMasterDataDTO(masterData.get())
+        return if (masterData != null) {
+            val responseDTO = mapper.asMasterDataDTO(masterData)
             ResponseEntity.status(200).body(responseDTO)
         } else {
             ResponseEntity.notFound().build()
