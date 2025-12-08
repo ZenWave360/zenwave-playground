@@ -1,5 +1,6 @@
 package io.zenwave360.example.clinicaltool.modules.clinical.config;
 
+import io.zenwave360.example.clinicaltool.common.TestDataLoader;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.domain.*;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.implementation.*;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.inbound.*;
@@ -21,7 +22,7 @@ public class ServicesInMemoryConfig extends RepositoriesInMemoryConfig {
     protected final HospitalServiceImpl hospitalService =
             new HospitalServiceImpl(hospitalRepository(), doctorRepository(), eventPublisher);
     protected final PatientsServiceImpl patientsService =
-            new PatientsServiceImpl(patientRepository(), provisionalPatientRepository(), eventPublisher);
+            new PatientsServiceImpl(patientRepository(), eventPublisher);
 
     @Bean
     public <T extends HospitalService> T hospitalService() {
@@ -36,7 +37,6 @@ public class ServicesInMemoryConfig extends RepositoriesInMemoryConfig {
     static List<Hospital> _hospitals;
     static List<Doctor> _doctors;
     static List<Patient> _patients;
-    static List<ProvisionalPatient> _provisionalPatients;
 
     public void reloadTestData() {
 
@@ -46,7 +46,6 @@ public class ServicesInMemoryConfig extends RepositoriesInMemoryConfig {
                 Patient.class,
                 GeneralInfo.class,
                 HealthInsuranceInfo.class,
-                ProvisionalPatient.class,
                 PatientAddress.class,
                 HospitalAddress.class,
                 PatientWearable.class,
@@ -62,11 +61,6 @@ public class ServicesInMemoryConfig extends RepositoriesInMemoryConfig {
         var patients = _patients != null ? _patients : testDataLoader.loadCollectionTestDataAsObjects(Patient.class);
         patientRepository().deleteAll();
         patientRepository().saveAll(patients);
-        var provisionalPatients = _provisionalPatients != null
-                ? _provisionalPatients
-                : testDataLoader.loadCollectionTestDataAsObjects(ProvisionalPatient.class);
-        provisionalPatientRepository().deleteAll();
-        provisionalPatientRepository().saveAll(provisionalPatients);
         eventPublisher.getEvents().clear();
     }
 

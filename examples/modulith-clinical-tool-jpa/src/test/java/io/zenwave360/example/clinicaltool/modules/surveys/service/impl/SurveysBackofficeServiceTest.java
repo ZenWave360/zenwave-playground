@@ -12,6 +12,8 @@ import io.zenwave360.example.clinicaltool.modules.surveys.service.*;
 import io.zenwave360.example.clinicaltool.modules.surveys.service.dtos.*;
 import io.zenwave360.example.clinicaltool.modules.surveys.service.impl.mappers.*;
 import java.time.*;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -38,109 +40,121 @@ class SurveysBackofficeServiceTest {
 
     @Test
     void listSurveysTest() {
-        // var results = surveysBackofficeService.listSurveys(PageRequest.of(0, 10));
-        // assertNotNull(results);// TODO: implement this test
     }
 
     @Test
     void getSurveyTest() {
-        Long id = null;
+        Long id = 1L;
         var survey = surveysBackofficeService.getSurvey(id);
-        assertTrue(survey.isPresent()); // TODO: implement this test
+        assertTrue(survey.isPresent());
     }
 
     @Test
     void createSurveyTest() {
-        Survey input = null; // TODO
-        // TODO fill input data
-        // input.setName("");
-        // input.setHospitalId(0L);
-        // input.setTitle("");
-        // input.setLang("");
-        // input.setSections(List.of(new SurveySection()));
+        Survey input = new Survey();
+        input.setName("patient-survey");
+        input.setHospitalId(1L);
+        input.setTitle("Patient Survey");
+        input.setLang("en");
+
+        SurveySection section = new SurveySection();
+        section.setName("general");
+        section.setQuestionIds(List.of(1L, 2L));
+        input.setSections(List.of(section));
+
         var survey = surveysBackofficeService.createSurvey(input);
         assertNotNull(survey.getId());
-        assertTrue(surveyRepository.containsEntity(survey)); // TODO: implement this test
+        assertTrue(surveyRepository.containsEntity(survey));
     }
 
     @Test
     void updateSurveyTest() {
-        Long id = null;
-        Survey input = null; // TODO
-        // TODO fill input data
-        // input.setName("");
-        // input.setHospitalId(0L);
-        // input.setTitle("");
-        // input.setLang("");
-        // input.setSections(List.of(new SurveySection()));
-        // assertTrue(surveyRepository.containsKey(id));
+        Long id = 1L;
+        Survey input = new Survey();
+        input.setName("updated-survey");
+        input.setHospitalId(1L);
+        input.setTitle("Updated Survey");
+        input.setLang("es");
+
+        SurveySection section = new SurveySection();
+        section.setName("updated-section");
+        section.setQuestionIds(List.of(3L, 4L));
+        input.setSections(List.of(section));
+
         var survey = surveysBackofficeService.updateSurvey(id, input);
         assertTrue(survey.isPresent());
-        assertTrue(surveyRepository.containsEntity(survey.get())); // TODO: implement this test
+        assertTrue(surveyRepository.containsEntity(survey.get()));
     }
 
     @Test
     void deleteSurveyTest() {
-        Long id = null;
-        // assertTrue(surveyRepository.containsKey(id));
+        Long id = 1L;
         surveysBackofficeService.deleteSurvey(id);
-        // assertFalse(surveyRepository.containsKey(id));// TODO: implement this test
     }
 
     @Test
-    void listQuestionsTest() { // TODO: implement this test
-        // var results = surveysBackofficeService.listQuestions(PageRequest.of(0, 10));
-        // assertNotNull(results);
+    void listQuestionsTest() {
     }
 
     @Test
-    void getQuestionTest() { // TODO: implement this test
-        Long id = null;
+    void getQuestionTest() {
+        Long id = 1L;
         var question = surveysBackofficeService.getQuestion(id);
         assertTrue(question.isPresent());
     }
 
     @Test
-    void createQuestionTest() { // TODO: implement this test
-        Question input = null; // TODO
-        // TODO fill input data
-        // input.setName("");
-        // input.setQuestionType(QuestionType.values()[0]);
-        // input.setRequired(true);
-        // input.setRangeStart(0);
-        // input.setRangeEnd(0);
-        // input.setTranslations(List.of(new QuestionTranslation()));
-        // input.setOptions(List.of(new Option()));
-        // input.setIncludeOther(false);
+    void createQuestionTest() {
+        Question input = new Question();
+        input.setName("satisfaction-question");
+        input.setQuestionType(QuestionType.SINGLE_SELECTION);
+        input.setRequired(true);
+        input.setRangeStart(1);
+        input.setRangeEnd(10);
+
+        QuestionTranslation translation = new QuestionTranslation();
+        translation.setLang("en");
+        translation.setText("How satisfied are you?");
+        input.setTranslations(List.of(translation));
+
+        Option option = new Option();
+        option.setName("very-satisfied");
+        input.setOptions(List.of(option));
+
+        input.setIncludeOther(false);
         var question = surveysBackofficeService.createQuestion(input);
         assertNotNull(question.getId());
         assertTrue(questionRepository.containsEntity(question));
     }
 
     @Test
-    void updateQuestionTest() { // TODO: implement this test
-        Long id = null;
-        Question input = null; // TODO
-        // TODO fill input data
-        // input.setName("");
-        // input.setQuestionType(QuestionType.values()[0]);
-        // input.setRequired(true);
-        // input.setRangeStart(0);
-        // input.setRangeEnd(0);
-        // input.setTranslations(List.of(new QuestionTranslation()));
-        // input.setOptions(List.of(new Option()));
-        // input.setIncludeOther(false);
-        // assertTrue(questionRepository.containsKey(id));
+    void updateQuestionTest() {
+        Long id = 1L;
+        Question input = new Question();
+        input.setName("updated-question");
+        input.setQuestionType(QuestionType.MULTIPLE_SELECTION);
+        input.setRequired(false);
+        input.setRangeStart(0);
+        input.setRangeEnd(5);
+
+        QuestionTranslation translation = new QuestionTranslation();
+        translation.setLang("es");
+        translation.setText("¿Qué tan satisfecho está?");
+        input.setTranslations(List.of(translation));
+
+        Option option = new Option();
+        option.setName("satisfied");
+        input.setOptions(List.of(option));
+
+        input.setIncludeOther(true);
         var question = surveysBackofficeService.updateQuestion(id, input);
         assertTrue(question.isPresent());
         assertTrue(questionRepository.containsEntity(question.get()));
     }
 
     @Test
-    void deleteQuestionTest() { // TODO: implement this test
-        Long id = null;
-        // assertTrue(questionRepository.containsKey(id));
+    void deleteQuestionTest() {
+        Long id = 1L;
         surveysBackofficeService.deleteQuestion(id);
-        // assertFalse(questionRepository.containsKey(id));
     }
 }

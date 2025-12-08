@@ -163,7 +163,7 @@ service SurveysService for (SurveyAnswers) {
     @post("/{surveyId}/patient/{patientId}/answers/{date}")
     answerSurvey(@natural id, SurveyAnswers) SurveyAnswers
 
-    @patch({ path: "/{surveyId}/patient/{patientId}/answers/{date}", params: { surveryId: Long } })
+    @patch({ path: "/{surveyId}/patient/{patientId}/answers/{date}", params: { surveyId: Long } })
     updateSurveyAnswers(@natural id, SurveyAnswers) SurveyAnswers?
 
     @get("/{surveyId}/patient/{patientId}/answers/{date}")

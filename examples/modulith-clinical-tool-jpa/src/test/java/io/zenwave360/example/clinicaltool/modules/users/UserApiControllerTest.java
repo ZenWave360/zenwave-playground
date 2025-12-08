@@ -29,14 +29,14 @@ public class UserApiControllerTest {
 
     @Test
     public void findByUsernameTest() {
-        String username = null;
+        String username = "admin";
         var response = controller.findByUsername(username);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
 
     @Test
     public void updateUserTest() {
-        String username = null;
+        String username = "admin";
         UserDTO reqBody = null;
         var response = controller.updateUser(username, reqBody);
         Assertions.assertEquals(200, response.getStatusCode().value());
@@ -44,7 +44,7 @@ public class UserApiControllerTest {
 
     @Test
     public void deleteUserTest() {
-        String username = null;
+        String username = "admin";
         var response = controller.deleteUser(username);
         Assertions.assertEquals(204, response.getStatusCode().value());
     }
@@ -58,14 +58,14 @@ public class UserApiControllerTest {
 
     @Test
     public void enableAccountTest() {
-        String username = null;
+        String username = "admin";
         var response = controller.enableAccount(username);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
 
     @Test
     public void disableAccountTest() {
-        String username = null;
+        String username = "admin";
         var response = controller.disableAccount(username);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }

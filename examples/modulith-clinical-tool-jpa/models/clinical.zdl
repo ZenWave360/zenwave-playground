@@ -67,15 +67,6 @@ relationship OneToMany {
     Patient{patientWearables required } to PatientWearable{patient required}
 }
 
-@aggregate
-entity ProvisionalPatient {
-    @naturalId
-    phoneNumber String required maxlength(20)
-    @naturalId
-    hisNumber String required maxlength(100)
-    @json patient Patient
-}
-
 @skip
 entity Address {
    street String required maxlength(100)
@@ -194,7 +185,7 @@ input DocumentSignatureRequestedInput {
 }
 
 @rest
-service PatientsService for (Patient, ProvisionalPatient) {
+service PatientsService for (Patient) {
 
     @get("/patients/{hisNumber}/{phoneNumber}")
     loadPatient(@natural id) Patient

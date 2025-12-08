@@ -29,7 +29,7 @@ public class PatientsApiControllerTest {
 
     @Test
     public void getPatientProfileByIdTest() {
-        Long id = null;
+        Long id = 1L;
         var response = controller.getPatientProfileById(id);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }

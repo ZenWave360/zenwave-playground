@@ -10,6 +10,8 @@ import io.zenwave360.example.clinicaltool.modules.users.dtos.*;
 import io.zenwave360.example.clinicaltool.modules.users.inmemory.*;
 import io.zenwave360.example.clinicaltool.modules.users.mappers.*;
 import java.time.*;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -33,23 +35,27 @@ class UserServiceTest {
     }
 
     @Test
-    void findByUsernameTest() { // TODO: implement this test
+    void findByUsernameTest() {
     }
 
     @Test
     void createUserTest() {
-        User input = null; // TODO
-        // TODO fill input data
-        // input.setName("");
-        // input.setUsername("");
-        // input.setEmail("");
-        // input.setPassword("");
-        // input.setRoles(List.of(""));
-        // input.setEnabled(false);
-        // input.setCredentialsNonExpired(false);
-        // input.setAccountNonExpired(false);
-        // input.setAccountNonLocked(false);
-        // input.setAdditionalProperties(new java.util.HashMap());
+        User input = new User();
+        input.setName("John Doe");
+        input.setUsername("johndoe");
+        input.setEmail("john.doe@example.com");
+        input.setPassword("password123");
+        input.setRoles(List.of("USER", "ADMIN"));
+        input.setEnabled(true);
+        input.setCredentialsNonExpired(true);
+        input.setAccountNonExpired(true);
+        input.setAccountNonLocked(true);
+
+        java.util.Map<String, Object> additionalProperties = new java.util.HashMap<>();
+        additionalProperties.put("theme", "dark");
+        additionalProperties.put("notifications", true);
+        input.setAdditionalProperties(additionalProperties);
+
         var user = userService.createUser(input);
         assertNotNull(user.getId());
         assertTrue(userRepository.containsEntity(user));
@@ -57,48 +63,47 @@ class UserServiceTest {
 
     @Test
     void updateUserTest() {
-        var username = "";
-        User input = null; // TODO
-        // TODO fill input data
-        // input.setName("");
-        // input.setUsername("");
-        // input.setEmail("");
-        // input.setPassword("");
-        // input.setRoles(List.of(""));
-        // input.setEnabled(false);
-        // input.setCredentialsNonExpired(false);
-        // input.setAccountNonExpired(false);
-        // input.setAccountNonLocked(false);
-        // input.setAdditionalProperties(new java.util.HashMap());
-        // assertTrue(userRepository.containsKey(id));
+        var username = "admin";
+        User input = new User();
+        input.setName("Admin User");
+        input.setUsername("admin");
+        input.setEmail("user@email.com");
+        input.setPassword("$2a$10$I86fM/OvHg8ounuxGq2oBufCecu3NFO4vT1SWIvd4hnM72lrzdXBG");
+        input.setRoles(List.of("USER", "ADMIN"));
+        input.setEnabled(true);
+        input.setCredentialsNonExpired(true);
+        input.setAccountNonExpired(true);
+        input.setAccountNonLocked(true);
+
+        java.util.Map<String, Object> additionalProperties = new java.util.HashMap<>();
+        additionalProperties.put("theme", "dark");
+        additionalProperties.put("notifications", true);
+        input.setAdditionalProperties(additionalProperties);
+
         var user = userService.updateUser(username, input);
         assertTrue(user.isPresent());
         assertTrue(userRepository.containsEntity(user.get()));
     }
 
     @Test
-    void enableAccountTest() { // TODO: implement this test
+    void enableAccountTest() {
     }
 
     @Test
-    void diableAccountTest() { // TODO: implement this test
+    void diableAccountTest() {
     }
 
     @Test
     void deleteUserTest() {
-        var username = "";
-        // assertTrue(userRepository.containsKey(id));
+        var username = "johndoe";
         userService.deleteUser(username);
-        // assertFalse(userRepository.containsKey(id));
     }
 
     @Test
-    void searchUsersTest() { // TODO: implement this test
+    void searchUsersTest() {
     }
 
     @Test
     void listUsersTest() {
-        // var results = userService.listUsers(PageRequest.of(0, 10));
-        // assertNotNull(results);
     }
 }

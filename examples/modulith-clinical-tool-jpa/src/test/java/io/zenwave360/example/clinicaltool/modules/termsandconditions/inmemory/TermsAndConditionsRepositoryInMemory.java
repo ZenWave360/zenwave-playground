@@ -9,11 +9,13 @@ import java.util.*;
 public class TermsAndConditionsRepositoryInMemory extends InMemoryJpaRepository<TermsAndConditions>
         implements TermsAndConditionsRepository {
 
-    @Override public TermsAndConditions findOneByLangAndStartDateAfterOrderByStartDateAsc(
+    @Override public TermsAndConditions findOneByLangAndStartDateBeforeOrderByStartDateAsc(
             String lang, LocalDate localDate) {
         return getEntities().values().stream()
                 .filter(e -> isSameValue(lang, readField(e, "lang"))
-                        && isSameValue(localDate, readField(e, "startDate"))) // FIXME
+                        && ((LocalDate) readField(e, "startDate")).isBefore(localDate))
+                .sorted((e1, e2) -> ((LocalDate) readField(e1, "startDate"))
+                        .compareTo((LocalDate) readField(e2, "startDate")))
                 .findFirst()
                 .orElse(null);
     }

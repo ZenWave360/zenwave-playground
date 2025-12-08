@@ -113,11 +113,6 @@ paths:
           schema:
             type: string
             format: date
-        - name: "surveryId"
-          in: query
-          schema:
-            type: integer
-            format: int64
       requestBody:
         required: true
         content:
@@ -373,7 +368,7 @@ components:
     sort:
       name: sort
       in: query
-      description: The number of results page
+      description: Sort results by field name and direction (asc or desc)
       schema:
         type: array
         items:

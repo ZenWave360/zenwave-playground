@@ -1,0 +1,29 @@
+{
+  "id": 1,
+  "version": 1,
+  "surveyId": 1,
+  "patientId": 1,
+  "date": "2025-12-12",
+  "lang": "en",
+  "answers": [
+    {
+      "questionId": 1,
+      "value": "8",
+      "values": null,
+      "otherValue": null
+    },
+    {
+      "questionId": 2,
+      "value": null,
+      "values": ["option1", "option2"],
+      "otherValue": null
+    },
+    {
+      "questionId": 3,
+      "value": "Very satisfied with the care received",
+      "values": null,
+      "otherValue": null
+    }
+  ]
+}
+

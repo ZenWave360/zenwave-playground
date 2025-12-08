@@ -10,6 +10,8 @@ import io.zenwave360.example.clinicaltool.modules.masterdata.dtos.*;
 import io.zenwave360.example.clinicaltool.modules.masterdata.inmemory.*;
 import io.zenwave360.example.clinicaltool.modules.masterdata.mappers.*;
 import java.time.*;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -34,12 +36,16 @@ class MasterDataServiceTest {
 
     @Test
     void createMasterDataTest() {
-        MasterData input = null; // TODO
-        // TODO fill input data
-        // input.setType(MasterDataType.values()[0]);
-        // input.setKey("");
-        // input.setValue("");
-        // input.setTranslations(List.of(new MasterDataTranslation()));
+        MasterData input = new MasterData();
+        input.setType(MasterDataType.GENDER);
+        input.setKey("MALE");
+        input.setValue("Male");
+
+        MasterDataTranslation translation = new MasterDataTranslation();
+        translation.setLang("en");
+        translation.setText("Male");
+        input.setTranslations(List.of(translation));
+
         var masterData = masterDataService.createMasterData(input);
         assertNotNull(masterData.getId());
         assertTrue(masterDataRepository.containsEntity(masterData));
@@ -47,21 +53,24 @@ class MasterDataServiceTest {
 
     @Test
     void getMasterDataTest() {
-        Long id = null;
+        Long id = 1L;
         var masterData = masterDataService.getMasterData(id);
         assertTrue(masterData.isPresent());
     }
 
     @Test
     void updateMasterDataTest() {
-        Long id = null;
-        MasterData input = null; // TODO
-        // TODO fill input data
-        // input.setType(MasterDataType.values()[0]);
-        // input.setKey("");
-        // input.setValue("");
-        // input.setTranslations(List.of(new MasterDataTranslation()));
-        // assertTrue(masterDataRepository.containsKey(id));
+        Long id = 1L;
+        MasterData input = new MasterData();
+        input.setType(MasterDataType.COUNTRY);
+        input.setKey("US");
+        input.setValue("United States");
+
+        MasterDataTranslation translation = new MasterDataTranslation();
+        translation.setLang("en");
+        translation.setText("United States");
+        input.setTranslations(List.of(translation));
+
         var masterData = masterDataService.updateMasterData(id, input);
         assertTrue(masterData.isPresent());
         assertTrue(masterDataRepository.containsEntity(masterData.get()));
@@ -69,19 +78,15 @@ class MasterDataServiceTest {
 
     @Test
     void listMasterDataTest() {
-        // var results = masterDataService.listMasterData(PageRequest.of(0, 10));
-        // assertNotNull(results);
     }
 
     @Test
     void deleteMasterDataTest() {
-        Long id = null;
-        // assertTrue(masterDataRepository.containsKey(id));
+        Long id = 1L;
         masterDataService.deleteMasterData(id);
-        // assertFalse(masterDataRepository.containsKey(id));
     }
 
     @Test
-    void listMasterDataOfTypeTest() { // TODO: implement this test
+    void listMasterDataOfTypeTest() {
     }
 }

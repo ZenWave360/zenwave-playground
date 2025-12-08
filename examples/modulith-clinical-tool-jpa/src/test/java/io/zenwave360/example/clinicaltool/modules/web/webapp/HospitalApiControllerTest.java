@@ -29,14 +29,14 @@ public class HospitalApiControllerTest {
 
     @Test
     public void getHospitalTest() {
-        Long id = null;
+        Long id = 1L;
         var response = controller.getHospital(id);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
 
     @Test
     public void updateHospitalTest() {
-        Long id = null;
+        Long id = 1L;
         HospitalDTO reqBody = null;
         var response = controller.updateHospital(id, reqBody);
         Assertions.assertEquals(200, response.getStatusCode().value());
@@ -72,7 +72,7 @@ public class HospitalApiControllerTest {
 
     @Test
     public void updateDoctorTest() {
-        Long id = null;
+        Long id = 1L;
         DoctorDTO reqBody = null;
         var response = controller.updateDoctor(id, reqBody);
         Assertions.assertEquals(200, response.getStatusCode().value());
@@ -80,21 +80,21 @@ public class HospitalApiControllerTest {
 
     @Test
     public void getDoctorTest() {
-        Long id = null;
+        Long id = 1L;
         var response = controller.getDoctor(id);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
 
     @Test
     public void listHospitalDoctorsTest() {
-        Long hospitalId = null;
+        Long hospitalId = 1L;
         var response = controller.listHospitalDoctors(hospitalId);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
 
     @Test
     public void listHospitalPatientsTest() {
-        Long hospitalId = null;
+        Long hospitalId = 1L;
         var response = controller.listHospitalPatients(hospitalId);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }

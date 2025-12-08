@@ -3,12 +3,11 @@ package io.zenwave360.example.clinicaltool.modules.termsandconditions;
 import io.zenwave360.example.clinicaltool.modules.termsandconditions.domain.*;
 import io.zenwave360.example.clinicaltool.modules.termsandconditions.dtos.*;
 import io.zenwave360.example.clinicaltool.modules.termsandconditions.mappers.*;
-import java.math.*;
+
 import java.time.*;
 import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,7 +65,7 @@ public class TermsAndConditionsServiceImpl implements TermsAndConditionsService 
     public Optional<TermsAndConditions> getCurrentTermsAndConditions(String lang) {
         log.debug("Request getCurrentTermsAndConditions: {}", lang);
         var yesterday = LocalDate.now().minusDays(1);
-        var termsAndConditions = termsAndConditionsRepository.findOneByLangAndStartDateAfterOrderByStartDateAsc(lang, yesterday);
+        var termsAndConditions = termsAndConditionsRepository.findOneByLangAndStartDateBeforeOrderByStartDateAsc(lang, yesterday);
         return Optional.ofNullable(termsAndConditions);
     }
 

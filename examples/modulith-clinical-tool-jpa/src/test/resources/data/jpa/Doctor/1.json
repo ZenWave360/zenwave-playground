@@ -1,0 +1,13 @@
+{
+  "id": 1,
+  "version": 1,
+  "userId": 1,
+  "profilePictureId": 1,
+  "hospitalId": 1,
+  "name": "John",
+  "surname": "Doe",
+  "surname2": "Smith",
+  "email": "test@example.com",
+  "phoneNumber": "1234567890",
+  "lang": "en"
+}

@@ -1,0 +1,18 @@
+{
+  "id": 1,
+  "version": 1,
+  "type": "GENDER",
+  "key": "MALE",
+  "value": "Male",
+  "translations": [
+    {
+      "lang": "en",
+      "text": "Male"
+    },
+    {
+      "lang": "es",
+      "text": "Masculino"
+    }
+  ]
+}
+
