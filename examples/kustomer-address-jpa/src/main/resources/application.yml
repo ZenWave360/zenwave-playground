@@ -46,5 +46,5 @@ spring:
       function:
         definition: on-customer-event;
       bindings:
-        on-customer-event-out-0:
+        on-customer-event-out:
           destination: customer.events

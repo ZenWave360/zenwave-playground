@@ -24,7 +24,7 @@ config {
 @auditing // adds auditing fields to the entity
 entity Customer {
     name String required maxlength(254) /** Customer name */
-    email String required maxlength(254)
+    email String required maxlength(254) pattern(/^[^@]+@[^\\s@]+\\.[^\\s@]+$/)
     /** Customer Addresses can be stored in a JSON column in the database. */
     @json addresses Address[] minlength(1) maxlength(5) {
         street String required maxlength(254)
@@ -62,7 +62,7 @@ service CustomerService for (Customer) {
     updateCustomer(id, Customer) Customer? withEvents CustomerEvent
     @delete("/{id}")
     deleteCustomer(id) withEvents CustomerDeletedEvent
-    @post("/search")
+    @post(path: "/search", status: 200)
     @paginated
     searchCustomers(CustomerSearchCriteria) Customer[]
 }
