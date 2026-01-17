@@ -1,0 +1,56 @@
+@import("io.zenwave360.sdk.plugins.customizations:kotlin-backend-application:2.3.0-SNAPSHOT")
+config {
+
+    // This is a global configuration that applies to all plugins.
+    zdlFile "zenwave-model.zdl"
+
+    // these should match the values of openapi-generator-maven-plugin
+    // used by the OpenAPIControllersPlugin and SpringWebTestClientPlugin
+    openApiApiPackage "{{basePackage}}.web"
+    openApiModelPackage "{{basePackage}}.web.model"
+    openApiModelNameSuffix DTO
+
+
+    plugins {
+        /** Generates an OpenAPI 3.0 specification from the ZDL model. */
+        ZDLToOpenAPIPlugin {
+            idType integer
+            idTypeFormat int64
+            targetFile "src/main/resources/public/apis/openapi.yml"
+        }
+        /** Generates an AsyncAPI 3.0 specification from the ZDL model. */
+        ZDLToAsyncAPIPlugin {
+            asyncapiVersion v3
+            idType integer
+            idTypeFormat int64
+            targetFile "src/main/resources/public/apis/asyncapi.yml"
+            includeCloudEventsHeaders true
+            includeKafkaCommonHeaders true
+        }
+        /** Generates a Backend Application from the ZDL model. (Headless Core) */
+        BackendApplicationDefaultPlugin {
+            templates "new io.zenwave360.sdk.plugins.kotlin.BackendApplicationKotlinTemplates()"
+            useJSpecify true
+            includeEmitEventsImplementation true
+//             --force // overwite all files
+        }
+        /** Generates Spring MVC controllers from the OpenAPI specification (Web Adapters). */
+        OpenAPIControllersPlugin {
+            templates "new io.zenwave360.sdk.plugins.kotlin.OpenAPIControllersKotlinTemplates()"
+            openapiFile "src/main/resources/public/apis/openapi.yml"
+        }
+
+        SpringWebTestClientPlugin {
+            templates "new io.zenwave360.sdk.plugins.kotlin.SpringWebTestClientKotlinTemplates()"
+            openapiFile "src/main/resources/public/apis/openapi.yml"
+        }
+
+        SpringWebTestClientPlugin {
+            templates "new io.zenwave360.sdk.plugins.kotlin.SpringWebTestClientKotlinTemplates()"
+            openapiFile "src/main/resources/public/apis/openapi.yml"
+            groupBy businessFlow
+            businessFlowTestName FromPlaceOrderToCancelIntegrationTest
+            operationIds placeOrder,getOrder,payOrder,shipOrder,cancelOrder
+        }
+    }
+}

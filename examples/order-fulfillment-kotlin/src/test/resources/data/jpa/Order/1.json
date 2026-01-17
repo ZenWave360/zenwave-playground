@@ -1,0 +1,26 @@
+{
+    "id": 1,
+    "version": 0,
+    "orderNumber": "ORD-2024-001",
+    "status": "PLACED",
+    "totalAmount": 299.99,
+    "currency": "USD",
+    "paymentReference": null,
+    "trackingNumber": null,
+    "items": [
+        {
+            "productId": "PROD-001",
+            "productName": "Wireless Bluetooth Headphones",
+            "quantity": 1,
+            "unitPrice": 199.99
+        },
+        {
+            "productId": "PROD-002",
+            "productName": "USB-C Cable",
+            "quantity": 2,
+            "unitPrice": 50.00
+        }
+    ],
+    "createdBy": "system",
+    "lastModifiedBy": "system"
+}

@@ -1,0 +1,21 @@
+{
+    "id": 2,
+    "version": 0,
+    "orderNumber": "ORD-2024-002",
+    "status": "PAID",
+    "totalAmount": 149.99,
+    "currency": "USD",
+    "paymentReference": null,
+    "trackingNumber": null,
+    "items": [
+        {
+            "productId": "PROD-003",
+            "productName": "Smartphone Case",
+            "quantity": 1,
+            "unitPrice": 149.99
+        }
+    ],
+    "createdBy": "system",
+    "lastModifiedBy": "system"
+}
+

@@ -1,0 +1,21 @@
+{
+    "id": 3,
+    "version": 0,
+    "orderNumber": "ORD-2024-003",
+    "status": "SHIPPED",
+    "totalAmount": 89.97,
+    "currency": "EUR",
+    "paymentReference": "PAY-REF-12343",
+    "trackingNumber": null,
+    "items": [
+        {
+            "productId": "PROD-004",
+            "productName": "Wireless Mouse",
+            "quantity": 3,
+            "unitPrice": 29.99
+        }
+    ],
+    "createdBy": "system",
+    "lastModifiedBy": "system"
+}
+

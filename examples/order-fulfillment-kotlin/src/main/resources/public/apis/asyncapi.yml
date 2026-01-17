@@ -1,0 +1,304 @@
+asyncapi: 3.0.0
+info:
+  title: "Order Fulfillment DDD Example"
+  version: 0.0.1
+  tags:
+    - name: "Default"
+    - name: "Order"
+
+defaultContentType: application/json
+
+channels:
+  OrdersPlacedChannel:
+    address: "orders.placed"
+    messages:
+      OrderPlacedMessage:
+        $ref: '#/components/messages/OrderPlacedMessage'
+  OrdersPaidChannel:
+    address: "orders.paid"
+    messages:
+      OrderPaidMessage:
+        $ref: '#/components/messages/OrderPaidMessage'
+  OrdersShippedChannel:
+    address: "orders.shipped"
+    messages:
+      OrderShippedMessage:
+        $ref: '#/components/messages/OrderShippedMessage'
+  OrdersCancelledChannel:
+    address: "orders.cancelled"
+    messages:
+      OrderCancelledMessage:
+        $ref: '#/components/messages/OrderCancelledMessage'
+
+operations:
+  onOrderPlaced:
+    action: send
+    tags:
+      - name: Order
+    channel:
+      $ref: '#/channels/OrdersPlacedChannel'
+  onOrderPaid:
+    action: send
+    tags:
+      - name: Order
+    channel:
+      $ref: '#/channels/OrdersPaidChannel'
+  onOrderShipped:
+    action: send
+    tags:
+      - name: Order
+    channel:
+      $ref: '#/channels/OrdersShippedChannel'
+  onOrderCancelled:
+    action: send
+    tags:
+      - name: Order
+    channel:
+      $ref: '#/channels/OrdersCancelledChannel'
+
+
+components:
+  messages:
+    OrderPlacedMessage:
+      name: OrderPlacedMessage
+      title: "Domain Events"
+      summary: "Domain Events"
+      traits:
+        - $ref: '#/components/messageTraits/CommonHeaders'
+      payload:
+        $ref: "#/components/schemas/OrderPlaced"
+    OrderPaidMessage:
+      name: OrderPaidMessage
+      title: ""
+      summary: ""
+      traits:
+        - $ref: '#/components/messageTraits/CommonHeaders'
+      payload:
+        $ref: "#/components/schemas/OrderPaid"
+    OrderShippedMessage:
+      name: OrderShippedMessage
+      title: ""
+      summary: ""
+      traits:
+        - $ref: '#/components/messageTraits/CommonHeaders'
+      payload:
+        $ref: "#/components/schemas/OrderShipped"
+    OrderCancelledMessage:
+      name: OrderCancelledMessage
+      title: ""
+      summary: ""
+      traits:
+        - $ref: '#/components/messageTraits/CommonHeaders'
+      payload:
+        $ref: "#/components/schemas/OrderCancelled"
+
+  messageTraits:
+    CommonHeaders:
+      headers:
+        type: object
+        properties:
+          kafka_messageKey:
+            type: "integer"
+            format: "int64"
+            description: This header value will be populated automatically at runtime
+            x-runtime-expression: $message.payload#/id
+          # CloudEvents Attributes
+          ce-id:
+            type: string
+            description: Unique identifier for the event
+            x-runtime-expression: $message.payload#{#this.id}
+          ce-source:
+            type: string
+            description: URI identifying the context where event happened
+            x-runtime-expression: $message.payload#{"Order"}
+          ce-specversion:
+            type: string
+            description: CloudEvents specification version
+            x-runtime-expression: $message.payload#{"1.0"}
+          ce-type:
+            type: string
+            description: Event type
+            x-runtime-expression: $message.payload#{#this.getClass().getSimpleName()}
+          ce-time:
+            type: string
+            description: Timestamp of when the event happened
+            x-runtime-expression: $message.payload#{T(java.time.Instant).now().toString()}
+
+  schemas:
+    OrderPlaced:
+      type: "object"
+      x-business-entity: "OrderPlaced"
+      required:
+      - "orderNumber"
+      - "status"
+      - "totalAmount"
+      - "currency"
+      properties:
+        orderNumber:
+          type: "string"
+          maxLength: 36
+          description: "prefix doc comment"
+        status:
+          $ref: "#/components/schemas/OrderStatus"
+        totalAmount:
+          type: "number"
+          format: "double"
+        currency:
+          type: "string"
+          maxLength: 3
+        paymentReference:
+          type: "string"
+        trackingNumber:
+          type: "string"
+          description: "Order lines stored as JSON for simplicity in the demo"
+        items:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/OrderItem"
+            minLength: 1
+        id:
+          type: "integer"
+          format: "int64"
+        version:
+          type: "integer"
+          format: "int32"
+    OrderPaid:
+      type: "object"
+      x-business-entity: "OrderPaid"
+      required:
+      - "orderNumber"
+      - "status"
+      - "totalAmount"
+      - "currency"
+      properties:
+        orderNumber:
+          type: "string"
+          maxLength: 36
+          description: "prefix doc comment"
+        status:
+          $ref: "#/components/schemas/OrderStatus"
+        totalAmount:
+          type: "number"
+          format: "double"
+        currency:
+          type: "string"
+          maxLength: 3
+        paymentReference:
+          type: "string"
+        trackingNumber:
+          type: "string"
+          description: "Order lines stored as JSON for simplicity in the demo"
+        items:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/OrderItem"
+            minLength: 1
+        id:
+          type: "integer"
+          format: "int64"
+        version:
+          type: "integer"
+          format: "int32"
+    OrderShipped:
+      type: "object"
+      x-business-entity: "OrderShipped"
+      required:
+      - "orderNumber"
+      - "status"
+      - "totalAmount"
+      - "currency"
+      properties:
+        orderNumber:
+          type: "string"
+          maxLength: 36
+          description: "prefix doc comment"
+        status:
+          $ref: "#/components/schemas/OrderStatus"
+        totalAmount:
+          type: "number"
+          format: "double"
+        currency:
+          type: "string"
+          maxLength: 3
+        paymentReference:
+          type: "string"
+        trackingNumber:
+          type: "string"
+        items:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/OrderItem"
+            minLength: 1
+        id:
+          type: "integer"
+          format: "int64"
+        version:
+          type: "integer"
+          format: "int32"
+    OrderCancelled:
+      type: "object"
+      x-business-entity: "OrderCancelled"
+      required:
+      - "orderNumber"
+      - "status"
+      - "totalAmount"
+      - "currency"
+      properties:
+        orderNumber:
+          type: "string"
+          maxLength: 36
+          description: "prefix doc comment"
+        status:
+          $ref: "#/components/schemas/OrderStatus"
+        totalAmount:
+          type: "number"
+          format: "double"
+        currency:
+          type: "string"
+          maxLength: 3
+        paymentReference:
+          type: "string"
+        trackingNumber:
+          type: "string"
+          description: "Order lines stored as JSON for simplicity in the demo"
+        items:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/OrderItem"
+            minLength: 1
+        id:
+          type: "integer"
+          format: "int64"
+        version:
+          type: "integer"
+          format: "int32"
+    OrderStatus:
+      type: "string"
+      x-business-entity: "OrderStatus"
+      enum:
+      - "DRAFT"
+      - "PLACED"
+      - "PAID"
+      - "SHIPPED"
+      - "CANCELLED"
+    OrderItem:
+      type: "object"
+      x-business-entity: "OrderItem"
+      required:
+      - "productId"
+      - "productName"
+      - "quantity"
+      - "unitPrice"
+      properties:
+        productId:
+          type: "string"
+        productName:
+          type: "string"
+          maxLength: 254
+        quantity:
+          type: "integer"
+          format: "int32"
+        unitPrice:
+          type: "number"
+          format: "double"
+

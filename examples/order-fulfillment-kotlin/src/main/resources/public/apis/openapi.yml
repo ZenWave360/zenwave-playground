@@ -1,0 +1,293 @@
+openapi: 3.0.1
+info:
+  title: "Order Fulfillment DDD Example"
+  version: 0.0.1
+  description: "Order Fulfillment DDD Example"
+  contact:
+    email: email@domain.com
+servers:
+  - description: localhost
+    url: http://localhost:8080/api
+  - description: custom
+    url: "{protocol}://{server}/{path}"
+    variables:
+      protocol:
+        enum: ['http', 'https']
+        default: 'http'
+      server:
+        default: 'localhost:8080'
+      path:
+        default: 'api'
+tags:
+  - name: "Default"
+  - name: "Order"
+
+
+paths:
+  /orders:
+    post:
+      operationId: placeOrder
+      description: "Customer places an order"
+      tags: [Order]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlaceOrderInput"
+      responses:
+        "201":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+  /orders/{orderNumber}/pay:
+    post:
+      operationId: payOrder
+      description: "Order is shipped"
+      tags: [Order]
+      parameters:
+        - name: "orderNumber"
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PayOrderInput"
+      responses:
+        "201":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+  /orders/{orderNumber}/ship:
+    post:
+      operationId: shipOrder
+      description: "Order is cancelled"
+      tags: [Order]
+      parameters:
+        - name: "orderNumber"
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ShipOrderInput"
+      responses:
+        "201":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+  /orders/{orderNumber}/cancel:
+    post:
+      operationId: cancelOrder
+      description: "Query order"
+      tags: [Order]
+      parameters:
+        - name: "orderNumber"
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "201":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+  /orders/{orderNumber}:
+    get:
+      operationId: getOrder
+      description: "getOrder"
+      tags: [Order]
+      parameters:
+        - name: "orderNumber"
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+
+components:
+  schemas:
+    PlaceOrderInput:
+      type: "object"
+      x-business-entity: "PlaceOrderInput"
+      required:
+      - "currency"
+      properties:
+        items:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/OrderItem"
+            minLength: 1
+        currency:
+          type: "string"
+          maxLength: 3
+    PayOrderInput:
+      type: "object"
+      x-business-entity: "PayOrderInput"
+      required:
+      - "paymentReference"
+      properties:
+        paymentReference:
+          type: "string"
+    ShipOrderInput:
+      type: "object"
+      x-business-entity: "ShipOrderInput"
+      required:
+      - "trackingNumber"
+      properties:
+        trackingNumber:
+          type: "string"
+    Order:
+      type: "object"
+      x-business-entity: "Order"
+      required:
+      - "orderNumber"
+      - "status"
+      - "totalAmount"
+      - "currency"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+          readOnly: true
+        version:
+          type: "integer"
+          default: "null"
+          description: "Version of the document (required in PUT for concurrency control,\
+            \ should be null in POSTs)."
+        orderNumber:
+          type: "string"
+          maxLength: 36
+          description: "prefix doc comment"
+        status:
+          $ref: "#/components/schemas/OrderStatus"
+        totalAmount:
+          type: "number"
+          format: "double"
+        currency:
+          type: "string"
+          maxLength: 3
+        paymentReference:
+          type: "string"
+        trackingNumber:
+          type: "string"
+          description: "Order lines stored as JSON for simplicity in the demo"
+        items:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/OrderItem"
+            minLength: 1
+    OrderStatus:
+      type: "string"
+      x-business-entity: "OrderStatus"
+      enum:
+      - "DRAFT"
+      - "PLACED"
+      - "PAID"
+      - "SHIPPED"
+      - "CANCELLED"
+    OrderItem:
+      type: "object"
+      x-business-entity: "OrderItem"
+      required:
+      - "productId"
+      - "productName"
+      - "quantity"
+      - "unitPrice"
+      properties:
+        productId:
+          type: "string"
+        productName:
+          type: "string"
+          maxLength: 254
+        quantity:
+          type: "integer"
+          format: "int32"
+        unitPrice:
+          type: "number"
+          format: "double"
+
+    Page:
+      type: object
+      required:
+        - "content"
+        - "totalElements"
+        - "totalPages"
+        - "size"
+        - "number"
+      properties:
+        number:
+          type: integer
+          minimum: 0
+        numberOfElements:
+          type: integer
+          minimum: 0
+        size:
+          type: integer
+          minimum: 0
+          maximum: 200
+          multipleOf: 25
+        totalElements:
+          type: integer
+        totalPages:
+          type: integer
+
+  parameters:
+    page:
+      name: page
+      in: query
+      description: The number of results page
+      schema:
+        type: integer
+        format: int32
+        default: 0
+    limit:
+      name: limit
+      in: query
+      description: The number of results in a single page
+      schema:
+        type: integer
+        format: int32
+        default: 20
+    sort:
+      name: sort
+      in: query
+      description: Sort results by field name and direction (asc or desc)
+      schema:
+        type: array
+        items:
+          type: string
+
+  securitySchemes:
+    basicAuth:     # <-- arbitrary name for the security scheme
+      type: http
+      scheme: basic
+    bearerAuth:     # <-- arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+security:
+  - basicAuth: []  # <-- use the same name here
+  - bearerAuth: []  # <-- use the same name here

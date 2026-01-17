@@ -1,0 +1,21 @@
+{
+    "id": 4,
+    "version": 0,
+    "orderNumber": "ORD-2024-004",
+    "status": "CANCELLED",
+    "totalAmount": 599.99,
+    "currency": "USD",
+    "paymentReference": "PAY-REF-12344",
+    "trackingNumber": "TRK-67894",
+    "items": [
+        {
+            "productId": "PROD-005",
+            "productName": "Gaming Keyboard",
+            "quantity": 1,
+            "unitPrice": 599.99
+        }
+    ],
+    "createdBy": "system",
+    "lastModifiedBy": "system"
+}
+
