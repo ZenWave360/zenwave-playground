@@ -16,13 +16,12 @@ import com.github.tomakehurst.wiremock.http.Response;
 import com.github.tomakehurst.wiremock.http.ResponseDefinition;
 import com.github.tomakehurst.wiremock.stubbing.ServeEvent;
 import com.jayway.jsonpath.JsonPath;
-import org.apache.commons.lang3.ObjectUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
+import org.apache.commons.lang3.ObjectUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class OpenApiWireMockServer extends WireMockServer {
 
@@ -33,11 +32,23 @@ class OpenApiWireMockServer extends WireMockServer {
     private final Object mockService;
 
     public OpenApiWireMockServer(WireMockConfiguration options, Object mockService, Map<String, Object> openapi) {
-        this(options, mockService, OpenApiInteractionValidator.createForInlineApiSpecification(asJson(openapi)).build(), openapi);
+        this(
+                options,
+                mockService,
+                OpenApiInteractionValidator.createForInlineApiSpecification(asJson(openapi))
+                        .build(),
+                openapi);
     }
 
-    private OpenApiWireMockServer(WireMockConfiguration options, Object mockService, OpenApiInteractionValidator validator, Map<String, Object> openapi) {
-        super(options.extensions(new DynamicResponseTransformer(mockService), new RequestValidator(validator), new ResponseValidator(validator)));
+    private OpenApiWireMockServer(
+            WireMockConfiguration options,
+            Object mockService,
+            OpenApiInteractionValidator validator,
+            Map<String, Object> openapi) {
+        super(options.extensions(
+                new DynamicResponseTransformer(mockService),
+                new RequestValidator(validator),
+                new ResponseValidator(validator)));
         this.validator = validator;
         this.mockService = mockService;
         configureStubsFromOpenApi(openapi);
@@ -60,32 +71,35 @@ class OpenApiWireMockServer extends WireMockServer {
 
                 var requestHandlerMethod = getRequestHandlerMethod(mockService, operationId);
                 if (requestHandlerMethod != null) {
-                    log.info("Configuring Dynamic Request Handler Stub for %s [%s %s %s]".formatted(operationId, method.toUpperCase(), path, statusCode));
+                    log.info("Configuring Dynamic Request Handler Stub for %s [%s %s %s]"
+                            .formatted(operationId, method.toUpperCase(), path, statusCode));
                     stubFor(WireMock.request(method.toUpperCase(), WireMock.urlPathTemplate(path))
                             .willReturn(WireMock.aResponse()
-                                    .withTransformers(DynamicResponseTransformer.class.getName(), ResponseValidator.class.getName())
+                                    .withTransformers(
+                                            DynamicResponseTransformer.class.getName(),
+                                            ResponseValidator.class.getName())
                                     .withTransformerParameter("operationId", operationId)
                                     .withTransformerParameter("statusCode", responseEntry.getKey())
-                                    .withTransformerParameter("contentType", contentType)
-                            )
-                    );
+                                    .withTransformerParameter("contentType", contentType)));
                     continue;
                 }
 
                 if (contentEntry == null) {
-                    log.info("Configuring Static Stub (no content) for %s [%s %s %s]".formatted(operationId, method.toUpperCase(), path, statusCode));
+                    log.info("Configuring Static Stub (no content) for %s [%s %s %s]"
+                            .formatted(operationId, method.toUpperCase(), path, statusCode));
                     stubFor(WireMock.request(method.toUpperCase(), WireMock.urlPathTemplate(path))
-                            .willReturn(WireMock.aResponse()
-                                    .withStatus(Integer.parseInt(statusCode))));
+                            .willReturn(WireMock.aResponse().withStatus(Integer.parseInt(statusCode))));
                     continue;
                 }
 
                 var example = ((Map) contentEntry.getValue()).get("example");
                 var examplesFirstKey = jsonPathFirstKey((Map) contentEntry.getValue(), "$.examples");
-                var examplesFirstValue = jsonPath((Map) contentEntry.getValue(), "$.examples." + examplesFirstKey + ".value");
+                var examplesFirstValue =
+                        jsonPath((Map) contentEntry.getValue(), "$.examples." + examplesFirstKey + ".value");
                 example = ObjectUtils.firstNonNull(example, examplesFirstValue);
                 if (example != null) {
-                    log.info("Configuring Static Stub for %s [%s %s %s]".formatted(operationId, method.toUpperCase(), path, statusCode));
+                    log.info("Configuring Static Stub for %s [%s %s %s]"
+                            .formatted(operationId, method.toUpperCase(), path, statusCode));
                     stubFor(WireMock.request(method.toUpperCase(), WireMock.urlPathTemplate(path))
                             .willReturn(WireMock.aResponse()
                                     .withStatus(Integer.parseInt(statusCode))
@@ -123,7 +137,6 @@ class OpenApiWireMockServer extends WireMockServer {
         }
     }
 
-
     private record ResponseValidator(OpenApiInteractionValidator validator) implements ResponseTransformerV2 {
 
         @Override
@@ -134,14 +147,14 @@ class OpenApiWireMockServer extends WireMockServer {
         @Override
         public Response transform(Response response, ServeEvent serveEvent) {
             var request = serveEvent.getRequest();
-            var method = com.atlassian.oai.validator.model.Request.Method.valueOf(request.getMethod().getName());
+            var method = com.atlassian.oai.validator.model.Request.Method.valueOf(
+                    request.getMethod().getName());
             var report = validator.validateResponse(request.getUrl(), method, WireMockResponse.of(response));
-            var errors = report.getMessages().stream().filter(message -> !message.getKey().equals("validation.response.status.unknown")).toList();
+            var errors = report.getMessages().stream()
+                    .filter(message -> !message.getKey().equals("validation.response.status.unknown"))
+                    .toList();
             if (!errors.isEmpty()) {
-                return Response.response()
-                        .status(500)
-                        .body(report.toString())
-                        .build();
+                return Response.response().status(500).body(report.toString()).build();
             }
             return response;
         }
@@ -151,7 +164,6 @@ class OpenApiWireMockServer extends WireMockServer {
             return false;
         }
     }
-
 
     private record DynamicResponseTransformer(Object service) implements ResponseTransformerV2 {
 
@@ -169,16 +181,22 @@ class OpenApiWireMockServer extends WireMockServer {
             com.github.tomakehurst.wiremock.http.Request request = serveEvent.getRequest();
 
             try {
-                log.info("Invoking request handler method {} for {} {}", requestHandlerMethod.getName(), request.getMethod(), request.getUrl());
-                var result = (Response) requestHandlerMethod.invoke(service, request, Integer.parseInt(statusCode), contentType);
-                log.info("Request handler method {} returned {} {}", requestHandlerMethod.getName(), result.getStatus(), result.getBodyAsString());
+                log.info(
+                        "Invoking request handler method {} for {} {}",
+                        requestHandlerMethod.getName(),
+                        request.getMethod(),
+                        request.getUrl());
+                var result = (Response)
+                        requestHandlerMethod.invoke(service, request, Integer.parseInt(statusCode), contentType);
+                log.info(
+                        "Request handler method {} returned {} {}",
+                        requestHandlerMethod.getName(),
+                        result.getStatus(),
+                        result.getBodyAsString());
                 return result;
             } catch (IllegalAccessException | InvocationTargetException e) {
                 log.error("Error invoking request handler method {}", requestHandlerMethod, e.getCause());
-                return Response.response()
-                        .status(500)
-                        .body(e.getMessage())
-                        .build();
+                return Response.response().status(500).body(e.getMessage()).build();
             }
         }
 

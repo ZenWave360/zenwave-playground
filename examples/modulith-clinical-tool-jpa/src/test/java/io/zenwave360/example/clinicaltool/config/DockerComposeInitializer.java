@@ -36,8 +36,8 @@ public class DockerComposeInitializer implements ApplicationContextInitializer<C
     private record Service(String name, int port, String envVar, String envValueTemplate) {}
 
     private static final String DOCKER_COMPOSE_FILE = "./docker-compose.yml";
-    private static final List<Service> SERVICES = List.of(
-            new Service("postgresql", 5432, "DATASOURCE_URL", "jdbc:postgresql://%s:%s/app"));
+    private static final List<Service> SERVICES =
+            List.of(new Service("postgresql", 5432, "DATASOURCE_URL", "jdbc:postgresql://%s:%s/app"));
 
     static String HOST = DockerClientFactory.instance().dockerHostIpAddress();
     static ComposeContainer container = new ComposeContainer(new File(DOCKER_COMPOSE_FILE)).withEnv("HOST", HOST);

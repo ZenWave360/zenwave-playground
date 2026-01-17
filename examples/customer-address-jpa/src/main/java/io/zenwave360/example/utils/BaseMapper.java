@@ -1,11 +1,10 @@
 package io.zenwave360.example.utils;
 
-import org.mapstruct.Mapper;
-
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import org.mapstruct.Mapper;
 
 @Mapper
 public interface BaseMapper {
@@ -25,5 +24,4 @@ public interface BaseMapper {
     default OffsetDateTime map(LocalDateTime value) {
         return value != null ? OffsetDateTime.of(value, ZoneOffset.UTC) : null;
     }
-
 }

@@ -11,15 +11,14 @@ import org.springframework.security.web.authentication.ott.RedirectOneTimeTokenG
 @Configuration
 public class OneTimeTokenConfiguration {
 
-	@Bean
-	OneTimeTokenGenerationSuccessHandler oneTimeTokenGenerationSuccessHandler() {
-		var redirectHandler = new RedirectOneTimeTokenGenerationSuccessHandler("/login/ott");
-		return (HttpServletRequest request, HttpServletResponse response, OneTimeToken oneTimeToken) -> {
+    @Bean
+    OneTimeTokenGenerationSuccessHandler oneTimeTokenGenerationSuccessHandler() {
+        var redirectHandler = new RedirectOneTimeTokenGenerationSuccessHandler("/login/ott");
+        return (HttpServletRequest request, HttpServletResponse response, OneTimeToken oneTimeToken) -> {
             // TODO: Implement this method
-			System.out.println("One-time token generated: " + oneTimeToken.getUsername() + " "
-					+ oneTimeToken.getTokenValue() + " " + oneTimeToken.getExpiresAt());
-			redirectHandler.handle(request, response, oneTimeToken);
-		};
-	}
-
+            System.out.println("One-time token generated: " + oneTimeToken.getUsername() + " "
+                    + oneTimeToken.getTokenValue() + " " + oneTimeToken.getExpiresAt());
+            redirectHandler.handle(request, response, oneTimeToken);
+        };
+    }
 }

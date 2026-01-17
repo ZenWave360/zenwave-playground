@@ -31,17 +31,17 @@ public interface MasterDataServiceMapper {
 
     default List<MasterDataKeyValue> asMasterDataKeyValueList(List<MasterData> entities, String lang) {
         return entities.stream()
-            .map(entity -> {
-                var keyValue = asMasterDataKeyValue(entity);
-                // Find translation for the specified language
-                var translation = entity.getTranslations().stream()
-                    .filter(t -> lang.equals(t.getLang()))
-                    .findFirst();
-                if (translation.isPresent()) {
-                    keyValue.setValue(translation.get().getText());
-                }
-                return keyValue;
-            })
-            .toList();
+                .map(entity -> {
+                    var keyValue = asMasterDataKeyValue(entity);
+                    // Find translation for the specified language
+                    var translation = entity.getTranslations().stream()
+                            .filter(t -> lang.equals(t.getLang()))
+                            .findFirst();
+                    if (translation.isPresent()) {
+                        keyValue.setValue(translation.get().getText());
+                    }
+                    return keyValue;
+                })
+                .toList();
     }
 }

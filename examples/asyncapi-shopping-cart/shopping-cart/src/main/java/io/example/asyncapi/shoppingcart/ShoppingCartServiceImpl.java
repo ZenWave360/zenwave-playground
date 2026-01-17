@@ -5,8 +5,6 @@ import io.example.asyncapi.shoppingcart.events.*;
 import io.example.asyncapi.shoppingcart.mappers.*;
 // import io.example.asyncapi.shoppingcart.events.avro.*;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -32,15 +30,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public ShoppingCart loadShoppingCart(Long customerId) {
         log.debug("Request loadShoppingCart: {}", customerId);
 
-        return shoppingCartRepository
-                .findByCustomerId(customerId)
-                .orElseGet(() -> {
-                    var newShoppingCart = new ShoppingCart().setCustomerId(customerId);
-                    // emit events
-                    var shoppingCartCreated = eventsMapper.asShoppingCartCreated(newShoppingCart);
-                    eventsProducer.onShoppingCartCreated(shoppingCartCreated);
-                    return shoppingCartRepository.save(newShoppingCart);
-                });
+        return shoppingCartRepository.findByCustomerId(customerId).orElseGet(() -> {
+            var newShoppingCart = new ShoppingCart().setCustomerId(customerId);
+            // emit events
+            var shoppingCartCreated = eventsMapper.asShoppingCartCreated(newShoppingCart);
+            eventsProducer.onShoppingCartCreated(shoppingCartCreated);
+            return shoppingCartRepository.save(newShoppingCart);
+        });
     }
 
     public ShoppingCart addItem(Long customerId, Item input) {
@@ -57,10 +53,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     public ShoppingCart removeItem(Long customerId, String name) {
         log.debug("Request removeItem: {} {}", customerId, name);
-        var shoppingCart = shoppingCartRepository
-                .findByCustomerId(customerId)
+        var shoppingCart = shoppingCartRepository.findByCustomerId(customerId).orElseThrow();
+        var item = shoppingCart.getItems().stream()
+                .filter(i -> i.getName().equals(name))
+                .findFirst()
                 .orElseThrow();
-        var item = shoppingCart.getItems().stream().filter(i -> i.getName().equals(name)).findFirst().orElseThrow();
         shoppingCart.getItems().remove(item);
         shoppingCartRepository.save(shoppingCart);
         // emit events
@@ -72,14 +69,15 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public ShoppingCart updateItemQuantity(Long customerId, Item input) {
         log.debug("Request updateItemQuantity: {} {}", customerId, input);
 
-        var shoppingCart = shoppingCartRepository
-                .findByCustomerId(customerId).orElseThrow();
+        var shoppingCart = shoppingCartRepository.findByCustomerId(customerId).orElseThrow();
         var item = shoppingCart.getItems().stream()
-                .filter(i -> i.getName().equals(input.getName())).findFirst();
+                .filter(i -> i.getName().equals(input.getName()))
+                .findFirst();
         if (item.isEmpty()) {
             return addItem(customerId, input);
         }
-        var previousItem = new Item().setName(item.get().getName()).setQuantity(item.get().getQuantity());
+        var previousItem =
+                new Item().setName(item.get().getName()).setQuantity(item.get().getQuantity());
         shoppingCartServiceMapper.update(shoppingCart, input);
         shoppingCartRepository.save(shoppingCart);
         // emit events
@@ -90,8 +88,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     public void checkoutShoppingCart(Long customerId) {
         log.debug("Request checkoutShoppingCart: {}", customerId);
-        shoppingCartRepository.findByCustomerId(customerId)
-                .ifPresent(shoppingCartRepository::delete);
+        shoppingCartRepository.findByCustomerId(customerId).ifPresent(shoppingCartRepository::delete);
     }
 
     public List<ShoppingCart> listShoppingCarts() {

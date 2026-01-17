@@ -6,11 +6,10 @@ import io.zenwave360.example.core.domain.PaymentMethod;
 import io.zenwave360.example.core.domain.PaymentMethodType;
 import io.zenwave360.example.core.outbound.jpa.CustomerRepository;
 import jakarta.persistence.EntityManager;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 class CustomerRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
 
@@ -42,12 +41,7 @@ class CustomerRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
         Customer customer = new Customer();
         customer.setName("Jane Smith");
         customer.setEmail("jane.smith@example.com");
-        customer.setAddresses(List.of(
-                        new Address()
-                                .setStreet("456 Elm St")
-                                .setCity("Othertown")
-                )
-        );
+        customer.setAddresses(List.of(new Address().setStreet("456 Elm St").setCity("Othertown")));
 
         // OneToMany paymentMethods owner: true
         var paymentMethods = new PaymentMethod();
@@ -75,7 +69,6 @@ class CustomerRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
         customer.setName("updated");
         customer.setEmail("updated@email.com");
 
-
         customer = customerRepository.save(customer);
         Assertions.assertEquals("updated", customer.getName());
         Assertions.assertEquals("updated@email.com", customer.getEmail());
@@ -87,5 +80,4 @@ class CustomerRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
         var notFound = customerRepository.findById(id);
         Assertions.assertFalse(notFound.isPresent());
     }
-
 }

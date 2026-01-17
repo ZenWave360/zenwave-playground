@@ -36,8 +36,7 @@ class TermsAndConditionsServiceTest {
     }
 
     @Test
-    void listTermsAndConditionsTest() {
-    }
+    void listTermsAndConditionsTest() {}
 
     @Test
     void getTermsAndConditionsTest() {
@@ -72,10 +71,8 @@ class TermsAndConditionsServiceTest {
     }
 
     @Test
-    void getCurrentTermsAndConditionsTest() {
-    }
+    void getCurrentTermsAndConditionsTest() {}
 
     @Test
-    void acceptTermsAndConditionsTest() {
-    }
+    void acceptTermsAndConditionsTest() {}
 }

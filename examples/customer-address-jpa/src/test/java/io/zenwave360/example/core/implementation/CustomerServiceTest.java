@@ -1,20 +1,19 @@
 package io.zenwave360.example.core.implementation;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import io.zenwave360.example.config.ServicesInMemoryConfig;
 import io.zenwave360.example.core.domain.Address;
 import io.zenwave360.example.core.domain.Customer;
 import io.zenwave360.example.core.inbound.dtos.CustomerSearchCriteria;
 import io.zenwave360.example.infrastructure.jpa.inmemory.CustomerRepositoryInMemory;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /** Acceptance Test for CustomerService. */
 class CustomerServiceTest {
@@ -35,12 +34,12 @@ class CustomerServiceTest {
     @Test
     void createCustomerTest() {
         var input = new Customer();
-         input.setName("name");
-         input.setEmail("me@email.com");
-         input.setAddresses(List.of(new Address() //
-                 .setStreet("street")
-                 .setCity("city")
-         ));
+        input.setName("name");
+        input.setEmail("me@email.com");
+        input.setAddresses(List.of(
+                new Address() //
+                        .setStreet("street")
+                        .setCity("city")));
         var customer = customerService.createCustomer(input);
         assertNotNull(customer.getId());
         assertTrue(customerRepository.containsEntity(customer));
@@ -59,10 +58,10 @@ class CustomerServiceTest {
         var input = new Customer();
         input.setName("name");
         input.setEmail("me@email.com");
-        input.setAddresses(List.of(new Address() //
-                .setStreet("street")
-                .setCity("city")
-        ));
+        input.setAddresses(List.of(
+                new Address() //
+                        .setStreet("street")
+                        .setCity("city")));
         assertTrue(customerRepository.containsKey(id));
         var customer = customerService.updateCustomer(id, input);
         assertTrue(customer.isPresent());
@@ -84,5 +83,4 @@ class CustomerServiceTest {
         Assertions.assertNotNull(results);
         Assertions.assertFalse(results.isEmpty());
     }
-
 }

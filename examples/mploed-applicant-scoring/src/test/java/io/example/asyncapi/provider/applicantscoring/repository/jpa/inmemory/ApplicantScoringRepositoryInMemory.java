@@ -6,5 +6,5 @@ import java.math.*;
 import java.time.*;
 import java.util.*;
 
-public class ApplicantScoringRepositoryInMemory extends InMemoryJpaRepository<ApplicantScoring> implements ApplicantScoringRepository {
-}
+public class ApplicantScoringRepositoryInMemory extends InMemoryJpaRepository<ApplicantScoring>
+        implements ApplicantScoringRepository {}

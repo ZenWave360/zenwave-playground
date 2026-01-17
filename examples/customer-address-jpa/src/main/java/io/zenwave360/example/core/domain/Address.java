@@ -3,7 +3,6 @@ package io.zenwave360.example.core.domain;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
 import java.io.Serializable;
 
 /** */
@@ -24,5 +23,4 @@ public class Address implements Serializable {
     @Size(max = 254)
     @Column(name = "city", nullable = false, length = 254)
     private String city;
-
 }

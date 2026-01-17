@@ -11,7 +11,6 @@ import io.zenwave360.example.clinicaltool.modules.masterdata.inmemory.*;
 import io.zenwave360.example.clinicaltool.modules.masterdata.mappers.*;
 import java.time.*;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -77,8 +76,7 @@ class MasterDataServiceTest {
     }
 
     @Test
-    void listMasterDataTest() {
-    }
+    void listMasterDataTest() {}
 
     @Test
     void deleteMasterDataTest() {
@@ -87,6 +85,5 @@ class MasterDataServiceTest {
     }
 
     @Test
-    void listMasterDataOfTypeTest() {
-    }
+    void listMasterDataOfTypeTest() {}
 }

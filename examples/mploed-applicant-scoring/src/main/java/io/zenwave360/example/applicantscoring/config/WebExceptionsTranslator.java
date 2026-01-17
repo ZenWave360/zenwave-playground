@@ -14,8 +14,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class WebExceptionsTranslator extends ResponseEntityExceptionHandler {
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-            HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
         ProblemDetail body = ex.updateAndGetBody(getMessageSource(), LocaleContextHolder.getLocale());
         fillBindingErrors(body, ex);
         return this.createResponseEntity(body, headers, statusCode, request);
@@ -27,17 +27,16 @@ public class WebExceptionsTranslator extends ResponseEntityExceptionHandler {
                 .forEach(fieldError -> body.setProperty(fieldError.getObjectName(), fieldError.toString()));
         errors.getBindingResult()
                 .getFieldErrors()
-                .forEach(fieldError -> body.setProperty(fieldError.getObjectName() + "." + fieldError.getField(),
-                        fieldError.getDefaultMessage()));
+                .forEach(fieldError -> body.setProperty(
+                        fieldError.getObjectName() + "." + fieldError.getField(), fieldError.getDefaultMessage()));
     }
 
     @Override
-    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
-            HttpStatusCode statusCode, WebRequest request) {
+    protected ResponseEntity<Object> handleExceptionInternal(
+            Exception ex, Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
         if (statusCode.is5xxServerError()) {
             logger.error(String.format("Internal Error: %s %s", request.getContextPath(), statusCode), ex);
         }
         return super.handleExceptionInternal(ex, body, headers, statusCode, request);
     }
-
 }

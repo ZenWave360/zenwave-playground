@@ -7,6 +7,7 @@ import io.zenwave360.example.core.inbound.CustomerService;
 import io.zenwave360.example.core.inbound.dtos.CustomerSearchCriteria;
 import io.zenwave360.example.core.outbound.events.CustomerEventsProducer;
 import io.zenwave360.example.core.outbound.jpa.CustomerRepository;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
@@ -14,8 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /** Service Implementation for managing [Customer]. */
 @Service
@@ -57,9 +56,12 @@ public class CustomerServiceImpl implements CustomerService {
     public Optional<Customer> updateCustomer(Long id, Customer input) {
         log.debug("Request updateCustomer: {} {}", id, input);
 
-        var customer = customerRepository.findById(id).map(existingCustomer -> {
-            return customerServiceMapper.update(existingCustomer, input);
-        }).map(customerRepository::save);
+        var customer = customerRepository
+                .findById(id)
+                .map(existingCustomer -> {
+                    return customerServiceMapper.update(existingCustomer, input);
+                })
+                .map(customerRepository::save);
         if (customer.isPresent()) {
             // emit events
             var customerEvent = eventsMapper.asCustomerEvent(customer.get());
@@ -83,5 +85,4 @@ public class CustomerServiceImpl implements CustomerService {
         var customers = customerRepository.findAll(pageable);
         return customers;
     }
-
 }

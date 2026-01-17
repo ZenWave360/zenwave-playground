@@ -1,7 +1,6 @@
 package io.zenwave360.example.clinicaltool.modules.masterdata;
 
 import io.zenwave360.example.clinicaltool.modules.masterdata.domain.*;
-
 import java.util.*;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;

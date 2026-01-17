@@ -1,5 +1,8 @@
 package io.zenwave360.example.applicantscoring.config;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
@@ -15,10 +18,6 @@ import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-
-import java.util.concurrent.Callable;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Future;
 
 @Configuration
 @EnableAsync
@@ -84,8 +83,7 @@ public class AsyncConfiguration implements AsyncConfigurer {
             return () -> {
                 try {
                     return task.call();
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     handle(e);
                     throw e;
                 }
@@ -96,8 +94,7 @@ public class AsyncConfiguration implements AsyncConfigurer {
             return () -> {
                 try {
                     task.run();
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     handle(e);
                 }
             };
@@ -140,7 +137,5 @@ public class AsyncConfiguration implements AsyncConfigurer {
                 bean.afterPropertiesSet();
             }
         }
-
     }
-
 }

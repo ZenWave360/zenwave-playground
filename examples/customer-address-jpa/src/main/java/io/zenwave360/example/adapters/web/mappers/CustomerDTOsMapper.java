@@ -5,11 +5,10 @@ import io.zenwave360.example.adapters.web.model.CustomerPaginatedDTO;
 import io.zenwave360.example.adapters.web.model.CustomerSearchCriteriaDTO;
 import io.zenwave360.example.core.domain.Customer;
 import io.zenwave360.example.core.inbound.dtos.CustomerSearchCriteria;
+import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 @Mapper(uses = BaseMapper.class)
 public interface CustomerDTOsMapper {
@@ -32,5 +31,4 @@ public interface CustomerDTOsMapper {
     }
 
     CustomerDTO asCustomerDTO(Customer entity);
-
 }

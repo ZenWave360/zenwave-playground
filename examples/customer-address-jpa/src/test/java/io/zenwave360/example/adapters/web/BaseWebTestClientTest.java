@@ -18,10 +18,12 @@ public abstract class BaseWebTestClientTest {
 
     @Autowired
     protected WebApplicationContext context;
+
     protected WebTestClient webTestClient;
 
     @BeforeEach
     void setup() {
-        this.webTestClient = MockMvcWebTestClient.bindToApplicationContext(this.context).build();
+        this.webTestClient =
+                MockMvcWebTestClient.bindToApplicationContext(this.context).build();
     }
 }

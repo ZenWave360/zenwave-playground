@@ -3,7 +3,6 @@ package io.zenwave360.example.clinicaltool.modules.masterdata;
 import io.zenwave360.example.clinicaltool.modules.masterdata.domain.*;
 import io.zenwave360.example.clinicaltool.modules.masterdata.dtos.*;
 import io.zenwave360.example.clinicaltool.modules.masterdata.mappers.*;
-
 import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

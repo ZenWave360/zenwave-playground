@@ -1,5 +1,6 @@
 package io.example.asyncapi.config;
 
+import java.util.Optional;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -15,8 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.SecurityFilterChain;
 
-import java.util.Optional;
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true)
@@ -25,21 +24,21 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // @formatter:off
-        http
-                .cors(Customizer.withDefaults())
+        http.cors(Customizer.withDefaults())
                 .headers(headers -> headers.frameOptions(FrameOptionsConfig::disable))
                 .csrf(CsrfConfigurer::disable)
-                .authorizeHttpRequests(auth ->
-                        auth
-                                .requestMatchers("/swagger-ui/**").permitAll()
-                                .requestMatchers("/v3/api-docs/swagger-config").permitAll()
-                                .requestMatchers("/apis/**").permitAll()
-                                .requestMatchers("/.well-known/**").permitAll()
-                                .anyRequest().authenticated()
-                )
-//                .formLogin(Customizer.withDefaults())
-                .httpBasic(Customizer.withDefaults())
-        ;
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/swagger-ui/**")
+                        .permitAll()
+                        .requestMatchers("/v3/api-docs/swagger-config")
+                        .permitAll()
+                        .requestMatchers("/apis/**")
+                        .permitAll()
+                        .requestMatchers("/.well-known/**")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated())
+                //                .formLogin(Customizer.withDefaults())
+                .httpBasic(Customizer.withDefaults());
         // @formatter:on
         return http.build();
     }
@@ -65,17 +64,13 @@ public class SecurityConfiguration {
             private static String extractPrincipal(Authentication authentication) {
                 if (authentication == null) {
                     return null;
-                }
-                else if (authentication.getPrincipal() instanceof UserDetails springSecurityUser) {
+                } else if (authentication.getPrincipal() instanceof UserDetails springSecurityUser) {
                     return springSecurityUser.getUsername();
-                }
-                else if (authentication.getPrincipal() instanceof String stringPrincipal) {
+                } else if (authentication.getPrincipal() instanceof String stringPrincipal) {
                     return stringPrincipal;
                 }
                 return null;
             }
-
         };
     }
-
 }

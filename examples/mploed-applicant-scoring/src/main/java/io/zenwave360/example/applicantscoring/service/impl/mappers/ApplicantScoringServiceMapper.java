@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(uses = { BaseMapper.class })
+@Mapper(uses = {BaseMapper.class})
 public interface ApplicantScoringServiceMapper {
 
     ApplicantScoringServiceMapper INSTANCE = Mappers.getMapper(ApplicantScoringServiceMapper.class);

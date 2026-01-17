@@ -1,5 +1,7 @@
 package io.example.asyncapi.shoppingcart.client.config;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -10,9 +12,6 @@ import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.retrytopic.RetryTopicConfiguration;
 import org.springframework.kafka.retrytopic.RetryTopicConfigurationBuilder;
 import org.springframework.kafka.retrytopic.TopicSuffixingStrategy;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Kafka Configuration for Shopping Cart Client
@@ -47,15 +46,15 @@ public class KafkaConfiguration {
      * - Includes all exceptions for retry
      */
     @Bean
-    public RetryTopicConfiguration shoppingCartRetryTopicConfiguration(ProducerFactory<Long, Object> defaultProducerFactory) {
+    public RetryTopicConfiguration shoppingCartRetryTopicConfiguration(
+            ProducerFactory<Long, Object> defaultProducerFactory) {
 
         Map<String, Object> props = new HashMap<>(defaultProducerFactory.getConfigurationProperties());
         props.put("value.subject.name.strategy", "io.confluent.kafka.serializers.subject.TopicRecordNameStrategy");
         ProducerFactory<Long, Object> customProducerFactory = new DefaultKafkaProducerFactory<>(props);
         var kafkaTemplate = new KafkaTemplate<>(customProducerFactory);
 
-        return RetryTopicConfigurationBuilder
-                .newInstance()
+        return RetryTopicConfigurationBuilder.newInstance()
                 .maxAttempts(5) // 5 retry attempts before DLT
                 .fixedBackOff(3000) // 3 seconds between retry attempts
                 .retryTopicSuffix("-retry") // Custom retry topic suffix
@@ -63,8 +62,7 @@ public class KafkaConfiguration {
                 .setTopicSuffixingStrategy(TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE) // Adds attempt number
                 .includeTopic("shopping-cart") // Apply to shopping-cart topic
                 .doNotRetryOnDltFailure() // Don't retry if DLT processing fails
-//                .dltHandlerMethod("shoppingCartDltHandler", "handleDlt")
+                //                .dltHandlerMethod("shoppingCartDltHandler", "handleDlt")
                 .create(kafkaTemplate); // Use custom template
     }
 }
-

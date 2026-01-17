@@ -2,6 +2,8 @@ package io.zenwave360.example.core.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.annotation.CreatedBy;
@@ -9,9 +11,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /** */
 @lombok.Getter
@@ -82,5 +81,4 @@ public class PaymentMethod implements Serializable {
     public int hashCode() {
         return getClass().hashCode();
     }
-
 }

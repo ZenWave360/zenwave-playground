@@ -13,7 +13,6 @@ import io.zenwave360.example.clinicaltool.modules.surveys.service.dtos.*;
 import io.zenwave360.example.clinicaltool.modules.surveys.service.impl.mappers.*;
 import java.time.*;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -39,8 +38,7 @@ class SurveysBackofficeServiceTest {
     }
 
     @Test
-    void listSurveysTest() {
-    }
+    void listSurveysTest() {}
 
     @Test
     void getSurveyTest() {
@@ -93,8 +91,7 @@ class SurveysBackofficeServiceTest {
     }
 
     @Test
-    void listQuestionsTest() {
-    }
+    void listQuestionsTest() {}
 
     @Test
     void getQuestionTest() {

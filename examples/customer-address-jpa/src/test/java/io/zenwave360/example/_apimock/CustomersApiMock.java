@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.http.HttpHeader;
 import com.github.tomakehurst.wiremock.http.Request;
 import com.github.tomakehurst.wiremock.http.Response;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,11 +40,11 @@ class CustomersApiMock {
         return response(statusCode, "plain/text", "");
     }
 
-    public Response searchCustomers(Request request, int statusCode, String contentType) throws JsonProcessingException {
+    public Response searchCustomers(Request request, int statusCode, String contentType)
+            throws JsonProcessingException {
         // TODO: filter and paginate
         return response(statusCode, contentType, customers.values());
     }
-
 
     private Response response(int statusCode, String contentType, Object body) {
         try {
@@ -58,7 +57,8 @@ class CustomersApiMock {
     private Response response(int statusCode, String contentType, String body) {
         return Response.response()
                 .status(statusCode)
-                .headers(new com.github.tomakehurst.wiremock.http.HttpHeaders(new HttpHeader("Content-Type", contentType)))
+                .headers(new com.github.tomakehurst.wiremock.http.HttpHeaders(
+                        new HttpHeader("Content-Type", contentType)))
                 .body(body)
                 .build();
     }

@@ -23,7 +23,7 @@ public class WebConfigurer implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOriginPatterns("*")
-                .allowedMethods("GET","POST","PUT","DELETE")
+                .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("Authorization", "X-Requested-With", "Content-Type")
                 .allowCredentials(true);
     }

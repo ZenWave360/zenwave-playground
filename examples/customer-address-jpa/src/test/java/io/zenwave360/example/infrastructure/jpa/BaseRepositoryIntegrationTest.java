@@ -8,6 +8,4 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("test")
 @DockerComposeInitializer.EnableDockerCompose
 @org.springframework.transaction.annotation.Transactional
-public abstract class BaseRepositoryIntegrationTest {
-
-}
+public abstract class BaseRepositoryIntegrationTest {}

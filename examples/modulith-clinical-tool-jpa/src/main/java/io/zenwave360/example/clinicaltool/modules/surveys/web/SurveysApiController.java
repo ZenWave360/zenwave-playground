@@ -71,8 +71,7 @@ public class SurveysApiController implements SurveysApi {
     @Override
     public ResponseEntity<SurveyAnswersDTO> updateSurveyAnswers(
             Long surveyId, Long patientId, LocalDate date, Map input) {
-        log.debug(
-                "REST request to updateSurveyAnswers: {}, {}, {}, {}", surveyId, patientId, date, input);
+        log.debug("REST request to updateSurveyAnswers: {}, {}, {}, {}", surveyId, patientId, date, input);
         var surveyAnswers = surveysService.updateSurveyAnswers(surveyId, patientId, date, input);
         if (surveyAnswers.isPresent()) {
             SurveyAnswersDTO responseDTO = mapper.asSurveyAnswersDTO(surveyAnswers.get());

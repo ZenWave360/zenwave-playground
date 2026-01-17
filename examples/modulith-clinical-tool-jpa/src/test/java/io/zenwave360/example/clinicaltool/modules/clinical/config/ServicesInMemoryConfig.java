@@ -21,8 +21,7 @@ public class ServicesInMemoryConfig extends RepositoriesInMemoryConfig {
     private InMemoryEventPublisher eventPublisher = new InMemoryEventPublisher();
     protected final HospitalServiceImpl hospitalService =
             new HospitalServiceImpl(hospitalRepository(), doctorRepository(), eventPublisher);
-    protected final PatientsServiceImpl patientsService =
-            new PatientsServiceImpl(patientRepository(), eventPublisher);
+    protected final PatientsServiceImpl patientsService = new PatientsServiceImpl(patientRepository(), eventPublisher);
 
     @Bean
     public <T extends HospitalService> T hospitalService() {

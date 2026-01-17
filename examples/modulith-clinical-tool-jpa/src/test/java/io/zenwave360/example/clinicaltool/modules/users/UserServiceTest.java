@@ -11,7 +11,6 @@ import io.zenwave360.example.clinicaltool.modules.users.inmemory.*;
 import io.zenwave360.example.clinicaltool.modules.users.mappers.*;
 import java.time.*;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -35,8 +34,7 @@ class UserServiceTest {
     }
 
     @Test
-    void findByUsernameTest() {
-    }
+    void findByUsernameTest() {}
 
     @Test
     void createUserTest() {
@@ -86,12 +84,10 @@ class UserServiceTest {
     }
 
     @Test
-    void enableAccountTest() {
-    }
+    void enableAccountTest() {}
 
     @Test
-    void diableAccountTest() {
-    }
+    void diableAccountTest() {}
 
     @Test
     void deleteUserTest() {
@@ -100,10 +96,8 @@ class UserServiceTest {
     }
 
     @Test
-    void searchUsersTest() {
-    }
+    void searchUsersTest() {}
 
     @Test
-    void listUsersTest() {
-    }
+    void listUsersTest() {}
 }

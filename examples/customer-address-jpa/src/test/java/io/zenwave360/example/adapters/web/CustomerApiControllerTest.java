@@ -2,14 +2,12 @@ package io.zenwave360.example.adapters.web;
 
 import io.zenwave360.example.adapters.web.model.*;
 import io.zenwave360.example.config.ServicesInMemoryConfig;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
-import java.util.Optional;
 
 /** Test controller for CustomerApiController. */
 class CustomerApiControllerTest {
@@ -71,5 +69,4 @@ class CustomerApiControllerTest {
         var response = controller.searchCustomers(page, limit, sort, reqBody);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
-
 }

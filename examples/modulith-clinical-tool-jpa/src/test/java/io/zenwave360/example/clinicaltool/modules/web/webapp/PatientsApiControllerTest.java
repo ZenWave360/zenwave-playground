@@ -128,5 +128,4 @@ public class PatientsApiControllerTest {
         var response = controller.getPatient(id);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
-
 }

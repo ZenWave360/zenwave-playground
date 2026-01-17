@@ -3,7 +3,6 @@ package io.example.asyncapi.shoppingcart;
 import io.example.asyncapi.shoppingcart.base.BaseRepositoryIntegrationTest;
 import io.example.asyncapi.shoppingcart.domain.*;
 import jakarta.persistence.EntityManager;
-
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

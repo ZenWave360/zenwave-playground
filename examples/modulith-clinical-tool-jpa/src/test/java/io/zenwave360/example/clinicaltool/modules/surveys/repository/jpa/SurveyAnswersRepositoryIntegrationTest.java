@@ -69,7 +69,7 @@ class SurveyAnswersRepositoryIntegrationTest extends BaseRepositoryIntegrationTe
         Assertions.assertEquals(0L, surveyAnswers.getPatientId());
         Assertions.assertEquals(LocalDate.now(), surveyAnswers.getDate());
         Assertions.assertEquals("", surveyAnswers.getLang());
-//        Assertions.assertEquals(List.of(new Answer()), surveyAnswers.getAnswers());
+        //        Assertions.assertEquals(List.of(new Answer()), surveyAnswers.getAnswers());
     }
 
     @Test

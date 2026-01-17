@@ -6,8 +6,6 @@ import io.zenwave360.example.clinicaltool.modules.documents.mappers.*;
 import java.math.*;
 import java.time.*;
 import java.util.*;
-
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,9 +79,7 @@ public class DocumentApiController implements DocumentApi {
 
     @Override
     public ResponseEntity<DocumentInfoDTO> uploadDocument(
-            String uuid,
-            List<String> tags,
-            org.springframework.web.multipart.MultipartFile file) {
+            String uuid, List<String> tags, org.springframework.web.multipart.MultipartFile file) {
         log.debug("REST request to uploadDocument: {}, {}, {}", file, uuid, tags);
         var input = mapper.asDocumentInfo(file, uuid, tags);
         var documentInfo = documentService.uploadDocument(input);

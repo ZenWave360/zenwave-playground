@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(uses = { BaseMapper.class })
+@Mapper(uses = {BaseMapper.class})
 public interface CustomerServiceMapper {
 
     CustomerServiceMapper INSTANCE = Mappers.getMapper(CustomerServiceMapper.class);
@@ -25,5 +25,4 @@ public interface CustomerServiceMapper {
             entity.getPaymentMethods().forEach(paymentMethods -> paymentMethods.setCustomer(entity));
         }
     }
-
 }

@@ -1,5 +1,6 @@
 package io.zenwave360.example.config;
 
+import java.util.Optional;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -15,8 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.SecurityFilterChain;
 
-import java.util.Optional;
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true)
@@ -25,22 +24,22 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // @formatter:off
-        http
-                .csrf(CsrfConfigurer::disable)
-                .authorizeHttpRequests(auth ->
-                        auth
-                                .requestMatchers("/swagger-ui/**").permitAll()
-                                .requestMatchers("/v3/api-docs/swagger-config").permitAll()
-                                .requestMatchers("/apis/**").permitAll()
-                                .requestMatchers("/.well-known/**").permitAll()
-                                .anyRequest().authenticated()
-                )
+        http.csrf(CsrfConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/swagger-ui/**")
+                        .permitAll()
+                        .requestMatchers("/v3/api-docs/swagger-config")
+                        .permitAll()
+                        .requestMatchers("/apis/**")
+                        .permitAll()
+                        .requestMatchers("/.well-known/**")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated())
                 .headers(headers -> headers.frameOptions(FrameOptionsConfig::disable))
                 .httpBasic(Customizer.withDefaults());
         // @formatter:on
         return http.build();
     }
-
 
     @Bean
     AuditorAware<String> springSecurityAuditorAware() {
@@ -71,7 +70,6 @@ public class SecurityConfiguration {
                 }
                 return null;
             }
-
         };
     }
 }

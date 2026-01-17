@@ -6,13 +6,12 @@ import io.zenwave360.example.core.domain.PaymentMethod;
 import io.zenwave360.example.core.implementation.CustomerServiceImpl;
 import io.zenwave360.example.core.inbound.CustomerService;
 import io.zenwave360.example.core.outbound.events.EventsProducerInMemoryContext;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /** Services InMemory Config. It can be used standalone or with @SpringBootTest. */
 @Configuration
@@ -28,8 +27,8 @@ public class ServicesInMemoryConfig extends RepositoriesInMemoryConfig {
         }
     };
 
-    protected final CustomerServiceImpl customerService = new CustomerServiceImpl(customerRepository(),
-            eventsProducerInMemoryContext.customerEventsProducer(), applicationEventPublisher);
+    protected final CustomerServiceImpl customerService = new CustomerServiceImpl(
+            customerRepository(), eventsProducerInMemoryContext.customerEventsProducer(), applicationEventPublisher);
 
     @Bean
     public <T extends CustomerService> T customerService() {
@@ -40,8 +39,8 @@ public class ServicesInMemoryConfig extends RepositoriesInMemoryConfig {
 
     public void reloadTestData() {
         var testDataLoader = new TestDataLoader(List.of(Customer.class, Address.class, PaymentMethod.class));
-        var customers = _customers != null ? _customers
-                : testDataLoader.loadCollectionTestDataAsObjects(Customer.class);
+        var customers =
+                _customers != null ? _customers : testDataLoader.loadCollectionTestDataAsObjects(Customer.class);
         customerRepository().deleteAll();
         customerRepository().saveAll(customers);
     }
@@ -55,5 +54,4 @@ public class ServicesInMemoryConfig extends RepositoriesInMemoryConfig {
     public List<Object> getPublishedEvents() {
         return publishedEvents;
     }
-
 }

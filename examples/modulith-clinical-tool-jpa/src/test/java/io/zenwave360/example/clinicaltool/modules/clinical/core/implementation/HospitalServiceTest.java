@@ -67,8 +67,7 @@ class HospitalServiceTest {
     }
 
     @Test
-    void listHospitalsTest() {
-    }
+    void listHospitalsTest() {}
 
     @Test
     void createDoctorTest() {
@@ -113,14 +112,11 @@ class HospitalServiceTest {
     }
 
     @Test
-    void listDoctorsTest() {
-    }
+    void listDoctorsTest() {}
 
     @Test
-    void listHospitalDoctorsTest() {
-    }
+    void listHospitalDoctorsTest() {}
 
     @Test
-    void listHospitalPatientsTest() {
-    }
+    void listHospitalPatientsTest() {}
 }

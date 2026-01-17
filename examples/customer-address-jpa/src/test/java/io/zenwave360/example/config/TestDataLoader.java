@@ -15,6 +15,7 @@ public class TestDataLoader {
     private List<? extends Class<?>> jpaManagedTypes;
 
     private ObjectMapper objectMapper = new ObjectMapper();
+
     {
         objectMapper.registerModule(new JavaTimeModule());
     }
@@ -39,23 +40,22 @@ public class TestDataLoader {
     }
 
     protected List<String> readDirectoryFilesAsString(String directory) {
-        return Stream.of(new File(directory).listFiles()).map(f -> {
-            try {
-                return Files.readString(f.toPath());
-            }
-            catch (java.io.IOException e) {
-                throw new RuntimeException(e);
-            }
-        }).collect(Collectors.toList());
+        return Stream.of(new File(directory).listFiles())
+                .map(f -> {
+                    try {
+                        return Files.readString(f.toPath());
+                    } catch (java.io.IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .collect(Collectors.toList());
     }
 
     public <T> T read(Class<T> type, String json) {
         try {
             return objectMapper.readValue(json, type);
-        }
-        catch (JsonProcessingException e) {
+        } catch (JsonProcessingException e) {
             throw new RuntimeException("Error reading json test data for " + type.getName(), e);
         }
     }
-
 }

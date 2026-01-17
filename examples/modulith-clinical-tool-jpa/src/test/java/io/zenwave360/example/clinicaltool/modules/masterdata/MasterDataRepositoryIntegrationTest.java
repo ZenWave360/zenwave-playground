@@ -62,7 +62,7 @@ class MasterDataRepositoryIntegrationTest extends BaseRepositoryIntegrationTest 
         Assertions.assertEquals(MasterDataType.values()[0], masterData.getType());
         Assertions.assertEquals("", masterData.getKey());
         Assertions.assertEquals("", masterData.getValue());
-//        Assertions.assertEquals(List.of(new MasterDataTranslation()), masterData.getTranslations());
+        //        Assertions.assertEquals(List.of(new MasterDataTranslation()), masterData.getTranslations());
     }
 
     @Test

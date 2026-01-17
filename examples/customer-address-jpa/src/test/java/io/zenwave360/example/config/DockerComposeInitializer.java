@@ -1,14 +1,5 @@
 package io.zenwave360.example.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.test.util.TestPropertyValues;
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.testcontainers.DockerClientFactory;
-import org.testcontainers.containers.DockerComposeContainer;
-import org.testcontainers.containers.wait.strategy.Wait;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -21,41 +12,43 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.test.util.TestPropertyValues;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.testcontainers.DockerClientFactory;
+import org.testcontainers.containers.DockerComposeContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
 
 public class DockerComposeInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
     private Logger log = LoggerFactory.getLogger(getClass());
 
-
     /** Use this annotation to activate TestContainers in your test. */
-    @Target({ ElementType.TYPE })
+    @Target({ElementType.TYPE})
     @Retention(RetentionPolicy.RUNTIME)
     @org.springframework.test.context.ContextConfiguration(initializers = DockerComposeInitializer.class)
-    public @interface EnableDockerCompose {
+    public @interface EnableDockerCompose {}
 
-    }
-
-
-    private record Service(String name, int port, String envVar, String envValueTemplate) {
-    }
-
+    private record Service(String name, int port, String envVar, String envValueTemplate) {}
 
     private static final String DOCKER_COMPOSE_FILE = "./docker-compose.yml";
 
     private static final List<Service> SERVICES = List.of(
             new Service("postgresql", 5432, "DATASOURCE_URL", "jdbc:postgresql://%s:%s/app"),
             new Service("kafka", 9092, "KAFKA_BOOTSTRAP_SERVERS", "%s:%s"),
-            new Service("schema-registry", 8081, "SCHEMA_REGISTRY_URL", "http://%s:%s")
-    );
+            new Service("schema-registry", 8081, "SCHEMA_REGISTRY_URL", "http://%s:%s"));
 
     static String HOST = DockerClientFactory.instance().dockerHostIpAddress();
-    static DockerComposeContainer container = new DockerComposeContainer(new File(DOCKER_COMPOSE_FILE)).withEnv("HOST",
-            HOST);
+    static DockerComposeContainer container =
+            new DockerComposeContainer(new File(DOCKER_COMPOSE_FILE)).withEnv("HOST", HOST);
 
     static {
         for (Service service : SERVICES) {
             if ("schema-registry".equals(service.name)) {
-                container.withExposedService(service.name, service.port, Wait.forHttp("/subjects").forStatusCode(200));
+                container.withExposedService(
+                        service.name, service.port, Wait.forHttp("/subjects").forStatusCode(200));
             } else {
                 container.withExposedService(service.name, service.port, Wait.forListeningPort());
             }
@@ -83,8 +76,8 @@ public class DockerComposeInitializer implements ApplicationContextInitializer<C
                     log.info("DockerCompose exposed port for {}: {}", service.name, HOST + ":" + port);
                     log.info("DockerCompose Service {} listening: {}", service.name, isPortOpen(HOST, port));
                     if (service.envValueTemplate != null) {
-                        TestPropertyValues
-                                .of(service.envVar + "=" + String.format(service.envValueTemplate, HOST, port))
+                        TestPropertyValues.of(
+                                        service.envVar + "=" + String.format(service.envValueTemplate, HOST, port))
                                 .applyTo(ctx.getEnvironment());
                     }
                 }
@@ -96,7 +89,8 @@ public class DockerComposeInitializer implements ApplicationContextInitializer<C
         var serviceNames = services.stream().map(Service::name).toList();
         return Stream.of("docker-compose", "docker-compose.exe").anyMatch(cmd -> {
             try {
-                return getDockerComposeRunningServices(cmd, "-f", DOCKER_COMPOSE_FILE, "ps", "--services").containsAll(serviceNames);
+                return getDockerComposeRunningServices(cmd, "-f", DOCKER_COMPOSE_FILE, "ps", "--services")
+                        .containsAll(serviceNames);
             } catch (IOException | InterruptedException e) {
                 return false;
             }
@@ -128,5 +122,4 @@ public class DockerComposeInitializer implements ApplicationContextInitializer<C
             return false;
         }
     }
-
 }

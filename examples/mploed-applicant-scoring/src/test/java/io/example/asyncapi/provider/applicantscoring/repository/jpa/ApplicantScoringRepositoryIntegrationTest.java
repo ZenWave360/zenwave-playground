@@ -1,20 +1,13 @@
 package io.example.asyncapi.provider.applicantscoring.repository.jpa;
 
-import io.zenwave360.example.applicantscoring.repository.jpa.BaseRepositoryIntegrationTest;
 import io.zenwave360.example.applicantscoring.domain.*;
 import io.zenwave360.example.applicantscoring.repository.jpa.ApplicantScoringRepository;
-
-import java.util.HashSet;
-import java.util.HashMap;
-import java.util.List;
+import io.zenwave360.example.applicantscoring.repository.jpa.BaseRepositoryIntegrationTest;
+import jakarta.persistence.EntityManager;
 import java.time.*;
-import java.math.BigDecimal;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import jakarta.persistence.EntityManager;
 
 class ApplicantScoringRepositoryIntegrationTest extends BaseRepositoryIntegrationTest {
 
@@ -29,7 +22,6 @@ class ApplicantScoringRepositoryIntegrationTest extends BaseRepositoryIntegratio
         var results = applicantScoringRepository.findAll();
         Assertions.assertFalse(results.isEmpty());
     }
-
 
     @Test
     void findByIdTest() {
@@ -48,8 +40,6 @@ class ApplicantScoringRepositoryIntegrationTest extends BaseRepositoryIntegratio
         applicantScoring.setCity(new City());
         applicantScoring.setBalanceAtBank(new BalanceAtBank());
 
-
-
         // Persist aggregate root
         var created = applicantScoringRepository.save(applicantScoring);
 
@@ -60,8 +50,6 @@ class ApplicantScoringRepositoryIntegrationTest extends BaseRepositoryIntegratio
         Assertions.assertNotNull(created.getVersion());
         Assertions.assertNotNull(created.getCreatedBy());
         Assertions.assertNotNull(created.getCreatedDate());
-
-
     }
 
     @Test

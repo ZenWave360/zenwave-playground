@@ -14,5 +14,4 @@ public class CustomerSearchCriteria implements Serializable {
     private String city;
 
     private String state;
-
 }

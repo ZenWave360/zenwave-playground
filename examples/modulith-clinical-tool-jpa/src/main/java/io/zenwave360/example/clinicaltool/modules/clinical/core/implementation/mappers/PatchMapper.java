@@ -1,16 +1,15 @@
 package io.zenwave360.example.clinicaltool.modules.clinical.core.implementation.mappers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.beans.NotWritablePropertyException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.beans.NotWritablePropertyException;
 
 /**
  * Utility class for performing partial updates on Java objects using field-level patching.
@@ -129,7 +128,7 @@ public class PatchMapper {
      * Patient updatedPatient = PatchMapper.patch(existingPatient, patientUpdates);
      * }</pre>
      */
-    static public <T> T patch(T target, Map<String, Object> input) {
+    public static <T> T patch(T target, Map<String, Object> input) {
         if (target == null || input == null) {
             return target;
         }
@@ -140,11 +139,11 @@ public class PatchMapper {
             String propertyPath = entry.getKey();
             Object value = entry.getValue();
 
-            if(isCollectionRootElement(propertyPath)) {
+            if (isCollectionRootElement(propertyPath)) {
                 // skip collection root elements like `order.items[0]` which are meant to be deleted in the second pass
                 continue;
             }
-            if(isIndexed(propertyPath) && value != null) {
+            if (isIndexed(propertyPath) && value != null) {
                 // ensure collection element exists before setting nested property
                 ensureCollectionElementExists(beanWrapper, propertyPath);
             }
@@ -160,7 +159,7 @@ public class PatchMapper {
             String propertyPath = entry.getKey();
             Object value = entry.getValue();
 
-            if(isCollectionRootElement(propertyPath) && value == null) {
+            if (isCollectionRootElement(propertyPath) && value == null) {
                 int index = extractIndex(propertyPath);
                 String prefix = extractPrefix(propertyPath);
                 Object collection = beanWrapper.getPropertyValue(prefix);
@@ -231,10 +230,12 @@ public class PatchMapper {
                     Class<?> elementType = getCollectionElementType(beanWrapper, collectionPath);
                     if (elementType != null) {
                         try {
-                            Object newElement = elementType.getDeclaredConstructor().newInstance();
+                            Object newElement =
+                                    elementType.getDeclaredConstructor().newInstance();
                             list.set(index, newElement);
                         } catch (Exception e) {
-                            log.warn("Could not create instance of {}: {}", elementType.getSimpleName(), e.getMessage());
+                            log.warn(
+                                    "Could not create instance of {}: {}", elementType.getSimpleName(), e.getMessage());
                         }
                     }
                 }
@@ -263,7 +264,10 @@ public class PatchMapper {
             Class<?> collectionType = beanWrapper.getPropertyType(collectionPath);
             if (List.class.isAssignableFrom(collectionType)) {
                 // Try to get the generic type of the List
-                java.lang.reflect.Type genericType = beanWrapper.getPropertyTypeDescriptor(collectionPath).getElementTypeDescriptor().getType();
+                java.lang.reflect.Type genericType = beanWrapper
+                        .getPropertyTypeDescriptor(collectionPath)
+                        .getElementTypeDescriptor()
+                        .getType();
                 if (genericType instanceof Class<?>) {
                     return (Class<?>) genericType;
                 }

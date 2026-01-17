@@ -1,18 +1,16 @@
 package io.example.asyncapi.provider.applicantscoring.web;
 
+import io.zenwave360.example.applicantscoring.config.ServicesInMemoryConfig;
 import io.zenwave360.example.applicantscoring.web.*;
 import io.zenwave360.example.applicantscoring.web.dtos.*;
-import io.zenwave360.example.applicantscoring.config.ServicesInMemoryConfig;
-
+import java.math.*;
+import java.time.*;
+import java.util.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.math.*;
-import java.time.*;
-import java.util.*;
 
 /**
  * Test controller for ApplicantScoringApiController.
@@ -23,13 +21,12 @@ public class ApplicantScoringApiControllerTest {
 
     ServicesInMemoryConfig context = new ServicesInMemoryConfig();
 
-    ApplicantScoringApiController controller = new ApplicantScoringApiController( context.applicantScoringService() );
+    ApplicantScoringApiController controller = new ApplicantScoringApiController(context.applicantScoringService());
 
-	@BeforeEach
-	void setUp() {
-		context.reloadTestData();
-	}
-
+    @BeforeEach
+    void setUp() {
+        context.reloadTestData();
+    }
 
     @Test
     public void getApplicationScoringTest() {
@@ -41,7 +38,7 @@ public class ApplicantScoringApiControllerTest {
     @Test
     public void updateApplicantScoringTest() {
         Long id = null;
-ApplicantScoringInputDTO reqBody = null;
+        ApplicantScoringInputDTO reqBody = null;
         var response = controller.updateApplicantScoring(id, reqBody);
         Assertions.assertEquals(200, response.getStatusCode().value());
     }
@@ -56,7 +53,7 @@ ApplicantScoringInputDTO reqBody = null;
     @Test
     public void updateCityTest() {
         Long id = null;
-CityInputDTO reqBody = null;
+        CityInputDTO reqBody = null;
         var response = controller.updateCity(id, reqBody);
         Assertions.assertEquals(201, response.getStatusCode().value());
     }
@@ -64,10 +61,8 @@ CityInputDTO reqBody = null;
     @Test
     public void updateBalanceAtBankTest() {
         Long id = null;
-BalanceAtBankInputDTO reqBody = null;
+        BalanceAtBankInputDTO reqBody = null;
         var response = controller.updateBalanceAtBank(id, reqBody);
         Assertions.assertEquals(201, response.getStatusCode().value());
     }
-
-
 }

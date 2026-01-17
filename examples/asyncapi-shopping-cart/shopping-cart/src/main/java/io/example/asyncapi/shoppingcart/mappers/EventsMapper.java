@@ -33,7 +33,6 @@ public interface EventsMapper {
     @Mapping(target = "shoppingCart", source = "shoppingCart")
     ShoppingCartItemRemoved asShoppingCartItemRemoved(ShoppingCart shoppingCart, Item item);
 
-
     io.example.asyncapi.shoppingcart.events.avro.Item asItem(Item item);
 
     io.example.asyncapi.shoppingcart.events.avro.ShoppingCart asShoppingCart(ShoppingCart shoppingCart);

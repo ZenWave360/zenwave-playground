@@ -1,9 +1,9 @@
 package io.zenwave360.example.infrastructure.jpa.inmemory;
 
+import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
+
 import io.zenwave360.example.core.domain.Customer;
 import io.zenwave360.example.core.outbound.jpa.CustomerRepository;
-
-import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 public class CustomerRepositoryInMemory extends InMemoryJpaRepository<Customer> implements CustomerRepository {
 

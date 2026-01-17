@@ -10,28 +10,28 @@ public class ShoppingCartChannelConsumerService implements IShoppingCartChannelC
 
     private static final Logger log = LoggerFactory.getLogger(ShoppingCartChannelConsumerService.class);
 
-    @Override public void onShoppingCartCreated(ShoppingCartCreated payload,
-            ShoppingCartCreatedHeaders headers) {
+    @Override
+    public void onShoppingCartCreated(ShoppingCartCreated payload, ShoppingCartCreatedHeaders headers) {
         log.info("onShoppingCartCreated: {}", payload);
     }
 
-    @Override public void onShoppingCartItemAdded(ShoppingCartItemAdded payload,
-            ShoppingCartItemAddedHeaders headers) {
+    @Override
+    public void onShoppingCartItemAdded(ShoppingCartItemAdded payload, ShoppingCartItemAddedHeaders headers) {
         log.info("onShoppingCartItemAdded: {}", payload);
     }
 
-    @Override public void onShoppingCartItemRemoved(ShoppingCartItemRemoved payload,
-            ShoppingCartItemRemovedHeaders headers) {
+    @Override
+    public void onShoppingCartItemRemoved(ShoppingCartItemRemoved payload, ShoppingCartItemRemovedHeaders headers) {
         log.info("onShoppingCartItemRemoved: {}", payload);
     }
 
-    @Override public void onShoppingCartItemUpdated(ShoppingCartItemUpdated payload,
-            ShoppingCartItemUpdatedHeaders headers) {
+    @Override
+    public void onShoppingCartItemUpdated(ShoppingCartItemUpdated payload, ShoppingCartItemUpdatedHeaders headers) {
         log.info("onShoppingCartItemUpdated: {}", payload);
     }
 
-    @Override public void onShoppingCartCheckedOut(ShoppingCartCheckedOut payload,
-            ShoppingCartCheckedOutHeaders headers) {
+    @Override
+    public void onShoppingCartCheckedOut(ShoppingCartCheckedOut payload, ShoppingCartCheckedOutHeaders headers) {
         log.info("onShoppingCartCheckedOut: {}", payload);
     }
 }

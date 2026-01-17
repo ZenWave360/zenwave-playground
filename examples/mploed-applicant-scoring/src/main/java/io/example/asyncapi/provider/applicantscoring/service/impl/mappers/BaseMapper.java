@@ -1,21 +1,20 @@
 package io.example.asyncapi.provider.applicantscoring.service.impl.mappers;
 
-import org.mapstruct.Mapper;
-
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import org.mapstruct.Mapper;
 
 @Mapper
 public interface BaseMapper {
 
     default Instant asInstant(OffsetDateTime date) {
-        return date != null? date.toInstant() : null;
+        return date != null ? date.toInstant() : null;
     }
 
     default OffsetDateTime asOffsetDateTime(Instant date) {
-        return date != null? OffsetDateTime.ofInstant(date, ZoneOffset.UTC) : null;
+        return date != null ? OffsetDateTime.ofInstant(date, ZoneOffset.UTC) : null;
     }
 
     default LocalDateTime map(OffsetDateTime value) {

@@ -9,12 +9,11 @@ import io.zenwave360.example.clinicaltool.modules.clinical.core.inbound.dtos.Doc
 import io.zenwave360.example.clinicaltool.modules.clinical.core.inbound.dtos.PatientProfile;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.outbound.events.EventPublisher;
 import io.zenwave360.example.clinicaltool.modules.clinical.core.outbound.jpa.PatientRepository;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * Service Implementation for managing [Patient, ProvisionalPatient].

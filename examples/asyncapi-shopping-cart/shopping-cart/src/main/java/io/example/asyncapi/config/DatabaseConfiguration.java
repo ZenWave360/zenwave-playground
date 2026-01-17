@@ -11,6 +11,4 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EntityScan("io.example.asyncapi.shoppingcart")
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @EnableTransactionManagement
-public class DatabaseConfiguration {
-
-}
+public class DatabaseConfiguration {}

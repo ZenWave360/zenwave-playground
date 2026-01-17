@@ -35,5 +35,4 @@ public class RepositoriesInMemoryConfig {
     public <T extends PatientRepository> T patientRepository() {
         return (T) patientRepository;
     }
-
 }

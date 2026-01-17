@@ -1,6 +1,8 @@
 package io.zenwave360.example.applicantscoring.domain;
 
 import jakarta.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.annotation.CreatedBy;
@@ -8,9 +10,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  *
@@ -28,7 +27,6 @@ public class ApplicantScoring implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-
     private Long id;
 
     @Version
@@ -49,12 +47,15 @@ public class ApplicantScoring implements Serializable {
     @CreatedBy
     @Column(name = "created_by", updatable = false)
     protected String createdBy;
+
     @CreatedDate
     @Column(name = "created_date", columnDefinition = "TIMESTAMP", updatable = false)
     protected LocalDateTime createdDate;
+
     @LastModifiedBy
     @Column(name = "last_modified_by")
     protected String lastModifiedBy;
+
     @LastModifiedDate
     @Column(name = "last_modified_date", columnDefinition = "TIMESTAMP")
     protected LocalDateTime lastModifiedDate;

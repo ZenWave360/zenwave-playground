@@ -34,12 +34,10 @@ class SurveysServiceTest {
     }
 
     @Test
-    void getSurveyAndQuestionsForPatientTest() {
-    }
+    void getSurveyAndQuestionsForPatientTest() {}
 
     @Test
-    void answerSurveyTest() {
-    }
+    void answerSurveyTest() {}
 
     @Test
     void updateSurveyAnswersTest() {

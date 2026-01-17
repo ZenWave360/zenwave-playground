@@ -1,11 +1,10 @@
 package io.zenwave360.example.clinicaltool.modules.clinical.core.implementation.mappers;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class PatchMapperTest {
 
@@ -33,10 +32,7 @@ class PatchMapperTest {
 
     @Test
     void testSimplePropertyUpdate() {
-        Map<String, Object> updates = Map.of(
-            "name", "Johnny",
-            "age", 31
-        );
+        Map<String, Object> updates = Map.of("name", "Johnny", "age", 31);
 
         PatchMapper.patch(user, updates);
 
@@ -48,9 +44,8 @@ class PatchMapperTest {
     @Test
     void testNestedPropertyUpdate() {
         Map<String, Object> updates = Map.of(
-            "generalInfo.firstName", "Janet",
-            "generalInfo.lastName", "Smith"
-        );
+                "generalInfo.firstName", "Janet",
+                "generalInfo.lastName", "Smith");
 
         PatchMapper.patch(patient, updates);
 
@@ -62,9 +57,8 @@ class PatchMapperTest {
     @Test
     void testCollectionElementUpdate() {
         Map<String, Object> updates = Map.of(
-            "addresses[0].street", "999 New Street",
-            "addresses[1].city", "New City"
-        );
+                "addresses[0].street", "999 New Street",
+                "addresses[1].city", "New City");
 
         PatchMapper.patch(patient, updates);
 
@@ -77,9 +71,8 @@ class PatchMapperTest {
     @Test
     void testCollectionAutoExpansion() {
         Map<String, Object> updates = Map.of(
-            "addresses[5].street", "Auto Expanded Street",
-            "addresses[5].city", "Auto City"
-        );
+                "addresses[5].street", "Auto Expanded Street",
+                "addresses[5].city", "Auto City");
 
         PatchMapper.patch(patient, updates);
 
@@ -131,7 +124,6 @@ class PatchMapperTest {
         assertEquals("New Street", patient.getAddresses().get(0).getStreet());
     }
 
-
     @Test
     void testMixedOperations() {
         Map<String, Object> updates = new HashMap<>();
@@ -182,10 +174,10 @@ class PatchMapperTest {
     void testInvalidPathHandling() {
         // Should not throw exceptions, just log warnings
         Map<String, Object> updates = Map.of(
-            "nonExistentField", "value",
-            "generalInfo.nonExistentNestedField", "value",
-            "addresses[100].street", "value" // out of bounds but should auto-expand
-        );
+                "nonExistentField", "value",
+                "generalInfo.nonExistentNestedField", "value",
+                "addresses[100].street", "value" // out of bounds but should auto-expand
+                );
 
         assertDoesNotThrow(() -> PatchMapper.patch(patient, updates));
 
@@ -247,12 +239,29 @@ class PatchMapperTest {
         private Integer age;
 
         // getters and setters
-        public String getName() { return name; }
-        public void setName(String name) { this.name = name; }
-        public String getEmail() { return email; }
-        public void setEmail(String email) { this.email = email; }
-        public Integer getAge() { return age; }
-        public void setAge(Integer age) { this.age = age; }
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public Integer getAge() {
+            return age;
+        }
+
+        public void setAge(Integer age) {
+            this.age = age;
+        }
     }
 
     static class TestPatient {
@@ -261,12 +270,29 @@ class PatchMapperTest {
         private List<TestAddress> addresses;
 
         // getters and setters
-        public String getName() { return name; }
-        public void setName(String name) { this.name = name; }
-        public TestGeneralInfo getGeneralInfo() { return generalInfo; }
-        public void setGeneralInfo(TestGeneralInfo generalInfo) { this.generalInfo = generalInfo; }
-        public List<TestAddress> getAddresses() { return addresses; }
-        public void setAddresses(List<TestAddress> addresses) { this.addresses = addresses; }
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public TestGeneralInfo getGeneralInfo() {
+            return generalInfo;
+        }
+
+        public void setGeneralInfo(TestGeneralInfo generalInfo) {
+            this.generalInfo = generalInfo;
+        }
+
+        public List<TestAddress> getAddresses() {
+            return addresses;
+        }
+
+        public void setAddresses(List<TestAddress> addresses) {
+            this.addresses = addresses;
+        }
     }
 
     static class TestGeneralInfo {
@@ -274,10 +300,21 @@ class PatchMapperTest {
         private String lastName;
 
         // getters and setters
-        public String getFirstName() { return firstName; }
-        public void setFirstName(String firstName) { this.firstName = firstName; }
-        public String getLastName() { return lastName; }
-        public void setLastName(String lastName) { this.lastName = lastName; }
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+
+        public String getLastName() {
+            return lastName;
+        }
+
+        public void setLastName(String lastName) {
+            this.lastName = lastName;
+        }
     }
 
     static class TestAddress {
@@ -292,9 +329,20 @@ class PatchMapperTest {
         }
 
         // getters and setters
-        public String getStreet() { return street; }
-        public void setStreet(String street) { this.street = street; }
-        public String getCity() { return city; }
-        public void setCity(String city) { this.city = city; }
+        public String getStreet() {
+            return street;
+        }
+
+        public void setStreet(String street) {
+            this.street = street;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public void setCity(String city) {
+            this.city = city;
+        }
     }
 }

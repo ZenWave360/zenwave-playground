@@ -1,13 +1,11 @@
 package io.example.asyncapi.provider.applicantscoring.config;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.persistence.Table;
-
 import java.io.File;
 import java.nio.file.Files;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -17,6 +15,7 @@ public class TestDataLoader {
     private List<? extends Class<?>> jpaManagedTypes;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+
     {
         objectMapper.registerModule(new JavaTimeModule());
     }
@@ -31,8 +30,8 @@ public class TestDataLoader {
     }
 
     public List<String> loadCollectionTestDataAsJson(Class collectionClass) {
-		var annotation = (Table) collectionClass.getAnnotation(Table.class);
-		var table = annotation.name();
+        var annotation = (Table) collectionClass.getAnnotation(Table.class);
+        var table = annotation.name();
         return readDirectoryFilesAsString("src/test/resources/data/jpa/" + table);
     }
 
@@ -41,13 +40,15 @@ public class TestDataLoader {
     }
 
     protected List<String> readDirectoryFilesAsString(String directory) {
-        return Stream.of(new File(directory).listFiles()).map(f -> {
-            try {
-                return Files.readString(f.toPath());
-            } catch (java.io.IOException e) {
-                throw new RuntimeException(e);
-            }
-        }).collect(Collectors.toList());
+        return Stream.of(new File(directory).listFiles())
+                .map(f -> {
+                    try {
+                        return Files.readString(f.toPath());
+                    } catch (java.io.IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .collect(Collectors.toList());
     }
 
     public <T> T read(Class<T> type, String json) {
@@ -57,5 +58,4 @@ public class TestDataLoader {
             throw new RuntimeException("Error reading json test data for " + type.getName(), e);
         }
     }
-
 }

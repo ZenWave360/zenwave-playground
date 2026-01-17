@@ -2,10 +2,9 @@ package io.zenwave360.example.core.inbound;
 
 import io.zenwave360.example.core.domain.Customer;
 import io.zenwave360.example.core.inbound.dtos.CustomerSearchCriteria;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.Optional;
 
 /** Inbound Service Port for managing [Customer]. */
 public interface CustomerService {
@@ -24,5 +23,4 @@ public interface CustomerService {
 
     /** */
     public Page<Customer> searchCustomers(CustomerSearchCriteria input, Pageable pageable);
-
 }

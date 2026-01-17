@@ -31,16 +31,13 @@ class DocumentServiceTest {
     }
 
     @Test
-    void listDocumentInfoTest() {
-    }
+    void listDocumentInfoTest() {}
 
     @Test
-    void downloadDocumentTest() {
-    }
+    void downloadDocumentTest() {}
 
     @Test
-    void uploadDocumentTest() {
-    }
+    void uploadDocumentTest() {}
 
     @Test
     void deleteDocumentInfoTest() {

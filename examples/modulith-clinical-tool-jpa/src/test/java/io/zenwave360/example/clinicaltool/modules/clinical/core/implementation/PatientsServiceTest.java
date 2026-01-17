@@ -13,7 +13,6 @@ import io.zenwave360.example.clinicaltool.modules.clinical.core.outbound.jpa.*;
 import io.zenwave360.example.clinicaltool.modules.clinical.infrastructure.jpa.inmemory.*;
 import java.time.*;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -37,12 +36,10 @@ class PatientsServiceTest {
     }
 
     @Test
-    void loadPatientTest() {
-    }
+    void loadPatientTest() {}
 
     @Test
-    void partialPatientUpdateTest() {
-    }
+    void partialPatientUpdateTest() {}
 
     @Test
     void createPatientTest() {
@@ -117,14 +114,11 @@ class PatientsServiceTest {
     }
 
     @Test
-    void getPatientProfileByIdTest() {
-    }
+    void getPatientProfileByIdTest() {}
 
     @Test
-    void requestOptOutTest() {
-    }
+    void requestOptOutTest() {}
 
     @Test
-    void associateDocumentWithPatientTest() {
-    }
+    void associateDocumentWithPatientTest() {}
 }
