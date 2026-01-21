@@ -22,6 +22,8 @@ Baseline Projects:
 
 Example Projects:
 
+* [examples/asyncapi-shopping-cart](examples/asyncapi-shopping-cart) AsyncAPI Shopping Cart Example
+* [examples/order-fulfillment-kotlin](examples/order-fulfillment-kotlin) Order Fulfillment DDD Example (Kotlin)
 * [examples/customer-address-jpa](examples/customer-address-jpa) Spring Boot + JPA + Kafka
 * [examples/kustomer-address-jpa](examples/kustomer-address-jpa) Spring Boot + JPA + Kafka + Kotlin
 * [examples/modulith-clinical-tool-jpa](examples/modulith-clinical-tool-jpa) Modular Monolith
