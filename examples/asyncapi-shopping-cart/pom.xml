@@ -27,7 +27,7 @@
         <spring-cloud-stream-schema.version>2.2.1.RELEASE</spring-cloud-stream-schema.version>
         <avro.version>1.11.1</avro.version>
 
-        <zenwave.version>2.2.0</zenwave.version>
+        <zenwave.version>2.3.0</zenwave.version>
         <openapi-generator-maven-plugin.version>7.17.0</openapi-generator-maven-plugin.version>
 
         <jakarta.validation-api.version>3.1.1</jakarta.validation-api.version>

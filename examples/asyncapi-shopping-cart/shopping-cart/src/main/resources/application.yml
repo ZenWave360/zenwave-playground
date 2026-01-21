@@ -60,7 +60,7 @@ spring:
       function:
         definition: shopping-cart-channel
       bindings:
-        shopping-cart-channel-out-0:
+        shopping-cart-channel-out:
           destination: shopping-cart
           content-type: application/*+avro
           producer:
