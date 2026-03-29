@@ -6,11 +6,10 @@ import jakarta.persistence.Converter
 /** Enum for OrderStatus. */
 enum class OrderStatus(val value: Int) {
 
-    DRAFT(1),
-    PLACED(2),
-    PAID(3),
-    SHIPPED(4),
-    CANCELLED(5);
+    PLACED(1),
+    PAID(2),
+    SHIPPED(3),
+    CANCELLED(4);
 
     companion object {
         fun fromValue(value: Int): OrderStatus? {

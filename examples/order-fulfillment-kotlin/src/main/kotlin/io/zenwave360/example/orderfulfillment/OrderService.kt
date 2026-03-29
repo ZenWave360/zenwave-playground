@@ -16,27 +16,26 @@ interface OrderService {
     fun placeOrder(input: PlaceOrderInput): Order
 
     /**
-     * Order is shipped
+     * Set Order as paid
      *
      * With Events: [OrderPaid].
      */
     fun payOrder(orderNumber: String, input: PayOrderInput): Order
 
     /**
-     * Order is cancelled
+     * Set Order as shipped
      *
      * With Events: [OrderShipped].
      */
     fun shipOrder(orderNumber: String, input: ShipOrderInput): Order
 
     /**
-     * Query order
+     * Set Order as cancelled
      *
-     * <ul><li><b>shipedOrdersCanNotBeCancelled</b>: Shipped orders can not be cancelled</li></ul> With Events:
-     * [OrderCancelled].
+     * With Events: [OrderCancelled].
      */
     fun cancelOrder(orderNumber: String): Order
 
-    /**  */
+    /** Query order */
     fun getOrder(orderNumber: String): Order?
 }

@@ -49,8 +49,12 @@ open class OrderServiceImpl(
 
         return orderRepository
             .findByOrderNumber(orderNumber)
-            ?.let { existingOrder -> orderServiceMapper.update(existingOrder, input) }
-            ?.apply { status = OrderStatus.PAID }
+            ?.let { existingOrder ->
+                OrderTransitions.ensureCanPayOrder(existingOrder)
+                orderServiceMapper.update(existingOrder, input)
+                existingOrder.status = OrderStatus.PAID
+                existingOrder
+            }
             ?.let { orderRepository.save(it) }
             ?.also {
 
@@ -64,8 +68,12 @@ open class OrderServiceImpl(
 
         return orderRepository
             .findByOrderNumber(orderNumber)
-            ?.let { existingOrder -> orderServiceMapper.update(existingOrder, input) }
-            ?.apply { status = OrderStatus.SHIPPED }
+            ?.let { existingOrder ->
+                OrderTransitions.ensureCanShipOrder(existingOrder)
+                orderServiceMapper.update(existingOrder, input)
+                existingOrder.status = OrderStatus.SHIPPED
+                existingOrder
+            }
             ?.let { orderRepository.save(it) }
             ?.also {
 
@@ -77,19 +85,16 @@ open class OrderServiceImpl(
     override fun cancelOrder(orderNumber: String): Order {
         log.debug("Request cancelOrder: {}", orderNumber)
 
-        return orderRepository.findByOrderNumber(orderNumber)
-            ?.also {
-                if (it.status == OrderStatus.SHIPPED) {
-                    throw IllegalStateException("Shipped orders can not be cancelled")
-                }
-            }
-            ?.apply { status = OrderStatus.CANCELLED }
-            ?.let { orderRepository.save(it) }
-            ?.also {
-                // emit events
-                eventsProducer.onOrderCancelled(eventsMapper.asOrderCancelled(it))
-            }
-            ?: throw NoSuchElementException("Order not found with id: orderNumber=$orderNumber")
+        val existingOrder =
+            orderRepository.findByOrderNumber(orderNumber)
+                ?: throw NoSuchElementException("Order not found with id: orderNumber=$orderNumber")
+        OrderTransitions.ensureCanCancelOrder(existingOrder)
+        existingOrder.status = OrderStatus.CANCELLED
+        val order = orderRepository.save(existingOrder)
+
+        // emit events
+        eventsProducer.onOrderCancelled(eventsMapper.asOrderCancelled(order))
+        return order
     }
 
     @Transactional(readOnly = true)

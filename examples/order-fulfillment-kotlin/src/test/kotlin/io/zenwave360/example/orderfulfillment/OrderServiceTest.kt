@@ -6,6 +6,7 @@ import io.zenwave360.example.orderfulfillment.domain.*
 import io.zenwave360.example.orderfulfillment.dtos.*
 import io.zenwave360.example.orderfulfillment.inmemory.*
 import io.zenwave360.example.orderfulfillment.mappers.*
+import org.junit.jupiter.api.Assertions.assertTrue
 import java.time.*
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -61,7 +62,7 @@ class OrderServiceTest {
 
     @Test
     fun shipOrderTest() {
-        val order = orderService.shipOrder("ORD-2024-003", ShipOrderInput("TRK-67890"))
+        val order = orderService.shipOrder("ORD-2024-002", ShipOrderInput("TRK-67890"))
         assertNotNull(order)
         assertNotNull(order.trackingNumber)
         assertEquals(OrderStatus.SHIPPED, order.status)
@@ -80,7 +81,7 @@ class OrderServiceTest {
             val order = orderService.cancelOrder("ORD-2024-003")
             fail("Expected IllegalStateException")
         } catch (e: IllegalStateException) {
-            assertEquals("Shipped orders can not be cancelled", e.message)
+            assertTrue(e.message?.startsWith("Invalid state transition for Order") == true)
         }
     }
 

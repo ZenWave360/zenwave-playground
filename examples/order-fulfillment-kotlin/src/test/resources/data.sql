@@ -60,7 +60,7 @@ INSERT INTO order_table (
     nextval('order_table_seq'),
     0,
     'ORD-2024-001',
-    2, -- PLACED status
+    1, -- PLACED status
     299.99,
     'USD',
     NULL,
@@ -75,7 +75,7 @@ INSERT INTO order_table (
     nextval('order_table_seq'),
     0,
     'ORD-2024-002',
-    2, -- PLACED status
+    1, -- PLACED status
     149.99,
     'USD',
     NULL,
@@ -90,7 +90,7 @@ INSERT INTO order_table (
     nextval('order_table_seq'),
     0,
     'ORD-2024-003',
-    2, -- PLACED status
+    1, -- PLACED status
     89.97,
     'EUR',
     NULL,
@@ -105,7 +105,7 @@ INSERT INTO order_table (
     nextval('order_table_seq'),
     0,
     'ORD-2024-004',
-    2, -- PLACED status
+    1, -- PLACED status
     599.99,
     'USD',
     NULL,
@@ -121,7 +121,7 @@ INSERT INTO order_table (
     nextval('order_table_seq'),
     0,
     'ORD-2024-005',
-    3, -- PAID status
+    2, -- PAID status
     199.99,
     'USD',
     'PAY-REF-12345',
@@ -136,7 +136,7 @@ INSERT INTO order_table (
     nextval('order_table_seq'),
     0,
     'ORD-2024-006',
-    3, -- PAID status
+    2, -- PAID status
     79.98,
     'USD',
     'PAY-REF-12346',
@@ -151,7 +151,7 @@ INSERT INTO order_table (
     nextval('order_table_seq'),
     0,
     'ORD-2024-007',
-    3, -- PAID status
+    2, -- PAID status
     449.99,
     'EUR',
     'PAY-REF-12347',
@@ -166,7 +166,7 @@ INSERT INTO order_table (
     nextval('order_table_seq'),
     0,
     'ORD-2024-008',
-    3, -- PAID status
+    2, -- PAID status
     129.99,
     'USD',
     'PAY-REF-12348',
@@ -182,7 +182,7 @@ INSERT INTO order_table (
     nextval('order_table_seq'),
     0,
     'ORD-2024-009',
-    4, -- SHIPPED status
+    3, -- SHIPPED status
     299.99,
     'USD',
     'PAY-REF-12349',
@@ -197,7 +197,7 @@ INSERT INTO order_table (
     nextval('order_table_seq'),
     0,
     'ORD-2024-010',
-    4, -- SHIPPED status
+    3, -- SHIPPED status
     159.98,
     'USD',
     'PAY-REF-12350',
@@ -212,7 +212,7 @@ INSERT INTO order_table (
     nextval('order_table_seq'),
     0,
     'ORD-2024-011',
-    4, -- SHIPPED status
+    3, -- SHIPPED status
     89.99,
     'EUR',
     'PAY-REF-12351',
@@ -227,7 +227,7 @@ INSERT INTO order_table (
     nextval('order_table_seq'),
     0,
     'ORD-2024-012',
-    4, -- SHIPPED status
+    3, -- SHIPPED status
     249.99,
     'USD',
     'PAY-REF-12352',
@@ -243,7 +243,7 @@ INSERT INTO order_table (
     nextval('order_table_seq'),
     0,
     'ORD-2024-013',
-    5, -- CANCELLED status
+    4, -- CANCELLED status
     99.99,
     'USD',
     NULL,
@@ -258,7 +258,7 @@ INSERT INTO order_table (
     nextval('order_table_seq'),
     0,
     'ORD-2024-014',
-    5, -- CANCELLED status
+    4, -- CANCELLED status
     179.98,
     'USD',
     NULL,
@@ -273,7 +273,7 @@ INSERT INTO order_table (
     nextval('order_table_seq'),
     0,
     'ORD-2024-015',
-    5, -- CANCELLED status
+    4, -- CANCELLED status
     349.99,
     'EUR',
     NULL,
@@ -288,7 +288,7 @@ INSERT INTO order_table (
     nextval('order_table_seq'),
     0,
     'ORD-2024-016',
-    5, -- CANCELLED status
+    4, -- CANCELLED status
     59.99,
     'USD',
     NULL,

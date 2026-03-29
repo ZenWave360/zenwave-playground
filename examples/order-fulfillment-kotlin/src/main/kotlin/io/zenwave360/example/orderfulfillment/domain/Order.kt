@@ -34,13 +34,13 @@ data class Order(
     @NotNull
     @Column(name = "status", nullable = false)
     @Convert(converter = OrderStatus.OrderStatusConverter::class)
-    var status: OrderStatus? = null,
+    var status: OrderStatus = OrderStatus.PLACED,
     @NotNull @Column(name = "total_amount", nullable = false) var totalAmount: BigDecimal? = null,
     @NotNull @Size(max = 3) @Column(name = "currency", nullable = false, length = 3) var currency: String? = null,
     @Column(name = "payment_reference") var paymentReference: String? = null,
+    @Column(name = "tracking_number") var trackingNumber: String? = null,
 
     /** Order lines stored as JSON for simplicity in the demo */
-    @Column(name = "tracking_number") var trackingNumber: String? = null,
     @Size(min = 1)
     @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.JSON)
     @Column(name = "items")

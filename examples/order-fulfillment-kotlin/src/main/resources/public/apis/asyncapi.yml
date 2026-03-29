@@ -150,7 +150,7 @@ components:
           type: "string"
         trackingNumber:
           type: "string"
-          description: "Order lines stored as JSON for simplicity in the demo"
+          description: ""
         items:
           type: "array"
           items:
@@ -187,7 +187,7 @@ components:
           type: "string"
         trackingNumber:
           type: "string"
-          description: "Order lines stored as JSON for simplicity in the demo"
+          description: ""
         items:
           type: "array"
           items:
@@ -260,7 +260,7 @@ components:
           type: "string"
         trackingNumber:
           type: "string"
-          description: "Order lines stored as JSON for simplicity in the demo"
+          description: ""
         items:
           type: "array"
           items:
@@ -276,7 +276,6 @@ components:
       type: "string"
       x-business-entity: "OrderStatus"
       enum:
-      - "DRAFT"
       - "PLACED"
       - "PAID"
       - "SHIPPED"

@@ -49,7 +49,7 @@ class OrderApiControllerTest {
 
     @Test
     fun shipOrderTest() {
-        val orderNumber: String = "ORD-2024-003"
+        val orderNumber: String = "ORD-2024-002"
         val reqBody: ShipOrderInputDTO = ShipOrderInputDTO(trackingNumber = "TRK-67890")
         val response = controller.shipOrder(orderNumber, reqBody)
         Assertions.assertEquals(201, response.statusCode.value())

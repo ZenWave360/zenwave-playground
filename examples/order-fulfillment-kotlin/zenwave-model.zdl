@@ -19,6 +19,7 @@ config {
  */
 @aggregate
 @auditing
+@lifecycle(field: status, initial: PLACED)
 entity Order(order_table) {
     /** prefix doc comment */
     @naturalId
@@ -45,16 +46,11 @@ policies (Order) {
     orderNumberUnique "orderNumber must be unique"
 }
 
-policies {
-    shipedOrdersCanNotBeCancelled "Shipped orders can not be cancelled"
-}
-
 enum OrderStatus {
-    DRAFT(1),
-    PLACED(2),
-    PAID(3),
-    SHIPPED(4),
-    CANCELLED(5)
+    PLACED(1),
+    PAID(2),
+    SHIPPED(3),
+    CANCELLED(4)
 }
 
 /**
@@ -81,19 +77,22 @@ service OrderService for (Order) {
 
     /** Customer places an order */
     @post
+    @transition(to: PLACED)
     placeOrder(PlaceOrderInput) Order withEvents OrderPlaced
 
-    /** Order is paid */
+    /** Set Order as paid */
     @post("/{orderNumber}/pay")
+    @transition(from: PLACED, to: PAID)
     payOrder(@natural id, PayOrderInput) Order withEvents OrderPaid
 
-    /** Order is shipped */
+    /** Set Order as shipped */
     @post("/{orderNumber}/ship")
+    @transition(from: PAID, to: SHIPPED)
     shipOrder(@natural id, ShipOrderInput) Order withEvents OrderShipped
 
-    /** Order is cancelled */
+    /** Set Order as cancelled */
     @post("/{orderNumber}/cancel")
-    @policy(shipedOrdersCanNotBeCancelled)
+    @transition(from: [PLACED, PAID], to: CANCELLED)
     cancelOrder(@natural id) Order withEvents OrderCancelled
 
     /** Query order */

@@ -45,7 +45,7 @@ paths:
   /orders/{orderNumber}/pay:
     post:
       operationId: payOrder
-      description: "Order is shipped"
+      description: "Set Order as paid"
       tags: [Order]
       parameters:
         - name: "orderNumber"
@@ -69,7 +69,7 @@ paths:
   /orders/{orderNumber}/ship:
     post:
       operationId: shipOrder
-      description: "Order is cancelled"
+      description: "Set Order as shipped"
       tags: [Order]
       parameters:
         - name: "orderNumber"
@@ -93,7 +93,7 @@ paths:
   /orders/{orderNumber}/cancel:
     post:
       operationId: cancelOrder
-      description: "Query order"
+      description: "Set Order as cancelled"
       tags: [Order]
       parameters:
         - name: "orderNumber"
@@ -111,7 +111,7 @@ paths:
   /orders/{orderNumber}:
     get:
       operationId: getOrder
-      description: "getOrder"
+      description: "Query order"
       tags: [Order]
       parameters:
         - name: "orderNumber"
@@ -163,7 +163,6 @@ components:
       type: "object"
       x-business-entity: "Order"
       required:
-      - "orderNumber"
       - "status"
       - "totalAmount"
       - "currency"
@@ -193,7 +192,7 @@ components:
           type: "string"
         trackingNumber:
           type: "string"
-          description: "Order lines stored as JSON for simplicity in the demo"
+          description: ""
         items:
           type: "array"
           items:
@@ -203,7 +202,6 @@ components:
       type: "string"
       x-business-entity: "OrderStatus"
       enum:
-      - "DRAFT"
       - "PLACED"
       - "PAID"
       - "SHIPPED"

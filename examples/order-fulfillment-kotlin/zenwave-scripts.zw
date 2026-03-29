@@ -1,4 +1,4 @@
-@import("io.zenwave360.sdk.plugins.customizations:kotlin-backend-application:2.3.0-SNAPSHOT")
+@import("io.zenwave360.sdk.plugins.customizations:kotlin-backend-application:2.4.0")
 config {
 
     // This is a global configuration that applies to all plugins.
