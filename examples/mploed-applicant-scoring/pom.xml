@@ -30,7 +30,7 @@
         <spring-modulith.version>1.4.1</spring-modulith.version>
         <spring-modulith-events-scs.version>1.0.2</spring-modulith-events-scs.version>
 
-        <zenwave.version>2.0.2</zenwave.version>
+        <zenwave.version>2.7.1</zenwave.version>
 
         <jakarta.validation-api.version>3.1.1</jakarta.validation-api.version>
         <mapstruct.version>1.6.3</mapstruct.version>
