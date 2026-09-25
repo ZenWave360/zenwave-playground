@@ -19,6 +19,7 @@ Baseline Projects:
 
 * [zenwave-jpa-baseline](zenwave-jpa-baseline)
 * [zenwave-mongodb-baseline](zenwave-mongodb-baseline)
+* [zenwave-java-archetype-baseapp](zenwave-java-archetype-baseapp) Maven archetype generating the baselines above, choosing between JPA/MongoDB, Kafka and Spring Modulith
 
 Example Projects:
 

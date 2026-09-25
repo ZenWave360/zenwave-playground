@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype-descriptor
+        name="zenwave-java-archetype"
+        xsi:schemaLocation="https://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.1.0 http://maven.apache.org/xsd/archetype-descriptor-1.1.0.xsd"
+        xmlns="https://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.1.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <requiredProperties>
+        <requiredProperty key="interactiveMode">
+            <defaultValue>false</defaultValue>
+        </requiredProperty>
+        <!-- no defaultValue: Maven always asks for these, the way it asks for groupId/artifactId.
+             Everything below keeps a default so Maven stays quiet about it and the
+             post-generate script can ask the [FEATURE] questions instead. -->
+        <requiredProperty key="projectName" />
+        <requiredProperty key="projectDescription" />
+
+        <requiredProperty key="artifactId" />
+        <requiredProperty key="groupId" />
+        <requiredProperty key="package">
+            <defaultValue>${groupId}</defaultValue>
+        </requiredProperty>
+        <requiredProperty key="version">
+            <defaultValue>0.0.1-SNAPSHOT</defaultValue>
+        </requiredProperty>
+        <!-- git init + initial commit in the generated project -->
+        <requiredProperty key="git">
+            <defaultValue>true</defaultValue>
+        </requiredProperty>
+
+        <!-- persistence: choose exactly one of jpa / mongodb -->
+        <requiredProperty key="jpa">
+            <defaultValue>false</defaultValue>
+        </requiredProperty>
+        <requiredProperty key="mongodb">
+            <defaultValue>false</defaultValue>
+        </requiredProperty>
+
+        <!-- event streaming (`streams` is derived from `kafka`, so it is not asked for) -->
+        <requiredProperty key="kafka">
+            <defaultValue>false</defaultValue>
+        </requiredProperty>
+
+        <!-- jMolecules DDD + architecture annotations -->
+        <requiredProperty key="jmolecules">
+            <defaultValue>false</defaultValue>
+        </requiredProperty>
+
+        <!-- spring modulith + transactional outbox (implies kafka) -->
+        <requiredProperty key="modulith">
+            <defaultValue>false</defaultValue>
+        </requiredProperty>
+
+    </requiredProperties>
+
+    <fileSets>
+        <fileSet filtered="true" packaged="true" encoding="UTF-8">
+            <directory>src/main/java</directory>
+            <includes>
+                <include>**/*.java</include>
+            </includes>
+        </fileSet>
+        <fileSet filtered="true" encoding="UTF-8">
+            <directory>src/main/resources</directory>
+            <includes>
+                <include>**/*.yml</include>
+            </includes>
+        </fileSet>
+        <fileSet filtered="true" packaged="true" encoding="UTF-8">
+            <directory>src/test/java</directory>
+            <includes>
+                <include>**/*.java</include>
+            </includes>
+        </fileSet>
+        <fileSet filtered="true" encoding="UTF-8">
+            <directory>src/test/resources</directory>
+            <includes>
+                <include>**/*.yml</include>
+                <include>**/*.js</include>
+            </includes>
+        </fileSet>
+        <fileSet filtered="true" encoding="UTF-8">
+            <directory></directory>
+            <includes>
+                <include>.*</include>
+                <include>*</include>
+            </includes>
+            <excludes>
+                <exclude>docker-compose.yml</exclude>
+            </excludes>
+        </fileSet>
+        <!-- not filtered: docker-compose.yml uses ${HOST:-localhost} which Velocity would mangle -->
+        <fileSet encoding="UTF-8">
+            <directory></directory>
+            <includes>
+                <include>docker-compose.yml</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</archetype-descriptor>
