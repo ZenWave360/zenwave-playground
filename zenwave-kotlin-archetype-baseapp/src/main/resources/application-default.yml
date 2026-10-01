@@ -1,0 +1,11 @@
+logging.level.org.hibernate.SQL: DEBUG
+logging.level.org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+logging.level.org.springframework.transaction: DEBUG
+
+spring.jpa.hibernate.ddl-auto: update
+
+DATASOURCE_URL: jdbc:postgresql://localhost:5432/app
+DATASOURCE_USERNAME: postgres
+DATASOURCE_PASSWORD: admin123
+MONGODB_URI: mongodb://localhost:27017/app?replicaSet=rs0
+KAFKA_BOOTSTRAP_SERVERS: localhost:9092

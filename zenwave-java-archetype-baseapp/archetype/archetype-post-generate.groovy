@@ -4,7 +4,10 @@ import java.nio.file.Paths
 
 Path projectPath = Paths.get(request.outputDirectory, request.artifactId)
 
-def javaConfigPackageFolder = "src/main/java/${request.packageName}/config".replace('.', '/')
+// this script is shared, byte-identical, by the Java and Kotlin archetypes: each ships only one source root
+def sourceLanguage = ["java", "kotlin"].find { projectPath.resolve("src/main/${it}").toFile().isDirectory() }
+def configPackageFolder = "src/main/${sourceLanguage}/${request.packageName}/config".replace('.', '/')
+def sourceExtension = sourceLanguage == "kotlin" ? "kt" : "java"
 
 def pomFile = projectPath.resolve("pom.xml").toFile()
 def applicationYmlPath = projectPath.resolve("src/main/resources/application.yml").toFile()
@@ -28,7 +31,7 @@ def taggedLineFiles = [zenwaveScriptsPath, pomFile]
  *   parents                -> features that are forced to `true` when this one is selected
  *   dependencies           -> `groupId:artifactId` removed from pom.xml (works for <dependencyManagement> BOMs too)
  *   pomProperties          -> <property> lines removed from pom.xml
- *   classes                -> files removed from src/main/java/<package>/config
+ *   classes                -> class names (no extension) removed from src/main/<java|kotlin>/<package>/config
  *   yamlKeys               -> keys removed from application.yml / application-default.yml / application-test.yml
  *   dockerComposeKeys      -> keys removed from docker-compose.yml
  *   searchAndReplace       -> [file, search, replace, isRegex] applied when the feature IS selected
@@ -46,7 +49,7 @@ def config = [
                         "org.springframework.boot:spring-boot-starter-data-jpa",
                         "org.postgresql:postgresql",
                 ],
-                "classes": ["DatabaseConfiguration.java"],
+                "classes": ["DatabaseConfiguration"],
                 "yamlKeys": [
                         "spring.datasource", "spring.jpa", "spring.sql",
                         "DATASOURCE_URL", "DATASOURCE_USERNAME", "DATASOURCE_PASSWORD",
@@ -56,7 +59,7 @@ def config = [
         ],
         "mongodb": [
                 "dependencies": ["org.springframework.boot:spring-boot-starter-data-mongodb"],
-                "classes": ["MongoConfig.java"],
+                "classes": ["MongoConfig"],
                 "yamlKeys": [
                         "spring.data.mongodb",
                         "MONGODB_URI",
@@ -79,9 +82,9 @@ def config = [
                 "parents": ["streams"],
                 "dependencies": [
                         "org.springframework.cloud:spring-cloud-starter-stream-kafka",
-                        "org.springframework.cloud:spring-cloud-stream-schema"
+                        "org.springframework.cloud:spring-cloud-stream-schema-registry-client"
                 ],
-                "pomProperties": ["spring-cloud-stream-schema.version", "avro.version"],
+                "pomProperties": ["avro.version"],
                 "yamlKeys": [
                         "spring.kafka", "spring.cloud.stream.kafka.binder.enable-observation",
                         "KAFKA_BOOTSTRAP_SERVERS", "logging.level.org.apache.kafka.clients.admin"
@@ -99,7 +102,7 @@ def config = [
                         "org.springframework.modulith:spring-modulith-docs",
                 ],
                 "pomProperties": ["spring-modulith.version", "zenwave-modulith-events-scs.version"],
-                "classes": ["ExternalizationConfiguration.java"],
+                "classes": ["ExternalizationConfiguration"],
                 "yamlKeys": ["spring.modulith"],
         ],
         "jmolecules": [
@@ -231,8 +234,9 @@ config.each { feature ->
             pomLines = removePropertyFromPom(pomLines, property)
         }
         feature.value["classes"]?.each { clazz ->
-            log_no_newline "    Removing class: ${javaConfigPackageFolder}/${clazz}... "
-            log projectPath.resolve(javaConfigPackageFolder).resolve(clazz).toFile().delete()
+            def classFile = "${clazz}.${sourceExtension}"
+            log_no_newline "    Removing class: ${configPackageFolder}/${classFile}... "
+            log projectPath.resolve(configPackageFolder).resolve(classFile).toFile().delete()
         }
         feature.value["yamlKeys"]?.each { key ->
             log "    Removing application.yml (default and test) key: ${key}"

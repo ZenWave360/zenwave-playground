@@ -1,0 +1,24 @@
+package io.zenwave360.example.config
+
+import org.springframework.boot.mongodb.autoconfigure.MongoAutoConfiguration
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Import
+import org.springframework.data.auditing.DateTimeProvider
+import org.springframework.data.mongodb.MongoDatabaseFactory
+import org.springframework.data.mongodb.MongoTransactionManager
+import org.springframework.data.mongodb.config.EnableMongoAuditing
+import java.time.OffsetDateTime
+import java.util.Optional
+
+@Configuration
+@Import(MongoAutoConfiguration::class)
+@EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware", dateTimeProviderRef = "auditingDateTimeProvider")
+class MongoConfig {
+
+    @Bean
+    fun transactionManager(dbFactory: MongoDatabaseFactory): MongoTransactionManager = MongoTransactionManager(dbFactory)
+
+    @Bean(name = ["auditingDateTimeProvider"])
+    fun dateTimeProvider(): DateTimeProvider = DateTimeProvider { Optional.of(OffsetDateTime.now()) }
+}

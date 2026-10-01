@@ -1,247 +1,178 @@
 # ZenWave Java Archetype Baseapp
 
-ZenWave Java Archetype Baseapp
-
-## Table of Contents
+#[[
+A Java + Spring Boot service created from the ZenWave archetype. Its structure is generated from a ZenWave domain model (ZDL), and the behavior the generator leaves out is completed with the zenwave-sdd agent skills and GitHub Spec Kit.
 
 1. [Getting Started](#getting-started)
-   1. [Prerequisites](#prerequisites)
-2. [Technologies](#technologies)
-   1. [Prerequisites](#prerequisites)
-3. [Project Structure](#project-structure)
-   1. [Clean/Hexagonal Architecture](#cleanhexagonal-architecture)
-   2. [3-Tier Architecture](#3-tier-architecture)
-   3. [Simple Domain Packaging](#simple-domain-packaging)
-4. [API First](#api-first)
-   1. [OpenAPI / SwaggerUI](#openapi--swaggerui)
-      1. [Customization](#customization)
-   2. [AsyncAPI / ZenWave SDK](#asyncapi--zenwave-sdk)
-5. [Domain Modeling and Code Generation with ZenWave SDK](#domain-modeling-and-code-generation-with-zenwave-sdk)
-   1. [Installing ZenWave SDK](#installing-zenwave-sdk)
-   2. [Modeling and Generating Code](#modeling-and-generating-code)
-6. [Testing](#testing)
-   1. [Rules of thumb for Testing](#rules-of-thumb-for-testing)
-7. [Code Formatting](#code-formatting)
-
+2. [Prerequisites](#prerequisites)
+3. [Technologies](#technologies)
+4. [Install the ZenWave tooling](#install-the-zenwave-tooling)
+5. [Code Generation](#code-generation)
+   1. [From the domain model: zenwave-scripts.zw](#from-the-domain-model-zenwave-scriptszw)
+   2. [At build time: OpenAPI and AsyncAPI (Maven)](#at-build-time-openapi-and-asyncapi-maven)
+6. [Spec-Driven Development with zenwave-sdd](#spec-driven-development-with-zenwave-sdd)
+   1. [Install the skills and Spec Kit](#install-the-skills-and-spec-kit)
+   2. [Run the skills](#run-the-skills)
 
 ## Getting Started
-
-After cloning the project, you can start the project with the following command:
 
 ```bash
 docker-compose up -d
 mvn spring-boot:run
 ```
 
-### Prerequisites
+SwaggerUI: http://localhost:8080/swagger-ui/index.html
 
-* Java 21+
+## Prerequisites
+
+* Java 25+
 * Maven 3.6+
-* Docker/Docker Compose
-* Git and Git-Bash
-* JBang and ZenWave SDK
-* SDKMAN! (optional but highly recommended)
+* Docker / Docker Compose (local infrastructure and integration tests)
+* Git and Git Bash (all commands below are Git Bash)
+* JBang and the ZenWave CLI (`jbang zw`), see [Install the ZenWave tooling](#install-the-zenwave-tooling)
+* For spec-driven development: `uv` (to install Spec Kit) and an AI coding agent (Claude Code, Codex, Grok…)
+* SDKMAN! (optional, recommended for Java and Maven)
 
 ## Technologies
 
-* Spring Boot 3.5.x
+* Java and Spring Boot 4.0.x
 * Spring Data JPA or MongoDB
-* Spring Data Elasticsearch
-* Spring Cloud Streams for Kafka, RabbitMQ, or other Message Brokers
+* Spring Cloud Stream for Kafka (or other brokers), Spring Modulith (optional)
 * Spring Security
-* KarateDSL for API Testing
-* ZenWave SDK for Domain Modeling and Code Generation
+* ZenWave SDK for domain modeling and code generation
 
-## Project Structure
+## Install the ZenWave tooling
 
-This project is a blank canvas, you can follow a Clean/Hexagonal Architecture, Traditional 3-Tier Architecture, or a Simple Domain Packaging.
-
-### Clean/Hexagonal Architecture
-
-```
-📦 <basePackage>
-   📦 adapters
-       └─ web
-       |  └─ RestControllers (spring mvc)
-       └─ events
-          └─ *EventListeners (spring-cloud-streams)
-   📦 core
-       ├─ 📦 domain
-       |     └─ (entities and aggregates)
-       ├─ 📦 inbound
-       |     ├─ dtos/
-       |     └─ ServiceInterface (inbound service interface)
-       ├─ 📦 outbound
-       |     ├─ mongodb
-       |     |  └─ *RepositoryInterface (spring-data interface)
-       |     └─ jpa
-       |        └─ *RepositoryInterface (spring-data interface)
-       └─ 📦 implementation
-             ├─ mappers/
-             └─ ServiceImplementation (inbound service implementation)
-   📦 infrastructure
-     ├─ mongodb
-     |  └─ CustomRepositoryImpl (spring-data custom implementation)
-     └─ jpa
-        └─ CustomRepositoryImpl (spring-data custom implementation)
-```
-
-### Traditional 3-Tier Architecture
-
-```
-📦 <basePackage>
-   📦 web
-       └─ RestControllers (spring mvc)
-   📦 events
-       └─ *EventListeners (spring-cloud-streams)
-   📦 domain/model
-       └─ (entities and aggregates)
-   📦 service
-       ├─ dtos/
-       └─ ServiceInterface (inbound service interface)
-       └─ 📦 implementation
-           ├─ mappers/
-           └─ ServiceImplementation (inbound service implementation)
-   📦 repositories
-       ├─ mongodb
-       |   └─ CustomRepositoryImpl (spring-data custom implementation)
-       └─ jpa
-           └─ CustomRepositoryImpl (spring-data custom implementation)
-```
-
-### Simple Domain Packaging
-
-Use a simple domain packaging for small projects with just one entity or aggregate, where you plan to have just one service, one repository, and one controller. Also useful for modular monoliths where each module follows a simple domain packaging.
-
-``` 
-📦 <basePackage>
-   📦 domain/model (entities or aggregate)
-   📦 dtos
-   📦 mappers
-   └─ RestController (spring mvc)
-   └─ EventListener (spring-cloud-streams)
-   └─ ServiceInterface (inbound service interface)
-   └─ ServiceImplementation (inbound service implementation)
-   └─ CustomRepositoryImpl (spring-data custom implementation)
-```
-
-## API First
-
-### OpenAPI / SwaggerUI
-
-The project uses `openapi-generator-maven-plugin` (see pom.xml) to generate SpringMVC interfaces and DTOs from the `src/main/resources/public/apis/openapi.yml` file.
-
-Generated sources are placed in `target/generated-sources/openapi` which becomes a source folder for the project. To implement the API, you can create a new `@RestController` and implement the generated interface.
-
-#### Customization
-
-You can customize generated code with this properties in `pom.xml` or directly in the plugin `openapi-generator-maven-plugin`: 
-```xml
-<openApiApiPackage>${basePackage}.adapters.web</openApiApiPackage>
-<openApiModelPackage>${basePackage}.adapters.web.model</openApiModelPackage>
-```
-
-SwaggerUI is available at http://localhost:8080/swagger-ui/index.html. If you need to add more OpenAPI files, you can customize SwaggerUI in `application.yml`:
-
-```yaml
-springdoc.swagger-ui.urls:
-   - name: ${projectName}
-     url: /apis/openapi.yml
-```
-
-URL is relative to 'src/main/resources/public'.
-
-### AsyncAPI / ZenWave SDK
-
-This project also uses `zenwave-sdk-maven-plugin` to generate interfaces, DTOs and producers/consumers using Spring Cloud Streams from the `src/main/resources/public/apis/asyncapi.yml` file.
-
-If this file does not exist, code generation is skipped. Generated sources are placed in `target/generated-sources/zenwave` which becomes a source folder for the project.
-
-#### Customization
-
-You can customize generated code with this properties in `pom.xml` or directly in the plugin `zenwave-sdk-maven-plugin`:
-
-```xml
-<asyncApiModelPackage>${basePackage}.events.dtos</asyncApiModelPackage>
-<asyncApiProducerApiPackage>${basePackage}.events.producer</asyncApiProducerApiPackage>
-<asyncApiConsumerApiPackage>${basePackage}.events.consumer</asyncApiConsumerApiPackage>
-```
-
-See https://www.zenwave360.io/zenwave-sdk/plugins/asyncapi-spring-cloud-streams3/ for more information about API-First with AsyncAPI and ZenWave SDK.
-
-
-## Domain Modeling and Code Generation with ZenWave SDK
-
-ZenWave SDK allows you to focus on Domain Modeling and Analysis using a Domain Specific Language (ZenWave Domain Language or ZDL) to define your domain model. 
-
-Then you can use ZenWave SDK command line or IntelliJ IDEA plugin to generate code from your analysed domain model.
-
-### Installing ZenWave SDK
-
-Use JBang to install a self-updating evergreen version of ZenWave SDK Command Line.
+Follow **[ZenWave Getting Started](https://www.zenwave360.io/docs/getting-started/)**. It covers installing the ZenWave CLI with JBang and the IDE plugins for editing `.zdl` and `.zw` files and running the generators. Quick reference for the CLI:
 
 ```bash
 jbang alias add --fresh --force --name=zw release@zenwave360/zenwave-sdk
-```
-
-This will give you access to the `jbang zw` command line tool. You can use `jbang zw --help` to see all available commands.
-
-```bash
 jbang zw --help list
 ```
 
-Install [ZenWave Domain Editor for IntelliJ IDEA](https://plugins.jetbrains.com/plugin/22858-zenwave-domain-model-editor-for-zdl) from the marketplace.
+## Code Generation
 
-See https://www.zenwave360.io/docs/getting-started/ for more information about ZenWave SDK.
+Code comes from two places: the ZenWave SDK, run from `zenwave-scripts.zw` when the domain model changes, and Maven plugins that run on every build for the API contracts.
 
-### Modeling and Generating Code
+### From the domain model: zenwave-scripts.zw
 
-The base project comes with to files:
+The project ships with two files:
 
-* `zenwave-scripts.zdl`: sample scripts you can use from IntelliJ to run ZenWave commands and generate different software artifacts.
-* `zenwave-model.zdl`: sample model you can use to generate a sample application and use it as a reference for your own modeling and analysis.
+* `zenwave-model.zdl`: the domain model. It's a sample: replace it with your own, or import a remote, governed version of the model.
+* `zenwave-scripts.zw`: the ZenWave plugins to run, with their configuration.
 
-## Testing
+The plugins in `zenwave-scripts.zw`, in the order to run them:
 
-* JUnit5
-* SpringWebTestClient for API Testing in Java
-* KarateDSL for API Testing
-* SpringBootTest for Integration Testing
-* TestContainers with DockerComposeContainer for Integration Testing
-* InMemory implementations of external Interfaces (Repositories) for Unit Testing (generated w/ ZenWave SDK)
-* WireMock + OpenAPI Examples for Mocking external APIs
-* Mockito as a last resort for Mocking external Dependencies. Whenever possible, please favor WireMock and InMemory Repositories.
+| Plugin | Generates |
+|---|---|
+| `ZDLToOpenAPIPlugin` | `src/main/resources/public/apis/openapi.yml` from the ZDL services |
+| `ZDLToAsyncAPIPlugin` | `src/main/resources/public/apis/asyncapi.yml` from the ZDL events |
+| `BackendApplicationDefaultPlugin` | domain entities, repositories, services and their implementations, DTOs, mappers, events, listeners, in-memory test configs and tests |
+| `OpenAPIControllersPlugin` | Spring MVC controllers implementing the OpenAPI interfaces |
+| `SpringWebTestClientPlugin` | API tests (per operation, and per business flow) |
 
-### Rules of thumb for Testing:
+**How to run them:** open `zenwave-scripts.zw` in the IDE with the ZenWave plugin and use the play button next to each plugin. Hovering the button shows the equivalent command line (`jbang zw -p <Plugin> --deps <...> key=value ...`), which you can copy and run from a terminal. `jbang zw` doesn't take a `.zw` file directly: each plugin block is one command.
 
-- Favor functional Vertical Testing (Acceptance Testing) over unit testing where every dependency is mocked.
-  - Use @SpringBootTests for the most important use cases.
-  - Use InMemory dependencies for all use cases.
-- Interfaces that connect to external resources **MUST** be tested using DockerComposeContainer, even if this does not contribute to code coverage metrics.
-
-
-## Code Formating
-
-This project is configured to use [Spotless](https://github.com/diffplug/spotless) with Palantir Java Format as code formatter. You can apply code formatting from the command line with the following command:
+After generating:
 
 ```bash
-mvn spotless:apply
+mvn -DskipTests clean test-compile    # also runs the Maven generators below
+git add -A && git commit -m "feat: generate code from zenwave-model.zdl"
 ```
 
-You can also configure your IDE for code automatic code formating with the following plugins:
+**Regenerating safely.** Some files are *generated once* and then belong to you: service implementations, event listeners and their MapStruct mappers, tests, `src/test/resources/data*` and `DockerComposeInitializer`. A normal run doesn't touch them. A run with `--force` / `-f` overwrites them, so check the command the IDE generates, and run `git diff` after every regeneration.
 
-- https://plugins.jetbrains.com/plugin/13180-palantir-java-format
-- https://github.com/palantir/palantir-java-format/tree/develop/eclipse_plugin
+### At build time: OpenAPI and AsyncAPI (Maven)
 
-Keep a consistent code style from the beginning of the project.
+These run in `generate-sources` on every `mvn compile`, from the API files the plugins above wrote. Their output goes to `target/` and is never edited by hand.
 
-### Palantir IntelliJ plugin
+**OpenAPI** (`openapi-generator-maven-plugin`, generator `spring`):
+* reads `src/main/resources/public/apis/openapi.yml`;
+* generates the Spring MVC API interfaces and the `*DTO` models into `target/generated-sources/openapi` (`interfaceOnly`: the controllers from `OpenAPIControllersPlugin` implement them);
+* packages are set by the `openApiApiPackage` / `openApiModelPackage` properties in `pom.xml`.
 
-The plugin will be disabled by default on new projects. To manually enable it in the current project, go to `File→Settings...→palantir-java-format Settings` (or `IntelliJ IDEA→Preferences...→Other Settings→palantir-java-format Settings` on macOS) and check the Enable palantir-java-format checkbox.
+**AsyncAPI** (`zenwave-sdk-maven-plugin`, generator `AsyncAPIGenerator`, profile `asyncapi-code-generation`):
+* the profile **activates only when `src/main/resources/public/apis/asyncapi.yml` exists**. Without the file, nothing is generated;
+* generates, as the API `provider`, the message DTOs and the Spring Cloud Stream producers and consumer interfaces into `target/generated-sources/zenwave`;
+* with Spring Modulith, it also wires the transactional outbox (`transactionalOutbox=modulith`) and the application-event listener;
+* packages are set by the `asyncApiModelPackage`, `asyncApiProducerApiPackage` and `asyncApiConsumerApiPackage` properties. See the [AsyncAPI generator docs](https://www.zenwave360.io/zenwave-sdk/plugins/asyncapi-generator/).
 
-To enable it by default in new projects, use `File→Other Settings→Default Settings...`.
+To serve more API files in SwaggerUI, add them to `application.yml` (`springdoc.swagger-ui.urls`, URLs relative to `src/main/resources/public`).
 
-When enabled, it will replace the normal Reformat Code action, which can be triggered from the Code menu or with the Ctrl-Alt-L (by default) keyboard shortcut.
+## Spec-Driven Development with zenwave-sdd
 
+The generator creates the structure: entities, services, events, mappers and test skeletons. It leaves the behavior as `TODO`s. The [zenwave-sdd](https://github.com/ZenWave360/zenwave-sdd) skills find and fill those gaps, and [GitHub Spec Kit](https://github.com/github/spec-kit) gives the work a standard shape (`spec.md` → `plan.md` → `tasks.md`). The full workflow is in the [zenwave-sdd manual](https://github.com/ZenWave360/zenwave-sdd/blob/main/MANUAL.md).
+
+The rule they all follow: **models own structure.** If a behavior needs a field, event, command or state that the ZDL doesn't have, fix the ZDL and regenerate. Never hand-add it to code.
+
+### Install the skills and Spec Kit
+
+Run once, from the project root, after the first generation. It installs a pinned zenwave-sdd release for Claude Code, Codex and Grok:
+
+```bash
+ZWSDD=v0.1.0-rc1                                     # zenwave-sdd release tag
+tmp=$(mktemp -d)
+git clone -q --depth 1 --branch "$ZWSDD" https://github.com/ZenWave360/zenwave-sdd "$tmp"
+
+# the same skills into each agent's folder (copies; symlinks are unreliable on Windows)
+for dir in .claude/skills .agents/skills .grok/skills; do
+  mkdir -p "$dir" && cp -r "$tmp"/skills/* "$dir"/
+done
+
+mkdir -p docs
+cp "$tmp"/templates/project-overlay.md docs/zenwave-sdd-overlay.md
+cp "$tmp"/speckit/constitution-zenwave.md docs/
+echo "$ZWSDD" > docs/zenwave-sdd.version
+rm -rf "$tmp"
+
+# Spec Kit, for every agent you use (claude is the default)
+uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
+specify init --here --integration claude --script sh
+specify integration install codex
+specify integration install grok
+specify integration use claude
+```
+
+Then:
+
+1. **Fill in `docs/zenwave-sdd-overlay.md`.** It's how the skills find your ZFL and ZDL files, and learn the deployment shape (microservices or modulith), the packages, and the build and regenerate commands.
+2. **Point every agent at it.** Create `AGENTS.md` (read by Codex and Grok) and a `CLAUDE.md` that imports it:
+
+   ```bash
+   cat > AGENTS.md <<'EOF'
+   # Agent instructions
+   - Before running any zenwave-* skill, read docs/zenwave-sdd-overlay.md.
+   - Models own structure: never hand-edit generated structure; model gaps go back to the ZDL + regeneration (docs/constitution-zenwave.md).
+   - Spec Kit features live in specs/NNN-<feature>/; the constitution is .specify/memory/constitution.md.
+   EOF
+   printf '@AGENTS.md\n' > CLAUDE.md
+   ```
+
+3. **Commit** the skill folders, `docs/`, `.specify/`, `AGENTS.md` and `CLAUDE.md`, so the whole team works with the same versions.
+
+To upgrade, re-run the first block with a new `ZWSDD` tag, and review the `git diff`.
+
+### Run the skills
+
+Claude Code and Grok invoke skills as `/skill-name`, and Codex as `$skill-name`. Any agent also understands "run the zenwave-gap-report skill".
+
+| Step | Run | Result |
+|---|---|---|
+| ZFL flow → ZDL (only when you start from a ZFL business flow) | `/zfl-to-zdl <flow.zfl>` | one ZDL per bounded context |
+| Find what the generator left out | `/zenwave-gap-report` | `docs/zenwave-gap-report.md`: model gaps, missing wiring, unimplemented methods, mapper and test gaps, open questions |
+| Fix model gaps | edit the ZDL, regenerate ([Code Generation](#code-generation)), re-run `/zenwave-gap-report` | no model gaps left |
+| Generate test data (JPA) | `/zenwave-test-data` | `src/test/resources/data.sql` + `data/jpa/<Entity>/*.json` |
+| Spec a flow | `/speckit-constitution` (once), then `/speckit-specify`, `/speckit-clarify`, `/speckit-plan`, `/speckit-tasks` | `specs/NNN-<flow>/` with tasks seeded from the gap report |
+| Implement | `/speckit-implement Use the zenwave-fill-gaps skill for each task.`, or `/zenwave-fill-gaps <finding-id>` | code and tests |
+| Check drift and close | `/speckit-converge`, `mvn test`, `/zenwave-gap-report` | no blockers or majors left |
+
+To export only the Hibernate DDL (no project configuration needed):
+
+```bash
+bash .claude/skills/zenwave-test-data/scripts/export-ddl.sh    # -> target/ddl/schema.sql
+```
+
+The prompts for each Spec Kit step, and the reasoning behind them, are in the [zenwave-sdd manual](https://github.com/ZenWave360/zenwave-sdd/blob/main/MANUAL.md).
 
 Happy Coding!! 🚀🚀🚀
+]]#

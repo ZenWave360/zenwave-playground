@@ -79,16 +79,5 @@ config {
             businessFlowTestName CreateUpdateDeleteCustomerIntegrationTest
             operationIds createCustomer,updateCustomer,deleteCustomer,getCustomer
         }
-
-        OpenAPIKaratePlugin {
-            openapiFile "src/main/resources/public/apis/openapi.yml"
-        }
-
-        OpenAPIKaratePlugin {
-            openapiFile "src/main/resources/public/apis/openapi.yml"
-            groupBy businessFlow
-            businessFlowTestName CreateUpdateDeleteCustomerKarateTest
-            operationIds createCustomer,updateCustomer,deleteCustomer,getCustomer
-        }
     }
 }

@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>4.0.0</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<groupId>io.zenwave360.example</groupId>
+	<artifactId>zenwave-kotlin-archetype-baseapp</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>ZenWave Kotlin Archetype Baseapp</name>
+	<description>${projectDescription}</description>
+
+
+	<properties>
+		<java.version>24</java.version>
+		<kotlin.version>2.3.21</kotlin.version>
+
+		<basePackage>io.zenwave360.example</basePackage>
+		<openApiApiPackage>${basePackage}.adapters.web</openApiApiPackage>
+		<openApiModelPackage>${basePackage}.adapters.web.model</openApiModelPackage>
+
+		<asyncapi.inputSpec>${project.basedir}/src/main/resources/public/apis/asyncapi.yml</asyncapi.inputSpec>
+		<asyncApiModelPackage>${basePackage}.events.dtos</asyncApiModelPackage>
+		<asyncApiProducerApiPackage>${basePackage}.events</asyncApiProducerApiPackage>
+		<asyncApiConsumerApiPackage>${basePackage}.commands</asyncApiConsumerApiPackage>
+
+		<spring-boot.version>${project.parent.version}</spring-boot.version>
+		<spring-cloud.version>2025.1.0</spring-cloud.version>
+		<spring-modulith.version>2.0.0</spring-modulith.version>
+		<avro.version>1.11.1</avro.version>
+		<zenwave-modulith-events-scs.version>1.3.0-SNAPSHOT</zenwave-modulith-events-scs.version>
+
+		<jmolecules-bom.version>2025.0.2</jmolecules-bom.version>
+
+		<zenwave.version>2.7.1</zenwave.version>
+		<openapi-generator-maven-plugin.version>7.17.0</openapi-generator-maven-plugin.version>
+
+		<jakarta.validation-api.version>3.1.1</jakarta.validation-api.version>
+		<mapstruct.version>1.6.3</mapstruct.version>
+		<testcontainers.version>1.21.4</testcontainers.version>
+		<archunit-junit5.version>1.4.1</archunit-junit5.version>
+		<springdoc-openapi-starter-webmvc-ui.version>2.8.3</springdoc-openapi-starter-webmvc-ui.version>
+		<spotless-maven-plugin.version>2.44.3</spotless-maven-plugin.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jmolecules</groupId>
+				<artifactId>jmolecules-bom</artifactId>
+				<version>${jmolecules-bom.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.modulith</groupId>
+				<artifactId>spring-modulith-bom</artifactId>
+				<version>${spring-modulith.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<!-- kotlin -->
+		<dependency>
+			<groupId>org.jetbrains.kotlin</groupId>
+			<artifactId>kotlin-stdlib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jetbrains.kotlin</groupId>
+			<artifactId>kotlin-reflect</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>tools.jackson.module</groupId>
+			<artifactId>jackson-module-kotlin</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<!-- jMolecules: DDD and architecture annotations, emitted when useJMolecules is enabled.
+		     Both architecture flavours ship so that changing `layout` in zenwave-model.zdl does not
+		     require a pom change. They are annotation-only jars. -->
+		<dependency>
+			<groupId>org.jmolecules</groupId>
+			<artifactId>jmolecules-ddd</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jmolecules</groupId>
+			<artifactId>jmolecules-events</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jmolecules</groupId>
+			<artifactId>jmolecules-hexagonal-architecture</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jmolecules</groupId>
+			<artifactId>jmolecules-layered-architecture</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jmolecules.integrations</groupId>
+			<artifactId>jmolecules-archunit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aspectj</artifactId>
+		</dependency>
+		<!-- jpa -->
+		<dependency>
+			<groupId>org.hibernate.orm</groupId>
+			<artifactId>hibernate-ant</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- mongodb -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+		</dependency>
+		<!-- kafka -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-stream-kafka</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-stream-schema-registry-client</artifactId>
+		</dependency>
+		<!-- spring modulith -->
+		<dependency>
+			<groupId>org.springframework.modulith</groupId>
+			<artifactId>spring-modulith-starter-core</artifactId>
+			<exclusions>
+				<!-- a javac annotation processor: kapt only runs mapstruct-processor -->
+				<exclusion>
+					<groupId>org.springframework.modulith</groupId>
+					<artifactId>spring-modulith-apt</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.modulith</groupId>
+			<artifactId>spring-modulith-starter-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.modulith</groupId>
+			<artifactId>spring-modulith-starter-mongodb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.modulith</groupId>
+			<artifactId>spring-modulith-runtime</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.zenwave360.sdk</groupId>
+			<artifactId>spring-modulith-events-scs</artifactId>
+			<version>${zenwave-modulith-events-scs.version}</version>
+		</dependency>
+		<!-- utils -->
+		<dependency>
+			<groupId>jakarta.validation</groupId>
+			<artifactId>jakarta.validation-api</artifactId>
+			<version>${jakarta.validation-api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>${mapstruct.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-processor</artifactId>
+			<version>${mapstruct.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+		<!-- swagger -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>${springdoc-openapi-starter-webmvc-ui.version}</version>
+		</dependency>
+
+		<!-- test -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webflux</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>${testcontainers.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.tngtech.archunit</groupId>
+			<artifactId>archunit-junit5-api</artifactId>
+			<version>${archunit-junit5.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Adding the engine dependency to the surefire-plugin unfortunately does not work in the current version. -->
+		<!-- https://www.archunit.org/userguide/html/000_Index.html#_junit_5 -->
+		<dependency>
+			<groupId>com.tngtech.archunit</groupId>
+			<artifactId>archunit-junit5-engine</artifactId>
+			<version>${archunit-junit5.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- spring modulith test -->
+		<dependency>
+			<groupId>org.springframework.modulith</groupId>
+			<artifactId>spring-modulith-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.modulith</groupId>
+			<artifactId>spring-modulith-docs</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+		<testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
+		<plugins>
+			<!-- `extensions` replaces maven-compiler's default executions so kotlinc runs before javac (generated
+			     AsyncAPI sources are Java). Sources come from the project's compile source roots, which the
+			     openapi and zenwave plugins register for their generated code. -->
+			<plugin>
+				<groupId>org.jetbrains.kotlin</groupId>
+				<artifactId>kotlin-maven-plugin</artifactId>
+				<version>${kotlin.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<jvmTarget>${java.version}</jvmTarget>
+					<javaParameters>true</javaParameters>
+					<args>
+						<arg>-Xjsr305=strict</arg>
+					</args>
+					<compilerPlugins>
+						<plugin>spring</plugin>
+						<plugin>jpa</plugin> <!-- [jpa] -->
+					</compilerPlugins>
+				</configuration>
+				<executions>
+					<!-- the extension already binds default-compile/default-testCompile; turn off the duplicate
+					     `compile`/`test-compile` executions inherited from spring-boot-starter-parent -->
+					<execution>
+						<id>compile</id>
+						<phase>none</phase>
+					</execution>
+					<execution>
+						<id>test-compile</id>
+						<phase>none</phase>
+					</execution>
+					<!-- mapstruct on Kotlin; after generate-sources so the generated DTOs are visible to the mappers -->
+					<execution>
+						<id>default-kapt</id>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>kapt</goal>
+						</goals>
+						<configuration>
+							<annotationProcessorPaths>
+								<annotationProcessorPath>
+									<groupId>org.mapstruct</groupId>
+									<artifactId>mapstruct-processor</artifactId>
+									<version>${mapstruct.version}</version>
+								</annotationProcessorPath>
+							</annotationProcessorPaths>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.jetbrains.kotlin</groupId>
+						<artifactId>kotlin-maven-allopen</artifactId>
+						<version>${kotlin.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.jetbrains.kotlin</groupId>
+						<artifactId>kotlin-maven-noarg</artifactId>
+						<version>${kotlin.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.diffplug.spotless</groupId>
+				<artifactId>spotless-maven-plugin</artifactId>
+				<version>${spotless-maven-plugin.version}</version>
+				<configuration>
+					<kotlin>
+						<ktlint />
+					</kotlin>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.14</version>
+				<configuration>
+					<excludes>
+						<exclude>**/config/**</exclude>
+						<exclude>**/*DTO.*</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<!-- attached to Maven test phase -->
+					<execution>
+						<id>report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Surefire Plugin for Unit Tests -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<includes>
+						<include>**/*Test.java</include>
+					</includes>
+					<excludes>
+						<exclude>**/*IT.java</exclude>
+						<exclude>**/*IntegrationTest.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<!-- Failsafe Plugin for Integration Tests -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>3.5.1</version>
+				<executions>
+					<execution>
+						<id>default</id>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>**/*IT.java</include>
+								<include>**/*IntegrationTest.java</include>
+							</includes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>${openapi-generator-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<phase>generate-sources</phase>
+						<configuration>
+							<inputSpec>${project.basedir}/src/main/resources/public/apis/openapi.yml</inputSpec>
+							<skipIfSpecIsUnchanged>true</skipIfSpecIsUnchanged>
+							<generatorName>kotlin-spring</generatorName>
+							<apiPackage>${openApiApiPackage}</apiPackage>
+							<modelPackage>${openApiModelPackage}</modelPackage>
+							<modelNameSuffix>DTO</modelNameSuffix>
+							<addCompileSourceRoot>true</addCompileSourceRoot>
+							<generateSupportingFiles>false</generateSupportingFiles>
+							<typeMappings>
+								<typeMapping>Double=java.math.BigDecimal</typeMapping>
+							</typeMappings>
+							<configOptions>
+								<useSpringBoot3>true</useSpringBoot3>
+								<documentationProvider>none</documentationProvider>
+								<openApiNullable>false</openApiNullable>
+								<useOptional>false</useOptional>
+								<useTags>true</useTags>
+								<interfaceOnly>true</interfaceOnly>
+								<skipDefaultInterface>true</skipDefaultInterface>
+								<delegatePattern>false</delegatePattern>
+								<sortParamsByRequiredFlag>false</sortParamsByRequiredFlag>
+								<exceptionHandler>false</exceptionHandler>
+								<!-- also the compile source root the plugin registers (it defaults to src/main/java) -->
+								<sourceFolder>src/main/kotlin</sourceFolder>
+							</configOptions>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>asyncapi-code-generation</id>
+			<activation>
+				<file>
+					<exists>${asyncapi.inputSpec}</exists>
+				</file>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>io.zenwave360.sdk</groupId>
+						<artifactId>zenwave-sdk-maven-plugin</artifactId>
+						<version>${zenwave.version}</version>
+						<configuration>
+							<inputSpec>${asyncapi.inputSpec}</inputSpec>
+							<skip>false</skip>
+							<addCompileSourceRoot>true</addCompileSourceRoot>
+							<addTestCompileSourceRoot>true</addTestCompileSourceRoot>
+							<!-- <authentication> -->
+							<!--     <authentication><key>API_KEY</key><value>XXX</value></authentication> -->
+							<!-- </authentication> -->
+						</configuration>
+						<executions>
+							<execution>
+								<id>generate-asyncapi</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+								<configuration>
+									<generatorName>AsyncAPIGenerator</generatorName>
+									<configOptions>
+										<role>provider</role>
+										<transactionalOutbox>modulith</transactionalOutbox> <!-- [modulith] -->
+										<includeApplicationEventListener>true</includeApplicationEventListener> <!-- [modulith] -->
+										<!-- <modelPackage> is required for json-schema payloads, drop it when payloads are avro -->
+										<modelPackage>${asyncApiModelPackage}</modelPackage>
+										<producerApiPackage>${asyncApiProducerApiPackage}</producerApiPackage>
+										<consumerApiPackage>${asyncApiConsumerApiPackage}</consumerApiPackage>
+										<!-- for avro payloads: <avroCompilerProperties.imports>${asyncapi.avro.imports}</avroCompilerProperties.imports> -->
+									</configOptions>
+								</configuration>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>io.zenwave360.sdk.plugins</groupId>
+								<artifactId>asyncapi-generator</artifactId>
+								<version>${zenwave.version}</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+</project>

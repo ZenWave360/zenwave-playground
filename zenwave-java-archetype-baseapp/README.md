@@ -14,10 +14,10 @@ you did not select.
 |---|---|
 | `jpa` | `spring-boot-starter-data-jpa`, PostgreSQL, `DatabaseConfiguration`, Hikari datasource config, `postgresql` compose service |
 | `mongodb` | `spring-boot-starter-data-mongodb`, `MongoConfig`, `spring.data.mongodb` config, `mongodb` compose service (single-node replica set) |
-| `kafka` | `spring-cloud-starter-stream-kafka` + `spring-cloud-stream-schema`, `spring.kafka`/`spring.cloud.stream` config, `zookeeper`/`kafka`/`schema-registry` compose services |
+| `kafka` | `spring-cloud-starter-stream-kafka` + `spring-cloud-stream-schema-registry-client`, `spring.kafka`/`spring.cloud.stream` config, `zookeeper`/`kafka`/`schema-registry` compose services |
 | `modulith` | Spring Modulith + transactional outbox: `spring-modulith-starter-core`, `-starter-jdbc`/`-starter-mongodb`, `io.zenwave360.sdk:spring-modulith-events-scs`, `ExternalizationConfiguration`, `spring.modulith.*` config, `spring-modulith-test`/`-docs`, `useSpringModulith`/`transactionalOutbox modulith` in `zenwave-scripts.zw`, and `transactionalOutbox`/`includeApplicationEventListener` in the AsyncAPIGenerator config. **Implies `kafka`.** |
 
-Always included: Spring Web/Security/Actuator, springdoc, MapStruct, Lombok, Karate + Testcontainers +
+Always included: Spring Web/Security/Actuator, springdoc, MapStruct, Lombok, Testcontainers +
 ArchUnit tests, spotless/palantir + spring-javaformat, jacoco, `openapi-generator-maven-plugin`, and the
 ZenWave SDK AsyncAPI generation profile.
 
@@ -115,6 +115,13 @@ Running `mvn install` on the generated archetype also runs those test projects
 | `_gitignore`, `_README.md` | renamed by the post-generate script ([ARCHETYPE-505](https://issues.apache.org/jira/browse/ARCHETYPE-505)) |
 | `archetype/` | archetype descriptor, post-generate script and test projects — never shipped |
 
+### Shared with the Kotlin archetype
+
+`archetype/archetype-post-generate.groovy` is **byte-identical** to the copy in
+[zenwave-kotlin-archetype-baseapp](../zenwave-kotlin-archetype-baseapp): it finds `src/main/java` or
+`src/main/kotlin` itself. Fix it in one archetype and copy it to the other; `create-archetype.sh` warns
+when the two copies differ.
+
 ### Adding a new feature
 
 Add an entry to the `config` map in `archetype/archetype-post-generate.groovy`, add its
@@ -125,7 +132,7 @@ superset files. Supported keys per feature:
 |---|---|
 | `dependencies` | removes `groupId:artifactId` from `pom.xml` (works for `<dependencyManagement>` BOMs too) |
 | `pomProperties` | removes `<property>` lines from `pom.xml` |
-| `classes` | deletes files from `src/main/java/<package>/config` |
+| `classes` | deletes classes (named without extension) from `src/main/java/<package>/config` |
 | `yamlKeys` | removes keys from `application.yml`, `application-default.yml`, `application-test.yml` |
 | `dockerComposeKeys` | removes keys from `docker-compose.yml` |
 | `searchAndReplaceIfMissing` | `[file, search, replace, isRegex]` |

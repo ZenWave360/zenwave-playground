@@ -15,6 +15,11 @@ find $RESOURCES/archetype-resources -type f -exec sed -i -r 's/ZenWave Java Arch
 
 echo "Copying archetype-post-generate.groovy to the generated archetype"
 cp archetype/archetype-post-generate.groovy $RESOURCES/META-INF/archetype-post-generate.groovy
+# the Java and Kotlin archetypes share this script byte-for-byte: fix it in one, copy it to the other
+SIBLING_SCRIPT=../zenwave-kotlin-archetype-baseapp/archetype/archetype-post-generate.groovy
+if [ -f "$SIBLING_SCRIPT" ] && ! cmp -s archetype/archetype-post-generate.groovy "$SIBLING_SCRIPT"; then
+    echo "WARNING: archetype-post-generate.groovy differs from $SIBLING_SCRIPT, keep both copies in sync"
+fi
 
 echo "Copying archetype-metadata.xml to the generated archetype"
 cp archetype/archetype-metadata.xml $RESOURCES/META-INF/maven/archetype-metadata.xml
