@@ -40,11 +40,14 @@ compiled together with the Kotlin sources).
 
 ## Using the archetype
 
+Each Central release uses a UTC timestamp (`yyyy.MM.dd.HHmm`). Maven resolves
+`RELEASE` to the latest released archetype version.
+
 ```bash
 mvn archetype:generate \
   -DarchetypeGroupId=io.zenwave360.archetypes \
   -DarchetypeArtifactId=zenwave-kotlin-archetype \
-  -DarchetypeVersion=0.0.1-SNAPSHOT \
+  -DarchetypeVersion=RELEASE \
   -DgroupId=com.example \
   -DartifactId=my-service \
   -Dpackage=com.example.myservice \
@@ -58,7 +61,7 @@ mvn archetype:generate \
 ### Interactively
 
 ```bash
-mvn archetype:generate   -DarchetypeGroupId=io.zenwave360.archetypes   -DarchetypeArtifactId=zenwave-kotlin-archetype   -DarchetypeVersion=0.0.1-SNAPSHOT   -DinteractiveMode=true
+mvn archetype:generate -DarchetypeGroupId=io.zenwave360.archetypes -DarchetypeArtifactId=zenwave-kotlin-archetype -DarchetypeVersion=RELEASE -DinteractiveMode=true
 ```
 
 Maven asks for `projectName`, `projectDescription`, `artifactId`, `groupId` and `package` (the only

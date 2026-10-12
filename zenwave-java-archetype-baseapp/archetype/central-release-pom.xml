@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>io.zenwave360.archetypes</groupId>
+  <artifactId>zenwave-java-archetype</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <packaging>maven-archetype</packaging>
+  <name>ZenWave Java Archetype</name>
+  <description>A Maven archetype for ZenWave Java applications.</description>
+  <url>https://www.zenwave360.io/</url>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <developers>
+    <developer><id>zenwave360</id><name>ZenWave360</name><url>https://www.zenwave360.io/</url></developer>
+  </developers>
+  <scm>
+    <connection>scm:git:https://github.com/ZenWave360/zenwave-playground.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/ZenWave360/zenwave-playground.git</developerConnection>
+    <url>https://github.com/ZenWave360/zenwave-playground</url>
+  </scm>
+  <build>
+    <extensions>
+      <extension><groupId>org.apache.maven.archetype</groupId><artifactId>archetype-packaging</artifactId><version>3.4.1</version></extension>
+    </extensions>
+    <plugins>
+      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-source-plugin</artifactId><version>3.3.1</version><executions><execution><id>attach-sources</id><goals><goal>jar-no-fork</goal></goals></execution></executions></plugin>
+      <!-- Maven archetypes do not have Java sources; Central accepts this documented placeholder Javadoc JAR. -->
+      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-antrun-plugin</artifactId><version>3.1.0</version><executions><execution><id>create-javadoc-placeholder</id><phase>package</phase><configuration><target><mkdir dir="${project.build.directory}/javadoc-placeholder"/><echo file="${project.build.directory}/javadoc-placeholder/README.txt">ZenWave Java Archetype documentation is available at https://www.zenwave360.io/</echo><jar destfile="${project.build.directory}/${project.build.finalName}-javadoc.jar" basedir="${project.build.directory}/javadoc-placeholder"/></target></configuration><goals><goal>run</goal></goals></execution></executions></plugin>
+      <plugin><groupId>org.codehaus.mojo</groupId><artifactId>build-helper-maven-plugin</artifactId><version>3.6.0</version><executions><execution><id>attach-javadoc-placeholder</id><phase>package</phase><goals><goal>attach-artifact</goal></goals><configuration><artifacts><artifact><file>${project.build.directory}/${project.build.finalName}-javadoc.jar</file><type>jar</type><classifier>javadoc</classifier></artifact></artifacts></configuration></execution></executions></plugin>
+      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-gpg-plugin</artifactId><version>3.2.7</version><executions><execution><id>sign-artifacts</id><phase>verify</phase><goals><goal>sign</goal></goals><configuration><passphrase>${env.SIGN_KEY_PASS}</passphrase><gpgArguments><arg>--pinentry-mode</arg><arg>loopback</arg></gpgArguments></configuration></execution></executions></plugin>
+      <plugin><groupId>org.sonatype.central</groupId><artifactId>central-publishing-maven-plugin</artifactId><version>0.11.0</version><extensions>true</extensions><configuration><publishingServerId>central</publishingServerId><autoPublish>true</autoPublish></configuration></plugin>
+    </plugins>
+  </build>
+</project>

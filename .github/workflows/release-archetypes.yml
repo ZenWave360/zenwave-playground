@@ -1,0 +1,92 @@
+name: Release Maven Archetypes
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'zenwave-java-archetype-baseapp/**'
+      - 'zenwave-kotlin-archetype-baseapp/**'
+      - '.github/workflows/release-archetypes.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-archetypes
+  cancel-in-progress: false
+
+jobs:
+  version:
+    name: Calculate UTC release version
+    runs-on: ubuntu-latest
+    outputs:
+      value: ${{ steps.version.outputs.value }}
+    steps:
+      - id: version
+        run: echo "value=$(date -u +'%Y.%m.%d.%H%M')" >> "$GITHUB_OUTPUT"
+
+  publish:
+    name: Release ${{ matrix.archetype.name }}
+    needs: version
+    runs-on: ubuntu-latest
+    environment: maven-central-upload
+    strategy:
+      fail-fast: false
+      matrix:
+        archetype:
+          - name: Java archetype
+            directory: zenwave-java-archetype-baseapp
+          - name: Kotlin archetype
+            directory: zenwave-kotlin-archetype-baseapp
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up JDK and Maven Central credentials
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+          server-id: central
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+
+      # Maven 3.10+ writes maven-metadata-local.xml into Central Publishing's
+      # staging directory. The Portal rejects that artifact-level metadata as
+      # content without a POM, so pin the known-compatible Maven line.
+      - name: Set up Maven 3.9.16
+        run: |
+          MAVEN_VERSION=3.9.16
+          ARCHIVE="apache-maven-${MAVEN_VERSION}-bin.tar.gz"
+          BASE_URL="https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries"
+          curl --fail --location --silent --show-error --remote-name "${BASE_URL}/${ARCHIVE}"
+          curl --fail --location --silent --show-error --remote-name "${BASE_URL}/${ARCHIVE}.sha512"
+          EXPECTED_SHA512="$(grep --only-matching --extended-regexp '[[:xdigit:]]{128}' "${ARCHIVE}.sha512" | head --lines=1)"
+          test -n "$EXPECTED_SHA512"
+          echo "${EXPECTED_SHA512}  ${ARCHIVE}" | sha512sum --check --status --
+          tar --extract --gzip --file "${ARCHIVE}" --directory "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/apache-maven-${MAVEN_VERSION}/bin" >> "$GITHUB_PATH"
+
+      - name: Import Maven Central signing key
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.SIGN_KEY }}
+          passphrase: ${{ secrets.SIGN_KEY_PASS }}
+
+      - name: Create and publish release
+        working-directory: ${{ matrix.archetype.directory }}
+        env:
+          ZENWAVE_CENTRAL_RELEASE: true
+          MAVEN_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN }}
+          SIGN_KEY_PASS: ${{ secrets.SIGN_KEY_PASS }}
+          VERSION: ${{ needs.version.outputs.value }}
+        run: |
+          ./create-archetype.sh
+          cd target/generated-sources/archetype
+          mvn --batch-mode --no-transfer-progress versions:set \
+            -DnewVersion="$VERSION" \
+            -DgenerateBackupPoms=false
+          mvn --batch-mode --no-transfer-progress deploy -DskipTests
+          echo "Released $VERSION" >> "$GITHUB_STEP_SUMMARY"

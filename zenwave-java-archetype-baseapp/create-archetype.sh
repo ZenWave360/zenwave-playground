@@ -6,6 +6,11 @@ RESOURCES=$GENERATED/src/main/resources
 
 mvn clean archetype:create-from-project -Darchetype.properties=./archetype/archetype.properties
 
+if [ "${ZENWAVE_CENTRAL_RELEASE:-false}" = "true" ]; then
+    echo "Configuring generated archetype for Maven Central release publishing"
+    cp archetype/central-release-pom.xml "$GENERATED/pom.xml"
+fi
+
 echo "Replacing package name in the generated archetype"
 find $RESOURCES/archetype-resources -type f -exec sed -i -r 's/io\.zenwave360\.example/${package}/g' {} \;
 
