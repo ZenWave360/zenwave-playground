@@ -16,6 +16,7 @@ config {
             idType long
             targetFile "src/main/resources/public/apis/asyncapi.yml"
             includeKafkaCommonHeaders true
+            includeCloudEventsHeaders true
         }
 
         BackendApplicationDefaultPlugin {

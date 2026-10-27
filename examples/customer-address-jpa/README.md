@@ -1,52 +1,54 @@
-# ZenWave Customer JPA Example
+# Transactional OutBox With AsyncAPI, SpringModulith and ZenWaveSDK
 
-This is a sample project generated with ZenWave SDK for this domain model:
+Implementing a Transactional OutBox With AsyncAPI, SpringModulith and ZenWaveSDK.
 
-```mermaid
-classDiagram
-    class Customer {
-        <<aggregate>>
-        String name
-        String email
-        Address[] addresses
-        PaymentMethod[] paymentMethods
-    }
-    
-    class Address {
-        <<Stored in a JSON column in the database>>
-        String street
-        String city
-    }
-    
-    class PaymentMethod {
-        PaymentMethodType type
-        String cardNumber
-        Customer customer
-    }
-    
-    class PaymentMethodType {
-        <<enumeration>>
-        VISA(1)
-        MASTERCARD(2)
-    }
-    
-    Customer "1" *--> "*" Address : contains
-    Customer "1" o--> "*" PaymentMethod : has
-    PaymentMethod --> PaymentMethodType : type
-```
+> **Purpose of this project:** it is a reference application and an integration test bed for
+> [`io.zenwave360.sdk:spring-modulith-events-scs`](https://github.com/ZenWave360/spring-modulith-events-spring-cloud-stream),
+> which plugs Spring Cloud Stream (with Avro payloads generated from AsyncAPI) into the transactional outbox
+> provided by Spring Modulith Events. The outbox itself is Spring Modulith's; what is tested here is the integration
+> between AsyncAPI-generated code, Spring Cloud Stream and Spring Modulith. To check a new release, bump
+> `zenwave-modulith-events-scs.version` (and/or the Spring Boot / Modulith / Cloud versions) in `pom.xml` and run
+> `CustomerOutboxIntegrationTest`.
+>
+> Library dependencies used by this project:
+>
+> ```xml
+> <dependency><!-- Spring Cloud Stream Externalization for Message<?> -->
+>     <groupId>io.zenwave360.sdk</groupId>
+>     <artifactId>spring-modulith-events-scs</artifactId>
+>     <version>${zenwave-modulith-events-scs.version}</version>
+> </dependency>
+> <dependency><!-- Needed for serializing Avro payloads to db storage as json -->
+>     <groupId>com.fasterxml.jackson.dataformat</groupId>
+>     <artifactId>jackson-dataformat-avro</artifactId>
+> </dependency>
+> ```
+>
+> TODO: full instructions.
 
-With these REST Endpoints:
+<picture>
+    <source
+        srcset="docs/TransactionalOutBoxWithAsyncAPIAndSpringModulith-light.png"
+        media="(prefers-color-scheme: light)">
+    <source
+        srcset="docs/TransactionalOutBoxWithAsyncAPIAndSpringModulith-dark.png"
+        media="(prefers-color-scheme: dark)">
+    <img
+        src="docs/TransactionalOutBoxWithAsyncAPIAndSpringModulith-light.png"
+        alt="Transactional OutBox"
+        style="max-width: 100%;">
+</picture>
 
-![OpenAPI Endpoints](src/main/resources/public/apis/endpoints-screenshot.png)
+We’ll explore how we can implement a Transactional Outbox Pattern to:
 
-And these Domain Events published to a Kafka Topic:
+- Persist data to a supported transactional database (e.g., SQL or MongoDB).
+- Send events to an external message broker like Kafka or RabbitMQ using Spring Cloud Stream.
+- Leverage Spring Modulith Events transactional features.
+- Use ZenWaveSDK Code Generator for AsyncAPI so you don’t need to write a single line of boilerplate code for the transactional outbox and event publishing.
 
-![AsyncAPI Operations](src/main/resources/public/apis/asyncapi-operations.png)
+Follow detailed instructions at https://www.zenwave360.io/posts/TransactionalOutBoxWithAsyncAPIAndSpringModulith
 
-As defined on this [ZenWave Model (zenwave-model.zdl)](zenwave-model.zdl)
-
-And generated using this [set of plugins (zenwave-scripts.zw)](zenwave-scripts.zw) using [ZenWave Editor](https://www.zenwave360.io/plugin/) for IntelliJ IDEA.
-
+The publication registry diagram is in [EventPublicationRegistry.excalidraw.svg](EventPublicationRegistry.excalidraw.svg).
 
 ## Requirements
 
@@ -72,7 +74,7 @@ mvn spring-boot:run
 ```
 
 * Open [Swagger UI](http://localhost:8080/swagger-ui/index.html) in your browser.
-Use "Basic Authentication" with username `admin` and password `password` to authenticate.
+Use "Basic Authentication" with username `user` and password `password` to authenticate.
 
 * Running Unit Tests:
 
@@ -86,9 +88,57 @@ mvn clean test
 mvn clean verify
 ```
 
+`CustomerOutboxIntegrationTest` boots the application against Postgres and Kafka (docker-compose or Testcontainers): it creates a customer through HTTP and waits for the Avro record on `customer.events.avro`.
+
+The integration tests live in `src/test/java/io/zenwave360/example/outbox/`:
+
+| Test | What it checks |
+|------|----------------|
+| `CustomerOutboxIntegrationTest` | HTTP create -> Kafka Avro record with key and CloudEvents headers -> `event_publication` completed |
+| `EventSerializerRoundTripIntegrationTest` | The Avro `Message<CustomerEvent>` survives serialize/deserialize through the library's `EventSerializer`, including rows stored by previous library releases |
+| `StoredEventsResubmitIntegrationTest` | Rows in `event_publication` are marked incomplete and resubmitted: the stored JSON is read back, rebuilt as Avro and published to Kafka again |
+
+Recorded `serialized_event` values from earlier releases are in `src/test/resources/stored-events/<version>.json` and must keep working.
+When a release intentionally changes the stored format, record a new fixture for it (never overwrite old ones):
+
+```bash
+mvn verify -Dit.test=EventSerializerRoundTripIntegrationTest#avroMessageSurvivesSerializeDeserialize   -Doutbox.fixture.out=src/test/resources/stored-events/<version>.json
+```
+
+* Testing Spring Modulith Events Externalizer for Spring Cloud Stream:
+
+```bash
+curl -X 'POST' \
+  'http://localhost:8080/api/customers' \
+  -H 'accept: application/json' \
+  -H 'Authorization: Basic dXNlcjpwYXNzd29yZA==' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "John Doe",
+  "email": "me@email.com",
+  "addresses": [
+    {
+      "street": "Rue del Percebe 13",
+      "city": "Aqui"
+    }
+  ],
+  "paymentMethods": [
+    {
+      "type": "VISA",
+      "cardNumber": "string"
+    }
+  ]
+}'
+```
+
+* Reading Avro messages from Kafka:
+
+```bash
+docker-compose exec -T schema-registry bash -c "kafka-avro-console-consumer --bootstrap-server kafka:19093 --topic customer.events.avro --from-beginning --property schema.registry.url=http://schema-registry:8081"
+```
+
 * Stop docker dependencies:
 
 ```bash
 docker-compose down
 ```
-

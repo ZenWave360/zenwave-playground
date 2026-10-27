@@ -18,7 +18,7 @@ import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.testcontainers.DockerClientFactory;
-import org.testcontainers.containers.DockerComposeContainer;
+import org.testcontainers.containers.ComposeContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
 public class DockerComposeInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
@@ -41,8 +41,10 @@ public class DockerComposeInitializer implements ApplicationContextInitializer<C
             new Service("schema-registry", 8081, "SCHEMA_REGISTRY_URL", "http://%s:%s"));
 
     static String HOST = DockerClientFactory.instance().dockerHostIpAddress();
-    static DockerComposeContainer container =
-            new DockerComposeContainer(new File(DOCKER_COMPOSE_FILE)).withEnv("HOST", HOST);
+    static ComposeContainer container = new ComposeContainer(new File(DOCKER_COMPOSE_FILE)).withEnv("HOST", HOST);
+
+    /** Mapped ports captured on container start and reapplied to every Spring test context. */
+    static final List<String> containerProperties = new ArrayList<>();
 
     static {
         for (Service service : SERVICES) {
@@ -64,9 +66,7 @@ public class DockerComposeInitializer implements ApplicationContextInitializer<C
         } else {
             log.info(
                     "Docker Compose Containers are not running from local docker-compose. Starting from TestContainers...");
-            if (isContainerRunning) {
-                log.info("Docker Compose Containers are already running from TestContainers. Skipping...");
-            } else {
+            if (!isContainerRunning) {
                 log.info("Starting Docker Compose Containers from TestContainers...");
                 container.start();
                 isContainerRunning = true;
@@ -76,11 +76,15 @@ public class DockerComposeInitializer implements ApplicationContextInitializer<C
                     log.info("DockerCompose exposed port for {}: {}", service.name, HOST + ":" + port);
                     log.info("DockerCompose Service {} listening: {}", service.name, isPortOpen(HOST, port));
                     if (service.envValueTemplate != null) {
-                        TestPropertyValues.of(
-                                        service.envVar + "=" + String.format(service.envValueTemplate, HOST, port))
-                                .applyTo(ctx.getEnvironment());
+                        containerProperties.add(
+                                service.envVar + "=" + String.format(service.envValueTemplate, HOST, port));
                     }
                 }
+            } else {
+                log.info("Docker Compose Containers are already running from TestContainers. Skipping...");
+            }
+            if (!containerProperties.isEmpty()) {
+                TestPropertyValues.of(containerProperties).applyTo(ctx.getEnvironment());
             }
         }
     }
