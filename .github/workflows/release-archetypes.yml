@@ -1,13 +1,29 @@
-name: Release Maven Archetypes
+name: Publish Maven Archetypes
+
+# Every push to main, develop or next builds both archetypes and publishes them to the Git-hosted Maven repository
+# zenwave360/maven-snapshots (branch main, served at https://www.zenwave360.io/maven-snapshots/) with git-maven-publisher.
+# The version is a UTC timestamp (yyyy.MM.dd.HHmm), so every push is a new, resolvable version.
+#
+# Maven Central is manual: run this workflow with `central: true` from main (environment maven-central-upload).
+#
+# Needs in this repository:
+#   - environment git-publisher-snapshots: no required reviewer, secret GIT_PUBLISHER_TOKEN (Contents: write on
+#     zenwave360/maven-snapshots, see ZenWave360/release-workflows docs/git-publisher-token.md)
+#   - environment maven-central-upload (Central only): CENTRAL_USERNAME, CENTRAL_TOKEN, SIGN_KEY, SIGN_KEY_PASS
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop, next]
     paths:
       - 'zenwave-java-archetype-baseapp/**'
       - 'zenwave-kotlin-archetype-baseapp/**'
       - '.github/workflows/release-archetypes.yml'
   workflow_dispatch:
+    inputs:
+      central:
+        description: 'Also release to Maven Central (only from main)'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -26,9 +42,92 @@ jobs:
       - id: version
         run: echo "value=$(date -u +'%Y.%m.%d.%H%M')" >> "$GITHUB_OUTPUT"
 
-  publish:
-    name: Release ${{ matrix.archetype.name }}
+  publish-git:
+    name: Publish ${{ matrix.archetype.name }} to zenwave360/maven-snapshots
     needs: version
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment: git-publisher-snapshots
+    strategy:
+      fail-fast: false
+      # one commit at a time on the snapshots branch
+      max-parallel: 1
+      matrix:
+        archetype:
+          - name: Java archetype
+            directory: zenwave-java-archetype-baseapp
+          - name: Kotlin archetype
+            directory: zenwave-kotlin-archetype-baseapp
+    env:
+      GIT_SNAPSHOTS_REPOSITORY: https://github.com/zenwave360/maven-snapshots.git
+      GIT_SNAPSHOTS_BRANCH: main
+      GIT_SNAPSHOTS_URL: https://www.zenwave360.io/maven-snapshots/
+      GIT_PUBLISHER_VERSION: 0.1.0-SNAPSHOT
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Set up JDK
+        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+
+      - name: Build the archetype sources
+        working-directory: ${{ matrix.archetype.directory }}
+        run: ./create-archetype.sh
+
+      - name: Set the release version
+        working-directory: ${{ matrix.archetype.directory }}/target/generated-sources/archetype
+        env:
+          VERSION: ${{ needs.version.outputs.value }}
+        run: mvn --batch-mode --no-transfer-progress versions:set -DnewVersion="$VERSION" -DgenerateBackupPoms=false
+
+      # The token is scoped to this step. The plugin snapshot is resolved from GIT_SNAPSHOTS_URL through a throwaway
+      # settings file (pluginRepository only, no servers, no credentials). Release versions need allowReleases.
+      - name: Publish to the Git repository
+        working-directory: ${{ matrix.archetype.directory }}/target/generated-sources/archetype
+        env:
+          GIT_PUBLISHER_TOKEN: ${{ secrets.GIT_PUBLISHER_TOKEN }}
+          VERSION: ${{ needs.version.outputs.value }}
+        run: |
+          if [ -z "${GIT_PUBLISHER_TOKEN}" ]; then
+            echo "::error::GIT_PUBLISHER_TOKEN is not set in environment git-publisher-snapshots"
+            exit 1
+          fi
+          settings="${RUNNER_TEMP}/git-publisher-settings.xml"
+          cat > "${settings}" <<EOF
+          <settings>
+            <profiles>
+              <profile>
+                <id>git-publisher</id>
+                <pluginRepositories>
+                  <pluginRepository>
+                    <id>git-maven-snapshots</id>
+                    <url>${GIT_SNAPSHOTS_URL}</url>
+                    <releases><enabled>false</enabled></releases>
+                    <snapshots><enabled>true</enabled><updatePolicy>always</updatePolicy></snapshots>
+                  </pluginRepository>
+                </pluginRepositories>
+              </profile>
+            </profiles>
+            <activeProfiles><activeProfile>git-publisher</activeProfile></activeProfiles>
+          </settings>
+          EOF
+          mvn --batch-mode --no-transfer-progress -s "${settings}" package -DskipTests \
+            "io.github.ivangsa:git-maven-publisher-maven-plugin:${GIT_PUBLISHER_VERSION}:deploy" \
+            "-Dgit-publisher.repository=${GIT_SNAPSHOTS_REPOSITORY}" \
+            "-Dgit-publisher.branch=${GIT_SNAPSHOTS_BRANCH}" \
+            "-Dgit-publisher.nojekyll=true" \
+            "-Dgit-publisher.allowReleases=true"
+          echo "Published ${{ matrix.archetype.name }} ${VERSION} to ${GIT_SNAPSHOTS_URL}" >> "$GITHUB_STEP_SUMMARY"
+
+  publish-central:
+    name: Release ${{ matrix.archetype.name }} to Maven Central
+    needs: [version, publish-git]
+    if: github.event_name == 'workflow_dispatch' && inputs.central && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: maven-central-upload
     strategy:
@@ -40,10 +139,12 @@ jobs:
           - name: Kotlin archetype
             directory: zenwave-kotlin-archetype-baseapp
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Set up JDK and Maven Central credentials
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
         with:
           distribution: temurin
           java-version: '25'
@@ -89,4 +190,4 @@ jobs:
             -DnewVersion="$VERSION" \
             -DgenerateBackupPoms=false
           mvn --batch-mode --no-transfer-progress deploy -DskipTests
-          echo "Released $VERSION" >> "$GITHUB_STEP_SUMMARY"
+          echo "Released $VERSION to Maven Central" >> "$GITHUB_STEP_SUMMARY"

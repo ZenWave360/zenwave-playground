@@ -58,6 +58,21 @@ mvn archetype:generate \
   -DinteractiveMode=false
 ```
 
+### From zenwave-snapshots (latest build)
+
+Every push to `main`, `develop` or `next` publishes the archetype, with the same timestamp version, to the
+Git-hosted Maven repository [zenwave360/maven-snapshots](https://github.com/zenwave360/maven-snapshots),
+served at `https://www.zenwave360.io/maven-snapshots/`. Point `archetype:generate` at it with
+`-DarchetypeRepository`:
+
+```bash
+mvn archetype:generate   -DarchetypeRepository=https://www.zenwave360.io/maven-snapshots/   -DarchetypeGroupId=io.zenwave360.archetypes   -DarchetypeArtifactId=zenwave-kotlin-archetype   -DarchetypeVersion=<version>   -DgroupId=com.example   -DartifactId=my-service   -Dpackage=com.example.myservice   -DprojectName="My Service"   -DprojectDescription="My Service"   -Djpa=true -Dkafka=true -Dmodulith=true   -DinteractiveMode=false
+```
+
+The available versions are listed in
+<https://www.zenwave360.io/maven-snapshots/io/zenwave360/archetypes/zenwave-kotlin-archetype/maven-metadata.xml>;
+pick the newest one (or use `RELEASE` if that file has a `<release>` entry).
+
 ### Interactively
 
 ```bash
