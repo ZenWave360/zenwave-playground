@@ -59,7 +59,20 @@ served at `https://www.zenwave360.io/maven-snapshots/`. Point `archetype:generat
 `-DarchetypeRepository`:
 
 ```bash
-mvn archetype:generate   -DarchetypeRepository=https://www.zenwave360.io/maven-snapshots/   -DarchetypeGroupId=io.zenwave360.archetypes   -DarchetypeArtifactId=zenwave-java-archetype   -DarchetypeVersion=<version>   -DgroupId=com.example   -DartifactId=my-service   -Dpackage=com.example.myservice   -DprojectName="My Service"   -DprojectDescription="My Service"   -Djpa=true -Dkafka=true -Dmodulith=true   -DinteractiveMode=false
+mvn archetype:generate \
+  -DarchetypeRepository=https://www.zenwave360.io/maven-snapshots/ \
+  -DarchetypeGroupId=io.zenwave360.archetypes \
+  -DarchetypeArtifactId=zenwave-java-archetype \
+  -DarchetypeVersion=<version> \
+  -DgroupId=com.example \
+  -DartifactId=my-service \
+  -Dpackage=com.example.myservice \
+  -DprojectName="My Service" \
+  -DprojectDescription="My Service" \
+  -Djpa=true \
+  -Dkafka=true \
+  -Dmodulith=true \
+  -DinteractiveMode=false
 ```
 
 The available versions are listed in
@@ -69,7 +82,11 @@ pick the newest one (or use `RELEASE` if that file has a `<release>` entry).
 ### Interactively
 
 ```bash
-mvn archetype:generate -DarchetypeGroupId=io.zenwave360.archetypes -DarchetypeArtifactId=zenwave-java-archetype -DarchetypeVersion=RELEASE -DinteractiveMode=true
+mvn archetype:generate \
+  -DarchetypeGroupId=io.zenwave360.archetypes \
+  -DarchetypeArtifactId=zenwave-java-archetype \
+  -DarchetypeVersion=RELEASE \
+  -DinteractiveMode=true
 ```
 
 Maven asks for `projectName`, `projectDescription`, `artifactId`, `groupId` and `package` (the only
