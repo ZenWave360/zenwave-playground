@@ -97,6 +97,9 @@ The integration tests live in `src/test/java/io/zenwave360/example/outbox/`:
 | `CustomerOutboxIntegrationTest` | HTTP create -> Kafka Avro record with key and CloudEvents headers -> `event_publication` completed |
 | `EventSerializerRoundTripIntegrationTest` | The Avro `Message<CustomerEvent>` survives serialize/deserialize through the library's `EventSerializer`, including rows stored by previous library releases |
 | `StoredEventsResubmitIntegrationTest` | Rows in `event_publication` are marked incomplete and resubmitted: the stored JSON is read back, rebuilt as Avro and published to Kafka again |
+| `LegacyListenerIdUpgradeIntegrationTest` | Upgrade 1.3.x -> 1.4.x: incomplete rows with the old `listener_id` are skipped until moved to the new id with the SQL from the 1.4.0 release notes |
+
+Spring Modulith 2.1 / events-scs 1.3.x is tested on the `examples/spring-modulith-events-scs-1.3.x` branch.
 
 Recorded `serialized_event` values from earlier releases are in `src/test/resources/stored-events/<version>.json` and must keep working.
 When a release intentionally changes the stored format, record a new fixture for it (never overwrite old ones):
